@@ -20,7 +20,7 @@ Example usage of [splunk ansible](https://github.com/splunk/splunk-ansible) proj
 
 In scenarios where ansible testing is taking place or where it cannot be installed via pacakge manager (e.g. yum), it is possible to run a _portable_ ansible installation. The following steps outline the requirements for setting this up:
 
-1. Clone the ansible repo `git clone -b master https://github.com/ansible/ansible.git`
+1. Clone the ansible repo `git clone https://github.com/ansible/ansible.git`
 2. Change director to ansible directory `cd ansible`
 3. Install required python modules `pip-3 install -r requirements.txt`
 4. Setup ansible environment `source ./hacking/env-setup`
