@@ -1,3 +1,4 @@
 [submodule "ansible-deployment/splunk-ansible"]
 	path = ansible-deployment/splunk-ansible
 	url = https://github.com/splunk/splunk-ansible.git
+	branch = master
