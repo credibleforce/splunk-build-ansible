@@ -2,14 +2,15 @@
 
 Example usage of [splunk ansible](https://github.com/splunk/splunk-ansible) project.
 
+Playbooks use a named account `deployer` for ansible ansible tasks on inventory hosts, either update this named account or ensure the user exists on all target machines
+
 **Usage**:
 
-1. Ensure `ansible` user exists on all target machines
-2. Download latest version of Splunk to `/tmp/splunk.rpm`
-3. Place the license file in `/tmp/splunk.lic`
-4. Clone repo `git clone https://github.com/ps-sec-analytics/splunk-engagement-ansible.git`
-5. Change directory to `cd splunk-engagement-ansible`
-6. Pull the splunk-ansible submodule `git submodule update --init --recursive`
+1. Download latest version of Splunk to `/tmp/splunk.rpm`
+2. Place the license file in `/tmp/splunk.lic`
+3. Clone repo `git clone https://github.com/ps-sec-analytics/splunk-engagement-ansible.git`
+4. Change directory to `cd splunk-engagement-ansible`
+5. Pull the splunk-ansible submodule `git submodule update --init --recursive`
 6. Change directory to ansible-deployment folder `cd ansible-deployment`
 7. Update inventory.xml as required
 8. Update the install-splunk.yml playbook as required
