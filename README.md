@@ -22,5 +22,5 @@ In scenarios where ansible testing is taking place or where it cannot be install
 
 1. Clone the ansible repo `git clone -b master https://github.com/ansible/ansible.git`
 2. Change director to ansible directory `cd ansible`
-3. Install required python modules `pip install -r requirements.txt`
+3. Install required python modules `pip-3 install -r requirements.txt`
 4. Setup ansible environment `source ./hacking/env-setup`
