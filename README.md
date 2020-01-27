@@ -7,8 +7,9 @@ Usage:
 2. Download latest version of Splunk to `/tmp/splunk.rpm`
 3. Place the license file in `/tmp/splunk.lic`
 4. Clone repo `https://github.com/ps-sec-analytics/splunk-engagement-ansible.git`
-5. Update the splunk-ansible submodule `git submodule init`
-6. Change directory to ansible-deployment folder `cd splunk-engagement-ansible/ansible-deployment`
+5. Change directory to `splunk-engagement-ansible`
+6. Pull the splunk-ansible submodule `git submodule update --init --recursive`
+6. Change directory to ansible-deployment folder `cd ansible-deployment`
 7. Update inventory.xml as required
 8. Update the install-splunk.yml playbook as required
 9. Run `./start_splunk_deployment.sh`
