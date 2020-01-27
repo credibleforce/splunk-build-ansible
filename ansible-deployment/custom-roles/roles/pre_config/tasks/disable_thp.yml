@@ -1,0 +1,13 @@
+---
+- name: Disables transparent-huge-pages
+  copy:
+    src: disable-transparent-hugepages.init
+    dest: "/etc/init.d/disable-transparent-hugepages"
+    mode: 0755
+
+- name: Run service disable transparent hugepages
+  service:
+    name: disable-transparent-hugepages
+    state: started
+    enabled: yes
+  when: not ansible_check_mode

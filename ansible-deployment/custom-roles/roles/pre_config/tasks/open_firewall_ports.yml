@@ -1,0 +1,48 @@
+---
+# tasks file for splunk_server
+- name: Register firewalld status
+  command: systemctl status "{{ item }}"
+  with_items:
+  - firewalld
+  register: firewalld_status
+  ignore_errors: yes
+
+- name: Splunk web firewall port
+  firewalld:
+    port: 8000/tcp
+    permanent: yes
+    immediate: yes
+    state: enabled
+  when: "(firewalld_status.results[0].rc == 0)"
+
+- name: Splunk management firewall port
+  firewalld:
+    port: 8089/tcp
+    permanent: yes
+    immediate: yes
+    state: enabled
+  when: "(firewalld_status.results[0].rc == 0)"
+
+- name: Splunk HEC firewall port
+  firewalld:
+    port: 8088/tcp
+    permanent: yes
+    immediate: yes
+    state: enabled
+  when: "(inventory_hostname in groups['splunk_indexer']) and (firewalld_status.results[0].rc == 0)"
+
+- name: Splunk indexer firewall port
+  firewalld:
+    port: 9997/tcp
+    permanent: yes
+    immediate: yes
+    state: enabled
+  when: "(inventory_hostname in groups['splunk_indexer']) and (firewalld_status.results[0].rc == 0)"
+
+- name: Splunk cluster replication firewall port
+  firewalld:
+    port: 9887/tcp
+    permanent: yes
+    immediate: yes
+    state: enabled
+  when: "(inventory_hostname in groups['splunk_indexer']) and (firewalld_status.results[0].rc == 0)"

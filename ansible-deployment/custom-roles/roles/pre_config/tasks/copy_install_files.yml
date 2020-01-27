@@ -1,0 +1,14 @@
+---
+# tasks file for splunk_server
+
+# copy install files
+- name: Copy splunk installation
+  copy:
+    src: /tmp/splunk.rpm
+    dest: /tmp/splunk.rpm
+
+# copy install files
+- name: Copy splunk license
+  copy:
+    src: /tmp/splunk.lic
+    dest: /tmp/splunk.lic

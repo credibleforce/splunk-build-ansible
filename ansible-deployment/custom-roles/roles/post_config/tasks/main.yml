@@ -1,0 +1,5 @@
+---
+# tasks file for splunk_server
+
+# kernel settings for splunk
+- import_tasks: update_service_ulimit.yml

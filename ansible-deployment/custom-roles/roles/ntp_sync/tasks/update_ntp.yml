@@ -1,0 +1,3 @@
+---
+- name: Force ntp update
+  command: service ntpd restart
