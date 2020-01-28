@@ -2,9 +2,10 @@
 # tasks file for splunk_server
 
 # kernel settings for splunk
-- import_tasks:  copy_install_files.yml
-- import_tasks:  add_splunk_user_accounts.yml
-- import_tasks:  open_firewall_ports.yml
-- import_tasks:  disable_thp.yml
-- import_tasks:  set_vm_swappiness.yml
-- import_tasks:  set_ulimits.yml
+- import_tasks: copy_install_files.yml
+- import_tasks: add_splunk_user_accounts.yml
+- import_tasks: open_firewall_ports.yml
+- import_tasks: disable_thp.yml
+- import_tasks: set_vm_swappiness.yml
+- import_tasks: set_ulimits.yml
+- import_tasks: set_splunk_home.yml
