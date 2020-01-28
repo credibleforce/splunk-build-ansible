@@ -67,7 +67,7 @@ splunk:
   http_enableSSL_privKey_password: null
   http_port: 8000
   indexer_cluster: true
-  
+  preferred_captaincy: false
   idxc:
     enable: false
     label: idxc_label
