@@ -1,3 +1,7 @@
 ---
-- name: Force ntp update
-  command: service ntpd restart
+- name: reload service ntpd, in all cases
+  systemd:
+    name: ntpd
+    state: restarted
+    daemon_reload: yes
+  become: yes

@@ -3,3 +3,4 @@
     name: vm.swappiness
     value: 10
     state: present
+  become: yes

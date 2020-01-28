@@ -7,3 +7,4 @@
       splunk soft nproc 8192
       splunk hard nproc 8192
     dest: /etc/security/limits.d/10-splunk.conf
+  become: yes

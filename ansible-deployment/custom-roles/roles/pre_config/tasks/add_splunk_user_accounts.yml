@@ -22,6 +22,7 @@
     name: splunk
     state: present
   when: group_exist["failed"] == true
+  become: yes
 
 - name: Create a splunk user
   user:
@@ -35,3 +36,4 @@
     createhome: yes        # Defaults to yes
     home: /home/splunk     # Defaults to /home/<username>
   when: user_exist["failed"] == true
+  become: yes

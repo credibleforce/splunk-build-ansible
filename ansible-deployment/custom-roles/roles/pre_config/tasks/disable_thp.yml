@@ -4,6 +4,7 @@
     src: disable-transparent-hugepages.init
     dest: "/etc/init.d/disable-transparent-hugepages"
     mode: 0755
+  become: yes
 
 - name: Run service disable transparent hugepages
   service:
@@ -11,3 +12,4 @@
     state: started
     enabled: yes
   when: not ansible_check_mode
+  become: yes

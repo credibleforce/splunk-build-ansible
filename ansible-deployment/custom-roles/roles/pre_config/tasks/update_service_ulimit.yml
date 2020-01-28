@@ -1,11 +1,14 @@
 ---
 - name: Splunk service ulimit configuration
-    replace:
+  replace:
     path: /etc/systemd/system/Splunkd.service
     regexp: 'LimitNOFILE=\d+'
     replace: 'LimitNOFILE=65536\nLimitNPROC=16000\nLimitDATA=8589934592\nLimitFSIZE=infinity\nTasksMax=8192'
+  become: yes
+
 - name: reload service Splunkd, in all cases
-    systemd:
+  systemd:
     name: Splunkd
     state: restarted
     daemon_reload: yes
+  become: yes
