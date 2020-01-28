@@ -70,7 +70,7 @@ all:
       vars:
         splunk:
           hostname: "{{ inventory_hostname }}"
-          role: "splunk_deployment_server"
+          role: "splunk_license_master"
       hosts: 
         splkdp1.psl.local:
           ansible_connection: ssh
