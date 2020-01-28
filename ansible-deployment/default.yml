@@ -48,7 +48,15 @@ splunk:
     shc: /opt/splunk/etc/shcluster/apps
   exec: /opt/splunk/bin/splunk
   group: splunk
-  
+  dfs:
+    dfc_num_slots: 4
+    dfw_num_slots: 10
+    dfw_num_slots_enabled: false
+    enable: false
+    port: 9000
+    spark_master_host: 127.0.0.1
+    spark_master_webui_port: 8080
+
   # hec should be deployed via master-apps in cluster
   hec_disabled: true
   hec_enableSSL: true
@@ -61,6 +69,7 @@ splunk:
   http_enableSSL_privKey_password: null
   http_port: 8000
   indexer_cluster: true
+  pass4SymmKey: dkw62XMBuESPcEkuYW8u7KaGtZh9idvz
   idxc:
     enable: false
     label: idxc_label
@@ -75,7 +84,7 @@ splunk:
   multisite_replication_factor_total: 3
   multisite_search_factor_origin: 2
   multisite_search_factor_total: 2
-  nfr_license: /tmp/nfr_enterprise.lic
+  nfr_license: /tmp/splunk.lic
   opt: /opt
   password: uOOuUI5D2flIqVXchggUOE+h0DFQV/zo
   pid: /opt/splunk/var/run/splunk/splunkd.pid
@@ -97,6 +106,7 @@ splunk:
     replication_port: 9887
     secret: PQBa0cJUDbnOIOpUe/WeHGrHzzZDIFDT
     pass4SymmKey: PQBa0cJUDbnOIOpUe/WeHGrHzzZDIFDT
+  service_name: splunk
   smartstore: null
   svc_port: 8089
   tar_dir: splunk
