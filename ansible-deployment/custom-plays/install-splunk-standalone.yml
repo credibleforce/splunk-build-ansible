@@ -19,16 +19,19 @@
     - name: Sync ntp
       include_role: 
         name: ntp_sync
+
+    # PRE CONFIG - Add users
+    - name: Custom splunk server pre-config (setup user)
+      include_role:
+        name: pre_config
+        
   post_tasks:
     # Set ulimits by service (assumes systemd service deployment)
     - name: Post install config
       include_role: 
         name: post_config
   tasks:
-    # PRE CONFIG - Add users
-    - name: Custom splunk server pre-config (setup user)
-      include_role:
-        name: pre_config
+    
 
     # STANDALONE - check for splunk_standalone role
     - name: Splunk splunk_standalone tasks
