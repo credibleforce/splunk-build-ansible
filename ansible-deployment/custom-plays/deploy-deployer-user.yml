@@ -27,7 +27,7 @@
       user:
         name: deployer
         groups: # Empty by default, here we give it some groups
-        - deployer
+          - deployer
         state: present
         shell: /bin/bash       # Defaults to /bin/bash
         system: no             # Defaults to no
