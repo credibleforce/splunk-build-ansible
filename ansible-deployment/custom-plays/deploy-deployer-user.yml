@@ -27,14 +27,14 @@
       user:
         name: deployer
         groups: # Empty by default, here we give it some groups
-          - deployer
+        - deployer
         state: present
         shell: /bin/bash       # Defaults to /bin/bash
         system: no             # Defaults to no
         createhome: yes        # Defaults to yes
         home: /home/deployer     # Defaults to /home/<username>
       when: user_exist["failed"] == true
-    
+
     - name: Make sure we have a 'wheel' group
       group:
         name: wheel
@@ -56,4 +56,12 @@
       with_file:
         - /tmp/id_rsa.pub
 
-    
+    - name: Delete stale lock filesi
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - /etc/passwd.lock
+        - /etc/shadow.lock
+        - /etc/group.lock
+        - /etc/gshadow.lock
