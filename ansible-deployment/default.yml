@@ -68,6 +68,7 @@ splunk:
     replication_port: 9887
     search_factor: 2
     secret: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
+    pass4SymmKey: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
   ignore_license: false
   license_download_dest: /tmp/splunk.lic
   multisite_replication_factor_origin: 3
@@ -95,6 +96,7 @@ splunk:
     replication_factor: 3
     replication_port: 9887
     secret: PQBa0cJUDbnOIOpUe/WeHGrHzzZDIFDT
+    pass4SymmKey: PQBa0cJUDbnOIOpUe/WeHGrHzzZDIFDT
   smartstore: null
   svc_port: 8089
   tar_dir: splunk
