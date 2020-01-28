@@ -39,7 +39,7 @@
       when: inventory_hostname in groups['splunk_license_master']
 
     - debug:
-        msg: "{{ inventory_hostname }}: splunk.role:{{ splunk.role }}; splunk_standalone:{{ inventory_hostname in groups['splunk_standalone'] }}; master_included:{{ inventory_hostname in groups['splunk_license_master'] }}; role check: {{ splunk.role != \"splunk_license_master\" }}"
+        msg: "{{ splunk.hostname }} => {{ inventory_hostname }}: splunk.role:{{ splunk.role }}; splunk_standalone:{{ inventory_hostname in groups['splunk_standalone'] }}; master_included:{{ inventory_hostname in groups['splunk_license_master'] }}; role check: {{ splunk.role != \"splunk_license_master\" }}"
 
     # STANDALONE - check for splunk_standalone role
     - name: Splunk splunk_standalone tasks
