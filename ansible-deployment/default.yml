@@ -26,8 +26,6 @@ config:
   max_timeout: 1200
 
 splunk:
-  hostname: null
-  role: splunk_standalone
   apps_location: null
   enable_service: true
   admin_user: admin
@@ -69,7 +67,7 @@ splunk:
   http_enableSSL_privKey_password: null
   http_port: 8000
   indexer_cluster: true
-  pass4SymmKey: dkw62XMBuESPcEkuYW8u7KaGtZh9idvz
+  
   idxc:
     enable: false
     label: idxc_label
@@ -78,8 +76,8 @@ splunk:
     search_factor: 2
     secret: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
     pass4SymmKey: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
-  ignore_license: true
-  license_download_dest: /tmp/splunk.lic
+  ignore_license: false
+  license_download_dest: /tmp/splunk.licences
   multisite_replication_factor_origin: 3
   multisite_replication_factor_total: 3
   multisite_search_factor_origin: 2
@@ -111,4 +109,4 @@ splunk:
   svc_port: 8089
   tar_dir: splunk
   user: splunk
-  wildcard_license: false
+  wildcard_license: true

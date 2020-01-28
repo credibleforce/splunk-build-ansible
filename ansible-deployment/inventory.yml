@@ -10,11 +10,17 @@ all:
         ansible_python_interpreter: "{{ansible_playbook_python}}"
     
     splunk_standalone:
+      vars:
+        splunk:
+          role: "splunk_standalone"
       hosts: 
         splksh1.psl.local:
           ansible_connection: ssh
           ansible_system: Linux
     splunk_search_head:
+      vars:
+        splunk:
+          role: "splunk_search_head"
       hosts: 
         splksh1.psl.local:
           ansible_connection: ssh
@@ -26,16 +32,25 @@ all:
           ansible_connection: ssh
           ansible_system: Linux
     splunk_search_head_captain:
+      vars:
+        splunk:
+          role: "splunk_search_head_captain"
       hosts: 
         splksh1.psl.local:
           ansible_connection: ssh
           ansible_system: Linux
     splunk_cluster_master:
+      vars:
+        splunk:
+          role: "splunk_cluster_master"
       hosts: 
         splkcm1.psl.local:
           ansible_connection: ssh
           ansible_system: Linux
     splunk_indexer:
+      vars:
+        splunk:
+          role: "splunk_indexer"
       hosts: 
         splkidx1.psl.local:
           ansible_connection: ssh
@@ -47,16 +62,28 @@ all:
           ansible_connection: ssh
           ansible_system: Linux
     splunk_deployment_server:
+      vars:
+        splunk:
+          role: "splunk_deployment_server"
       hosts: 
         splkdp1.psl.local:
           ansible_connection: ssh
           ansible_system: Linux
     splunk_license_master:
+      vars:
+        splunk:
+          role: "splunk_license_master"
       hosts: 
         splkdp1.psl.local:
           ansible_connection: ssh
           ansible_system: Linux
     splunk_deployer:
+      vars:
+        splunk:
+          # Note: this server has two roles (LM and DP) - we need to set the role to 
+          # splunk_license_master or it will get added as a local slave to itself.
+          # This cases delays in deployment and general non-goodness :)
+          role: "splunk_license_master"
       hosts: 
         splkdp1.psl.local:
           ansible_connection: ssh

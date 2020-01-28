@@ -53,6 +53,12 @@
         name: post_config
   tasks:
     
+    # LICENSE MASTER- check for splunk_license_master role
+    - name: Splunk splunk_license_master tasks
+      include_role:
+        name: splunk_license_master
+      when: inventory_hostname in groups['splunk_license_master']
+    
     # STANDALONE - check for splunk_standalone role
     - name: Splunk splunk_standalone tasks
       include_role:
@@ -88,12 +94,6 @@
       include_role:
         name: splunk_deployment_server
       when: inventory_hostname in groups['splunk_deployment_server']
-    
-    # LICENSE MASTER- check for splunk_license_master role
-    - name: Splunk splunk_license_master tasks
-      include_role:
-        name: splunk_license_master
-      when: inventory_hostname in groups['splunk_license_master']
 
     # DEPLOYER- check for splunk_deployer role
     - name: Splunk splunk_deployer tasks
