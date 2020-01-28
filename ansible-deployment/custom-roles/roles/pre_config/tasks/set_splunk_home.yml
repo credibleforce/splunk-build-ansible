@@ -1,6 +1,6 @@
 ---
 - name: Add another bin dir to system-wide $PATH.
-  become_user: "{{ privileged_user }}"
+  become: yes
   copy:
     dest: /etc/profile.d/splunk.sh
     content: 'SPLUNK_HOME="{{ splunk.home }}"'
