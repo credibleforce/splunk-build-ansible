@@ -94,7 +94,6 @@ splunk:
     ssl: null
     cert: null
     password: null
-  search_head_cluster_url: null
   search_head_cluster: true
   deployer_included: true
   secret: null
