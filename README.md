@@ -16,6 +16,9 @@ Playbooks use a named account `deployer` for ansible ansible tasks on inventory 
 8. Update the install-splunk.yml playbook as required
 9. Run `./start_splunk_deployment.sh`
 
+**Updating**
+
+1. To update run `git pull` and to pull an updated splunk-ansible submodule `git submodule update --recursive --remote`
 
 **Testing**:
 
