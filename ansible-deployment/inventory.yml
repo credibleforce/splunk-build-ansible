@@ -39,8 +39,7 @@ all:
           ansible_connection: ssh
           ansible_system: Linux
           vars:
-            splunk_search_head_captain: "{{ inventory_hostname }} == {{ groups['splunk_search_head_captain'][0] }} if (splunk.search_head_cluster == true) else null"
-    
+            splunk_search_head_captain: "{{ inventory_hostname }} == {{ groups['splunk_search_head_captain'][0] }} if (splunk.search_head_cluster == true) else null"  
     splunk_search_head_captain:
       vars:
         splunk:

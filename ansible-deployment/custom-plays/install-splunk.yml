@@ -15,7 +15,7 @@
 #########################################
 
 # Indexer cluster and search head cluster
-# - hosts: splunk_license_master:splunk_cluster_master:splunk_deployer:splunk_deployment_server:splunk_indexer:splunk_search_head
+# - hosts: splunk_license_master:splunk_cluster_master:splunk_deployer:splunk_search_head_captain:splunk_deployment_server:splunk_indexer:splunk_search_head
 
 # Indexer cluster only
 # - hosts: splunk_license_master:splunk_cluster_master:splunk_deployment_server:splunk_indexer:splunk_search_head
@@ -30,7 +30,7 @@
 # DEPLOPY ALL ROLES
 #########################################
 
-- hosts: splunk_license_master:splunk_cluster_master:splunk_deployer:splunk_deployment_server:splunk_indexer:splunk_search_head
+- hosts: splunk_license_master:splunk_cluster_master:splunk_deployer:splunk_search_head_captain:splunk_deployment_server:splunk_indexer:splunk_search_head
   # STRATEGY - free allows multiple server(s) and roles installed simultaneous and is required for service availability checks
   strategy: free
   gather_facts: True
@@ -58,12 +58,12 @@
       include_role:
         name: splunk_license_master
       when: inventory_hostname in groups['splunk_license_master']
-    
-    # CLUSTER MASTER - check for splunk_cluster_master role
-    - name: Splunk cluster_master tasks
+
+    # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role
+    - name: Splunk splunk_search_head_captain tasks
       include_role:
-        name: splunk_cluster_master
-      when: inventory_hostname in groups['splunk_cluster_master']
+        name: splunk_search_head_captain
+      when: inventory_hostname in groups['splunk_search_head_captain']
 
     # DEPLOYER- check for splunk_deployer role
     - name: Splunk splunk_deployer tasks
@@ -89,10 +89,14 @@
         name: splunk_search_head
       when: inventory_hostname in groups['splunk_search_head']
 
-    
-
     # DEPLOYMENT SERVER- check for splunk_deployment_server role
     - name: Splunk splunk_deployment_server tasks
       include_role:
         name: splunk_deployment_server
       when: inventory_hostname in groups['splunk_deployment_server']
+
+    # CLUSTER MASTER - check for splunk_cluster_master role
+    - name: Splunk cluster_master tasks
+      include_role:
+        name: splunk_cluster_master
+      when: inventory_hostname in groups['splunk_cluster_master']
