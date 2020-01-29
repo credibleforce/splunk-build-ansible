@@ -38,6 +38,7 @@ all:
         splunk:
           hostname: "{{ inventory_hostname }}"
           role: "splunk_search_head_captain"
+          search_head_captain: true
         splunk_search_head_captain: true
       hosts: 
         splksh1.psl.local:
