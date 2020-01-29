@@ -23,7 +23,7 @@ all:
         splunk:
           hostname: "{{ inventory_hostname }}"
           role: "splunk_search_head"
-          search_head_cluster_url: {{ groups['splunk_search_head'][0] }}
+          search_head_cluster_url: "{{ groups['splunk_search_head'][0] }}"
       hosts: 
         splksh1.psl.local:
           ansible_connection: ssh
