@@ -1,6 +1,8 @@
 all:
   vars:
     ansible_user: deployer
+    ansible_connection: ssh
+    ansible_system: Linux
   children:
     local:
       hosts:
@@ -16,51 +18,38 @@ all:
           role: "splunk_standalone"
       hosts: 
         splksh1.psl.local:
-          ansible_connection: ssh
-          ansible_system: Linux
-    splunk_search_head:
-      vars:
-        splunk:
-          hostname: "{{ inventory_hostname }}"
-          role: "splunk_search_head"
-          search_head_cluster_url: "{{ groups['splunk_search_head_captain'][0] if (splunk.search_head_cluster == true) else null }}"
-      hosts: 
-        splksh1.psl.local:
-          ansible_connection: ssh
-          ansible_system: Linux
-          vars:
-            splunk_search_head_captain: "{{ inventory_hostname == groups['splunk_search_head_captain'][0] if (splunk.search_head_cluster == true) else False |bool }}"
-        splksh2.psl.local:
-          ansible_connection: ssh
-          ansible_system: Linux
-          vars:
-            splunk_search_head_captain: "{{ inventory_hostname == groups['splunk_search_head_captain'][0] if (splunk.search_head_cluster == true) else False |bool }}"
-        splksh3.psl.local:
-          ansible_connection: ssh
-          ansible_system: Linux
-          vars:
-            splunk_search_head_captain: "{{ inventory_hostname == groups['splunk_search_head_captain'][0] if (splunk.search_head_cluster == true) else False |bool }}"
     splunk_search_head_captain:
       vars:
         splunk:
           hostname: "{{ inventory_hostname }}"
           role: "splunk_search_head_captain"
-          search_head_cluster_url: "{{ groups['splunk_search_head_captain'][0] }} if (splunk.search_head_cluster == true) else null"
+      hosts: 
+        # omit this host for non shc setup
+        splksh1.psl.local:
+    splunk_search_head:
+      vars:
+        search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
+        splunk:
+          hostname: "{{ inventory_hostname }}"
+          role: 
+            "{% if inventory_hostname == search_head_cluster_host %}
+              splunk_search_head_captain
+            {% else %}
+              splunk_search_head
+            {% endif %}"
+          search_head_cluster_url: "{{ search_head_cluster_host }}"
+            
       hosts: 
         splksh1.psl.local:
-          ansible_connection: ssh
-          ansible_system: Linux
-          vars:
-            splunk_search_head_captain: "{{ inventory_hostname == groups['splunk_search_head_captain'][0] if (splunk.search_head_cluster == true) else False |bool }}"
+        splksh2.psl.local:
+        splksh3.psl.local:
     splunk_cluster_master:
       vars:
         splunk:
           hostname: "{{ inventory_hostname }}"
           role: "splunk_cluster_master"
       hosts: 
-        splkcm1.psl.local:
-          ansible_connection: ssh
-          ansible_system: Linux
+        splkcm1.psl.local
     splunk_indexer:
       vars:
         splunk:
@@ -68,14 +57,8 @@ all:
           role: "splunk_indexer"
       hosts: 
         splkidx1.psl.local:
-          ansible_connection: ssh
-          ansible_system: Linux
         splkidx2.psl.local:
-          ansible_connection: ssh
-          ansible_system: Linux
         splkidx3.psl.local:
-          ansible_connection: ssh
-          ansible_system: Linux
     splunk_deployment_server:
       vars:
         splunk:
@@ -83,8 +66,6 @@ all:
           role: "splunk_license_master"
       hosts: 
         splkdp1.psl.local:
-          ansible_connection: ssh
-          ansible_system: Linux
     splunk_license_master:
       vars:
         splunk:
@@ -92,8 +73,6 @@ all:
           role: "splunk_license_master"
       hosts: 
         splkdp1.psl.local:
-          ansible_connection: ssh
-          ansible_system: Linux
     splunk_deployer:
       vars:
         splunk:
@@ -104,5 +83,3 @@ all:
           role: "splunk_license_master"
       hosts: 
         splkdp1.psl.local:
-          ansible_connection: ssh
-          ansible_system: Linux

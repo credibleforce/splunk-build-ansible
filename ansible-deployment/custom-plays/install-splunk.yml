@@ -52,18 +52,12 @@
       include_role: 
         name: post_config
   tasks:
-    
+
     # LICENSE MASTER- check for splunk_license_master role
     - name: Splunk splunk_license_master tasks
       include_role:
         name: splunk_license_master
       when: inventory_hostname in groups['splunk_license_master']
-
-    # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role
-    - name: Splunk splunk_search_head_captain tasks
-      include_role:
-        name: splunk_search_head_captain
-      when: inventory_hostname in groups['splunk_search_head_captain']
 
     # DEPLOYER- check for splunk_deployer role
     - name: Splunk splunk_deployer tasks
@@ -88,6 +82,12 @@
       include_role:
         name: splunk_search_head
       when: inventory_hostname in groups['splunk_search_head']
+    
+    # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role
+    - name: Splunk splunk_search_head_captain tasks
+      include_role:
+        name: splunk_search_head_captain
+      when: inventory_hostname in groups['splunk_search_head_captain']
 
     # DEPLOYMENT SERVER- check for splunk_deployment_server role
     - name: Splunk splunk_deployment_server tasks
