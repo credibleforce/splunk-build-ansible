@@ -23,19 +23,36 @@ all:
         splunk:
           hostname: "{{ inventory_hostname }}"
           role: "splunk_search_head"
-          search_head_cluster_url: "{{ groups['splunk_search_head'][0] }}"
+          search_head_cluster_url: "{{ groups['splunk_search_head_captain'][0] }} if (splunk.search_head_cluster == true) else null"
       hosts: 
         splksh1.psl.local:
           ansible_connection: ssh
           ansible_system: Linux
           vars:
-            splunk_search_head_captain: true
+            splunk_search_head_captain: "{{ inventory_hostname }} == {{ groups['splunk_search_head_captain'][0] }} if (splunk.search_head_cluster == true) else null"
         splksh2.psl.local:
           ansible_connection: ssh
           ansible_system: Linux
+          vars:
+            splunk_search_head_captain: "{{ inventory_hostname }} == {{ groups['splunk_search_head_captain'][0] }} if (splunk.search_head_cluster == true) else null"
         splksh3.psl.local:
           ansible_connection: ssh
           ansible_system: Linux
+          vars:
+            splunk_search_head_captain: "{{ inventory_hostname }} == {{ groups['splunk_search_head_captain'][0] }} if (splunk.search_head_cluster == true) else null"
+    
+    splunk_search_head_captain:
+      vars:
+        splunk:
+          hostname: "{{ inventory_hostname }}"
+          role: "splunk_search_head_captain"
+          search_head_cluster_url: "{{ groups['splunk_search_head_captain'][0] }} if (splunk.search_head_cluster == true) else null"
+      hosts: 
+        splksh1.psl.local:
+          ansible_connection: ssh
+          ansible_system: Linux
+          vars:
+            splunk_search_head_captain: "{{ inventory_hostname }} == {{ groups['splunk_search_head_captain'][0] }} if (splunk.search_head_cluster == true) else null"
     splunk_cluster_master:
       vars:
         splunk:

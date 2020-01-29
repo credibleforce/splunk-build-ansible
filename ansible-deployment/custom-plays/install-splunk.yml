@@ -89,6 +89,8 @@
         name: splunk_search_head
       when: inventory_hostname in groups['splunk_search_head']
 
+    
+
     # DEPLOYMENT SERVER- check for splunk_deployment_server role
     - name: Splunk splunk_deployment_server tasks
       include_role:
