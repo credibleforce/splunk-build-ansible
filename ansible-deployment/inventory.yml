@@ -38,6 +38,7 @@ all:
         splunk:
           hostname: "{{ inventory_hostname }}"
           role: "splunk_search_head_captain"
+        splunk_search_head_captain: true
       hosts: 
         splksh1.psl.local:
           ansible_connection: ssh
