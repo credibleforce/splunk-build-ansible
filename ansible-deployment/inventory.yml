@@ -17,7 +17,7 @@ all:
           hostname: "{{ inventory_hostname }}"
           role: "splunk_standalone"
       hosts: 
-        splksh1.psl.local:
+        splksh4.psl.local:
     splunk_search_head_captain:
       vars:
         search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0] }}"
