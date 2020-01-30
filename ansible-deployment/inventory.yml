@@ -6,6 +6,7 @@ all:
     search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
     splunk:
       search_head_cluster_url: "{{ search_head_cluster_host }}"
+      hostname: "{{ inventory_hostname }}"
   children:
     local:
       hosts:
@@ -17,7 +18,6 @@ all:
     splunk_standalone:
       vars:
         splunk:
-          hostname: "{{ inventory_hostname }}"
           role: "splunk_standalone"
       hosts: 
         splksh4.psl.local:
@@ -34,7 +34,6 @@ all:
       vars:
         is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
         splunk:
-          hostname: "{{ inventory_hostname }}"
           role: 
             "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
       hosts: 
@@ -44,14 +43,12 @@ all:
     splunk_cluster_master:
       vars:
         splunk:
-          hostname: "{{ inventory_hostname }}"
           role: "splunk_cluster_master"
       hosts: 
         splkcm1.psl.local
     splunk_indexer:
       vars:
         splunk:
-          hostname: "{{ inventory_hostname }}"
           role: "splunk_indexer"
       hosts: 
         splkidx1.psl.local:
@@ -60,21 +57,18 @@ all:
     splunk_deployment_server:
       vars:
         splunk:
-          hostname: "{{ inventory_hostname }}"
           role: "splunk_license_master"
       hosts: 
         splkdp1.psl.local:
     splunk_license_master:
       vars:
         splunk:
-          hostname: "{{ inventory_hostname }}"
           role: "splunk_license_master"
       hosts: 
         splkdp1.psl.local:
     splunk_deployer:
       vars:
         splunk:
-          hostname: "{{ inventory_hostname }}"
           # Note: this server has two roles (LM and DP) - we need to set the role to 
           # splunk_license_master or it will get added as a local slave to itself.
           # This cases delays in deployment and general non-goodness :)
