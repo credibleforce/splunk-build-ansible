@@ -8,6 +8,7 @@ all:
       search_head_cluster_url: "{{ search_head_cluster_host }}"
       hostname: "{{ inventory_hostname }}"
       all_sites: "site1,site2"
+      multisite_master: "{{ groups['splunk_cluster_master'][0]|default(omit) }}"
   children:
     local:
       hosts:
