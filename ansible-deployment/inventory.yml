@@ -55,7 +55,7 @@ all:
     splunk_cluster_master:
       vars:
         splunk:
-          all_sites: "site1"
+          all_sites: "site1,site2"
           multisite_master: "{{ groups['splunk_cluster_master'][0]|default(omit) }}"
           role: "splunk_cluster_master"
       hosts: 
@@ -65,7 +65,7 @@ all:
     splunk_indexer:
       vars:
         splunk:
-          all_sites: "site1"
+          all_sites: "site1,site2"
           multisite_master: "{{ groups['splunk_cluster_master'][0]|default(omit) }}"
           role: "splunk_indexer"
       hosts: 
