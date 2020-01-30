@@ -32,28 +32,23 @@ all:
           search_head_cluster_url: "{{ search_head_cluster_host }}"
       hosts: 
         splksh1.psl.local:
-          vars:
-            splunk:
-              role: splunk_search_head_captain
     splunk_search_head:
       vars:
+        search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0] }}"
         splunk:
           hostname: "{{ inventory_hostname }}"
-          search_head_cluster_url: "{{ groups['splunk_search_head_captain'][0] }}"
+          role: 
+            "{% if inventory_hostname == search_head_cluster_host %}
+              splunk_search_head_captain
+            {% else %}
+              splunk_search_head
+            {% endif %}"
+          search_head_cluster_url: "{{ search_head_cluster_host }}"
             
       hosts: 
         splksh1.psl.local:
-          vars:
-            splunk:
-              role: splunk_search_head_captain
         splksh2.psl.local:
-          vars:
-            splunk:
-              role: splunk_search_head
         splksh3.psl.local:
-          vars:
-            splunk:
-              role: splunk_search_head
     splunk_cluster_master:
       vars:
         splunk:
