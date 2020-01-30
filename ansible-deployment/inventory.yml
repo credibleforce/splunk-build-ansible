@@ -52,6 +52,9 @@ all:
         splksh3.psl.local:
           splunk:
             site: site1
+        #splksh4.psl.local:
+        #  splunk:
+        #    site: site1
     splunk_cluster_master:
       vars:
         splunk:
@@ -78,7 +81,7 @@ all:
         splkidx3.psl.local:
           splunk:
             site: site2
-        splksh4.psl.local:
+        splkidx4.psl.local:
           splunk:
             site: site2
     splunk_deployment_server:
