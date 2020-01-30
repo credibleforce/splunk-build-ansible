@@ -24,11 +24,7 @@ all:
         splunk:
           hostname: "{{ inventory_hostname }}"
           role: 
-            "{% if inventory_hostname == search_head_cluster_host %}
-            {{ 'splunk_search_head_captain' }}
-            {% else %}
-            {{ 'splunk_search_head' }}
-            {% endif %}"
+            "{{ 'splunk_search_head_captain' if inventory_hostname == search_head_cluster_host else 'splunk_search_head' }}"
           search_head_cluster_url: "{{ search_head_cluster_host }}"
       hosts: 
         splksh1.psl.local:
@@ -38,7 +34,7 @@ all:
         splunk:
           hostname: "{{ inventory_hostname }}"
           role: 
-            "{{ splunk_search_head_captain if inventory_hostname == search_head_cluster_host else splunk_search_head }}"
+            "{{ 'splunk_search_head_captain' if inventory_hostname == search_head_cluster_host else 'splunk_search_head' }}"
           search_head_cluster_url: "{{ search_head_cluster_host }}"
             
       hosts: 
