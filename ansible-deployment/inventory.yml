@@ -7,8 +7,6 @@ all:
     splunk:
       search_head_cluster_url: "{{ search_head_cluster_host }}"
       hostname: "{{ inventory_hostname }}"
-      all_sites: "site1,site2"
-      multisite_master: "{{ groups['splunk_cluster_master'][0]|default(omit) }}"
   children:
     local:
       hosts:
@@ -27,6 +25,8 @@ all:
       vars:
         is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
         splunk:
+          all_sites: "site1"
+          multisite_master: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
           hostname: "{{ inventory_hostname }}"
           role: 
             "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
@@ -38,6 +38,8 @@ all:
       vars:
         is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
         splunk:
+          all_sites: "site1"
+          multisite_master: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
           role: 
             "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
       hosts: 
@@ -53,12 +55,18 @@ all:
     splunk_cluster_master:
       vars:
         splunk:
+          all_sites: "site1"
+          multisite_master: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
           role: "splunk_cluster_master"
       hosts: 
-        splkcm1.psl.local
+        splkcm1.psl.local:
+          splunk:
+            site: site1
     splunk_indexer:
       vars:
         splunk:
+          all_sites: "site1"
+          multisite_master: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
           role: "splunk_indexer"
       hosts: 
         splkidx1.psl.local:
@@ -94,3 +102,5 @@ all:
           role: "splunk_license_master"
       hosts: 
         splkdp1.psl.local:
+          splunk:
+            site: site1
