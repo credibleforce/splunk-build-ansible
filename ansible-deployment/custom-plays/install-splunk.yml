@@ -27,10 +27,10 @@
 # - hosts: splunk_standalone
 
 #########################################
-# DEPLOPY ALL ROLES
+# DEPLOPY INDEXING/LICENSING/DEPLOYMENT
 #########################################
 
-- hosts: splunk_license_master:splunk_cluster_master:splunk_deployer:splunk_search_head_captain:splunk_deployment_server:splunk_indexer:splunk_search_head
+- hosts: splunk_license_master:splunk_cluster_master:splunk_deployment_server:splunk_indexer
   # STRATEGY - free allows multiple server(s) and roles installed simultaneous and is required for service availability checks
   strategy: free
   gather_facts: True
@@ -39,18 +39,19 @@
     # Force an ntp update as service check requires time sync to work (should not be required in production)
     - name: Sync ntp
       include_role: 
-        name: ntp_sync
+        name: custom-roles/roles/ntp_sync
 
     # PRE CONFIG - Add users
     - name: Custom splunk server pre-config (setup user)
       include_role:
-        name: pre_config
+        name: custom-roles/roles/pre_config
 
   post_tasks:
     # Set ulimits by service (assumes systemd service deployment)
     - name: Post install config
       include_role: 
-        name: post_config
+        name: custom-roles/roles/post_config
+        
   tasks:
 
     # LICENSE MASTER- check for splunk_license_master role
@@ -64,12 +65,6 @@
       include_role:
         name: splunk_cluster_master
       when: inventory_hostname in groups['splunk_cluster_master']
-    
-    # DEPLOYER- check for splunk_deployer role
-    - name: Splunk splunk_deployer tasks
-      include_role:
-        name: splunk_license_master
-      when: inventory_hostname in groups['splunk_deployer']
 
     # STANDALONE - check for splunk_standalone role
     - name: Splunk splunk_standalone tasks
@@ -83,20 +78,53 @@
         name: splunk_indexer
       when: inventory_hostname in groups['splunk_indexer']
 
+    # DEPLOYMENT SERVER- check for splunk_deployment_server role
+    - name: Splunk splunk_deployment_server tasks
+      include_role:
+        name: splunk_deployment_server
+      when: inventory_hostname in groups['splunk_deployment_server']
+
+######################################################
+# DEPLOPY DEPLOYER/SEARCH HEAD CAPTAIN/SEARCH HEAD
+######################################################
+
+- hosts: splunk_deployer:splunk_search_head_captain:splunk_search_head
+  # STRATEGY - free allows multiple server(s) and roles installed simultaneous and is required for service availability checks
+  strategy: free
+  gather_facts: True
+  user: deployer
+  pre_tasks:
+    # Force an ntp update as service check requires time sync to work (should not be required in production)
+    - name: Sync ntp
+      include_role: 
+        name: custom-roles/roles/ntp_sync
+
+    # PRE CONFIG - Add users
+    - name: Custom splunk server pre-config (setup user)
+      include_role:
+        name: custom-roles/roles/pre_config
+
+  post_tasks:
+    # Set ulimits by service (assumes systemd service deployment)
+    - name: Post install config
+      include_role: 
+        name: custom-roles/roles/post_config
+
+  tasks:
     # SEARCH HEADS - check for splunk_search_head role
     - name: Splunk search_head tasks
       include_role:
         name: splunk_search_head
       when: inventory_hostname in groups['splunk_search_head']
     
+    # DEPLOYER- check for splunk_deployer role
+    - name: Splunk splunk_deployer tasks
+      include_role:
+        name: splunk_license_master
+      when: inventory_hostname in groups['splunk_deployer']
+    
     # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role
     - name: Splunk splunk_search_head_captain tasks
       include_role:
         name: splunk_search_head_captain
       when: inventory_hostname in groups['splunk_search_head_captain']
-
-    # DEPLOYMENT SERVER- check for splunk_deployment_server role
-    - name: Splunk splunk_deployment_server tasks
-      include_role:
-        name: splunk_deployment_server
-      when: inventory_hostname in groups['splunk_deployment_server']
