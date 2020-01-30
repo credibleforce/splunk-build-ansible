@@ -111,6 +111,12 @@
         name: ../custom-roles/roles/post_config
 
   tasks:
+    # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role
+    - name: Splunk splunk_search_head_captain tasks
+      include_role:
+        name: splunk_search_head_captain
+      when: inventory_hostname in groups['splunk_search_head_captain']
+      
     # SEARCH HEADS - check for splunk_search_head role
     - name: Splunk search_head tasks
       include_role:
@@ -123,8 +129,4 @@
         name: splunk_license_master
       when: inventory_hostname in groups['splunk_deployer']
     
-    # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role
-    - name: Splunk splunk_search_head_captain tasks
-      include_role:
-        name: splunk_search_head_captain
-      when: inventory_hostname in groups['splunk_search_head_captain']
+    
