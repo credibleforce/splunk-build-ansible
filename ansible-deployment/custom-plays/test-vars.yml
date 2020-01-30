@@ -7,4 +7,4 @@
           - "{{ inventory_hostname == groups['splunk_search_head_captain'][0] if (splunk.search_head_cluster == true) else False |bool }}"
           - "{{ splunk.role }}"
           - "{{ splunk.search_head_cluster }}"
-          - "{{ splunk.role == \"splunk_search_head_captain\" }}"
+          - "{{splunk.role}} == {{ \"splunk_search_head_captain\" }}  {{ splunk.role == \"splunk_search_head_captain\" }}"

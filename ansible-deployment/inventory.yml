@@ -25,9 +25,9 @@ all:
           hostname: "{{ inventory_hostname }}"
           role: 
             "{% if inventory_hostname == search_head_cluster_host %}
-              splunk_search_head_captain
+            splunk_search_head_captain
             {% else %}
-              splunk_search_head
+            splunk_search_head
             {% endif %}"
           search_head_cluster_url: "{{ search_head_cluster_host }}"
       hosts: 
@@ -39,9 +39,9 @@ all:
           hostname: "{{ inventory_hostname }}"
           role: 
             "{% if inventory_hostname == search_head_cluster_host %}
-              splunk_search_head_captain
+            splunk_search_head_captain
             {% else %}
-              splunk_search_head
+            splunk_search_head
             {% endif %}"
           search_head_cluster_url: "{{ search_head_cluster_host }}"
             
