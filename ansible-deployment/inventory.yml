@@ -21,20 +21,22 @@ all:
     splunk_search_head_captain:
       vars:
         search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0] }}"
+        cluster_captain: "{{ inventory_hostname == search_head_cluster_host) and (splunk.search_head_cluster }}"
         splunk:
           hostname: "{{ inventory_hostname }}"
           role: 
-            "{{ 'splunk_search_head_captain' if (inventory_hostname == search_head_cluster_host) and (splunk.search_head_cluster) else 'splunk_search_head' }}"
+            "{{ 'splunk_search_head_captain' if cluster_captain else 'splunk_search_head' }}"
           search_head_cluster_url: "{{ search_head_cluster_host }}"
       hosts: 
         splksh1.psl.local:
     splunk_search_head:
       vars:
         search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0] }}"
+        cluster_captain: "{{ inventory_hostname == search_head_cluster_host) and (splunk.search_head_cluster }}"
         splunk:
           hostname: "{{ inventory_hostname }}"
           role: 
-            "{{ 'splunk_search_head_captain' if (inventory_hostname == search_head_cluster_host) and (splunk.search_head_cluster) else 'splunk_search_head' }}"
+            "{{ 'splunk_search_head_captain' if cluster_captain else 'splunk_search_head' }}"
           search_head_cluster_url: "{{ search_head_cluster_host }}"
             
       hosts: 
