@@ -1,6 +1,9 @@
 ---
 - hosts: all
+  vars:
+    test: "{{ inventory_hostname == search_head_cluster_host|default(omit) and splunk.search_head_cluster }}"
   tasks:
+   
     - debug:
         msg:
           - "{{ inventory_hostname }}"
@@ -8,3 +11,6 @@
           - "{{ splunk.role }}"
           - "{{ splunk.search_head_cluster }}"
           - "{{splunk.role}} == {{ \"splunk_search_head_captain\" }}  {{ splunk.role == \"splunk_search_head_captain\" }}"
+          - "{{ search_head_cluster_host|default(omit) }}"
+          - "{{ inventory_hostname == search_head_cluster_host|default(omit) and splunk.search_head_cluster }}"
+          - "{{ test }}"
