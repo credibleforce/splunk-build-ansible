@@ -59,6 +59,12 @@
         name: splunk_license_master
       when: inventory_hostname in groups['splunk_license_master']
 
+    # CLUSTER MASTER - check for splunk_cluster_master role
+    - name: Splunk cluster_master tasks
+      include_role:
+        name: splunk_cluster_master
+      when: inventory_hostname in groups['splunk_cluster_master']
+    
     # DEPLOYER- check for splunk_deployer role
     - name: Splunk splunk_deployer tasks
       include_role:
@@ -94,9 +100,3 @@
       include_role:
         name: splunk_deployment_server
       when: inventory_hostname in groups['splunk_deployment_server']
-
-    # CLUSTER MASTER - check for splunk_cluster_master role
-    - name: Splunk cluster_master tasks
-      include_role:
-        name: splunk_cluster_master
-      when: inventory_hostname in groups['splunk_cluster_master']
