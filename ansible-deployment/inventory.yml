@@ -25,8 +25,8 @@ all:
       vars:
         is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
         splunk:
-          all_sites: "site1"
-          multisite_master: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
+          #all_sites: "site1"
+          #multisite_master: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
           hostname: "{{ inventory_hostname }}"
           role: 
             "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
@@ -38,8 +38,8 @@ all:
       vars:
         is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
         splunk:
-          all_sites: "site1"
-          multisite_master: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
+          #all_sites: "site1"
+          #multisite_master: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
           role: 
             "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
       hosts: 

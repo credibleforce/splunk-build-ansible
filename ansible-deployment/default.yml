@@ -72,9 +72,9 @@ splunk:
   idxc:
     enable: false
     label: idxc_label
-    replication_factor: 3
+    replication_factor: 2
     replication_port: 9887
-    search_factor: 2
+    search_factor: 1
     secret: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
     pass4SymmKey: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
   ignore_license: false
