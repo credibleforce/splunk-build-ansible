@@ -20,11 +20,17 @@ all:
         splksh1.psl.local:
     splunk_search_head_captain:
       vars:
+        search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
         splunk:
           hostname: "{{ inventory_hostname }}"
-          role: "splunk_search_head_captain"
+          role: 
+            "{% if inventory_hostname == search_head_cluster_host %}
+              splunk_search_head_captain
+            {% else %}
+              splunk_search_head
+            {% endif %}"
+          search_head_cluster_url: "{{ search_head_cluster_host }}"
       hosts: 
-        # omit this host for non shc setup
         splksh1.psl.local:
     splunk_search_head:
       vars:
