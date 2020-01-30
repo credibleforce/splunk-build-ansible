@@ -49,8 +49,8 @@
   post_tasks:
     # Set ulimits by service (assumes systemd service deployment)
     - name: Post install config
-      include_role: 
-        name: ../custom-roles/roles/post_config
+      import_tasks: 
+        name: ../custom-roles/roles/post_config/tasks/main.yml
 
   tasks:
 
@@ -107,8 +107,8 @@
   post_tasks:
     # Set ulimits by service (assumes systemd service deployment)
     - name: Post install config
-      include_role: 
-        name: ../custom-roles/roles/post_config
+      import_tasks: 
+        name: ../custom-roles/roles/post_config/tasks/main.yml
 
   tasks:
     # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role
