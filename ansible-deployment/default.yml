@@ -79,9 +79,9 @@ splunk:
     pass4SymmKey: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
   ignore_license: false
   license_download_dest: /tmp/splunk.licences
-  multisite_replication_factor_origin: 3
-  multisite_replication_factor_total: 3
-  multisite_search_factor_origin: 2
+  multisite_replication_factor_origin: 1
+  multisite_replication_factor_total: 2
+  multisite_search_factor_origin: 1
   multisite_search_factor_total: 2
   nfr_license: /tmp/splunk.lic
   opt: /opt
