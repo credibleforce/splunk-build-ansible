@@ -50,7 +50,7 @@
     permanent: yes
     immediate: yes
     state: enabled
-  when: "splunk.index_indexer_cluster == 'true' and inventory_hostname in groups['splunk_indexer'] and firewalld_status.results[0].rc == 0"
+  when: "splunk.indexer_cluster == 'true' and inventory_hostname in groups['splunk_indexer'] and firewalld_status.results[0].rc == 0"
   become: yes
 
 - name: Splunk search head cluster replication firewall port
