@@ -56,7 +56,7 @@ all:
       vars:
         splunk:
           all_sites: "site1"
-          multisite_master: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
+          multisite_master: "{{ groups['splunk_cluster_master'][0]|default(omit) }}"
           role: "splunk_cluster_master"
       hosts: 
         splkcm1.psl.local:
@@ -66,7 +66,7 @@ all:
       vars:
         splunk:
           all_sites: "site1"
-          multisite_master: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
+          multisite_master: "{{ groups['splunk_cluster_master'][0]|default(omit) }}"
           role: "splunk_indexer"
       hosts: 
         splkidx1.psl.local:
