@@ -37,7 +37,7 @@
   user: deployer
   
   environment:
-    SPLUNK_SEARCH_HEAD_CAPTAIN_URL: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
+    SPLUNK_SEARCH_HEAD_CAPTAIN_URL: "{{ groups['splunk_search_head_captain'][0] }}"
   
   pre_tasks:
     # Force an ntp update as service check requires time sync to work (should not be required in production)
@@ -97,7 +97,7 @@
   user: deployer
   
   environment:
-    SPLUNK_SEARCH_HEAD_CAPTAIN_URL: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
+    SPLUNK_SEARCH_HEAD_CAPTAIN_URL: "{{ groups['splunk_search_head_captain'][0] }}"
 
   pre_tasks:
     # Force an ntp update as service check requires time sync to work (should not be required in production)

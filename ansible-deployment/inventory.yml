@@ -20,7 +20,7 @@ all:
         splksh1.psl.local:
     splunk_search_head_captain:
       vars:
-        search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
+        search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0] }}"
         splunk:
           hostname: "{{ inventory_hostname }}"
           role: 
@@ -34,7 +34,7 @@ all:
         splksh1.psl.local:
     splunk_search_head:
       vars:
-        search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
+        search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0] }}"
         splunk:
           hostname: "{{ inventory_hostname }}"
           role: 
