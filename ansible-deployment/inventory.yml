@@ -32,6 +32,9 @@ all:
           search_head_cluster_url: "{{ search_head_cluster_host }}"
       hosts: 
         splksh1.psl.local:
+          vars:
+            splunk:
+              role: splunk_search_head_captain
     splunk_search_head:
       vars:
         search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0] }}"
@@ -47,6 +50,9 @@ all:
             
       hosts: 
         splksh1.psl.local:
+          vars:
+            splunk:
+              role: splunk_search_head_captain
         splksh2.psl.local:
         splksh3.psl.local:
     splunk_cluster_master:
