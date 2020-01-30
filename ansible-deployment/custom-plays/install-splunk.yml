@@ -8,7 +8,7 @@
     # Force an ntp update as service check requires time sync to work (should not be required in production)
     - name: Sync ntp
       include_role: 
-        name: ntp_sync
+        name: ../custom-roles/roles/ntp_sync
 
 #########################################
 # ROLE ASSIGNMENTS BY INVENTORY
