@@ -21,7 +21,7 @@ all:
     splunk_search_head_captain:
       vars:
         search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0] }}"
-        cluster_captain: "{{ inventory_hostname == search_head_cluster_host) and (splunk.search_head_cluster }}"
+        cluster_captain: "{{ (inventory_hostname == search_head_cluster_host) and (splunk.search_head_cluster) }}"
         splunk:
           hostname: "{{ inventory_hostname }}"
           role: 
@@ -32,7 +32,7 @@ all:
     splunk_search_head:
       vars:
         search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0] }}"
-        cluster_captain: "{{ inventory_hostname == search_head_cluster_host) and (splunk.search_head_cluster }}"
+        cluster_captain: "{{ (inventory_hostname == search_head_cluster_host) and (splunk.search_head_cluster) }}"
         splunk:
           hostname: "{{ inventory_hostname }}"
           role: 
