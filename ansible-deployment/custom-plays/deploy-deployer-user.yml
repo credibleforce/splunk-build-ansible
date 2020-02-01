@@ -40,15 +40,14 @@
         name: wheel
         state: present
 
-    - name: Add user to sudo
+    - name: Add user to sudoers
       lineinfile:
-      path: /etc/sudoers.d/90-deployer-user
-      line: 'deployer ALL=(ALL) NOPASSWD: ALL'
-      state: present
-      mode: 0440
-      create: yes
-      become: yes
-      validate: 'visudo -cf %s'
+        path: /etc/sudoers.d/90-deployer-user
+        line: 'deployer ALL=(ALL) NOPASSWD: ALL'
+        state: present
+        mode: 0440
+        create: yes
+        validate: 'visudo -cf %s'
 
     - name: Add sudoers users to wheel group
       user: name=deployer groups=wheel append=yes state=present createhome=yes
