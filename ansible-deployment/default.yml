@@ -1,5 +1,4 @@
 ---
-ansible_os_family: CentOS
 ansible_post_tasks: null
 ansible_pre_tasks: null
 hide_password: false
