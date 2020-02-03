@@ -8,6 +8,7 @@ wait_for_splunk_retry_num: 60
 shc_sync_retry_num: 60
 shc_bootstrap_delay: 30
 splunk_home_ownership_enforcement: true
+cert_prefix: https
 
 config:
   baked: default.yml
