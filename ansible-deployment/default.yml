@@ -101,8 +101,8 @@ splunk:
     label: shc_label
     replication_factor: 3
     replication_port: 9887
-    secret: PQBa0cJUDbnOIOpUe/WeHGrHzzZDIFDT
-    pass4SymmKey: PQBa0cJUDbnOIOpUe/WeHGrHzzZDIFDT
+    secret: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
+    pass4SymmKey: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
   service_name: splunk
   smartstore: null
   svc_port: 8089
