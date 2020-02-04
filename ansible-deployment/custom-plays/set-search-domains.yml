@@ -1,0 +1,9 @@
+---
+- hosts: all
+  gather_facts: True
+  tasks:
+    - name: configure search domain
+      replace:
+        path: /etc/resolv.conf
+        regexp: '^search .*$'
+        replace: 'search localdomain psl.local'
