@@ -2,11 +2,10 @@
 ansible_post_tasks: null
 ansible_pre_tasks: null
 hide_password: false
-retry_delay: 10
+retry_delay: 5
 retry_num: 60
 wait_for_splunk_retry_num: 60
-shc_sync_retry_num: 30
-shc_bootstrap_delay: 60
+shc_sync_retry_num: 60
 splunk_home_ownership_enforcement: true
 cert_prefix: https
 
