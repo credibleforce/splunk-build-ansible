@@ -60,7 +60,7 @@ splunk:
   hec_port: 8088
   hec_token: f7a5b222-7b57-41cf-9714-fb5fc333bef6
   home: /opt/splunk
-  http_enableSSL: true
+  http_enableSSL: false
   http_enableSSL_cert: null
   http_enableSSL_privKey: null
   http_enableSSL_privKey_password: null
