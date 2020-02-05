@@ -1,0 +1,30 @@
+---
+# tasks file for splunk_server (workaround for SPL-79993)
+
+- name: Install httpd and mod_ssl
+  package:
+    name: 
+      - httpd
+      - mod_ssl
+    state: present
+  become: yes
+
+- name: Update httpd configuration for Splunk Web Proxy
+  command:
+    - "sed -i '/<VirtualHost _default_:443>/a ProxyPass \/ https:\/\/127.0.0.1:8000\/' /etc/httpd/conf.d/ssl.conf"
+    - "sed -i '/<VirtualHost _default_:443>/a ProxyPassReverse \/ https:\/\/127.0.0.1:8000\/' /etc/httpd/conf.d/ssl.conf"
+    - "sed -i '/<VirtualHost _default_:443>/a SSLProxyEngine on' /etc/httpd/conf.d/ssl.conf"
+    - "sed -i '/<VirtualHost _default_:443>/a SSLProxyVerify none' /etc/httpd/conf.d/ssl.conf"
+  become: yes
+
+- name: Enable service httpd, and not touch the state
+  service:
+    name: httpd
+    enabled: yes
+  become: yes
+
+- name: Start service httpd, if not started
+  service:
+    name: httpd
+    state: reloaded
+  become: yes
