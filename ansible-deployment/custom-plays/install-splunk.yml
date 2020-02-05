@@ -80,11 +80,15 @@
         name: ../splunk-ansible/roles/splunk_indexer
       when: inventory_hostname in groups['splunk_indexer']
 
-    # DEPLOYMENT SERVER- check for splunk_deployment_server role
+    # DEPLOYMENT SERVER - check for splunk_deployment_server role
     - name: Splunk splunk_deployment_server tasks
       include_role:
         name: ../splunk-ansible/roles/splunk_deployment_server
       when: inventory_hostname in groups['splunk_deployment_server']
+  
+    - name: Hold for 1 minute before SHC
+      pause:
+        minutes: 1
 
     # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role
     - name: Splunk splunk_search_head_captain tasks
