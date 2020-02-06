@@ -31,7 +31,7 @@
 #########################################
 
 # STAGE 1 - INDEX CLUSTER
-- hosts: splunk_license_master:splunk_cluster_master:splunk_deployment_server:splunk_indexer
+- hosts: splunk_license_master:splunk_cluster_master:splunk_deployment_server:splunk_deployer:splunk_indexer
   # STRATEGY - free allows multiple server(s) and roles installed simultaneous and is required for service availability checks
   strategy: free
   gather_facts: True
@@ -87,10 +87,16 @@
         name: ../splunk-ansible/roles/splunk_deployment_server
       when: inventory_hostname in groups['splunk_deployment_server']
 
+    # DEPLOYER- check for splunk_deployer role
+    - name: Splunk splunk_deployer tasks
+      include_role:
+        name: ../splunk-ansible/roles/splunk_deployer
+      when: inventory_hostname in groups['splunk_deployer']
+
     
 
 # STAGE 2 - SEARCH HEAD CLUSTER
-- hosts: splunk_deployer:splunk_search_head_captain:splunk_search_head
+- hosts: splunk_search_head_captain:splunk_search_head
   # STRATEGY - free allows multiple server(s) and roles installed simultaneous and is required for service availability checks
   strategy: free
   gather_facts: True
@@ -115,20 +121,14 @@
       import_tasks: ../custom-roles/roles/post_config/tasks/main.yml
 
   tasks:  
-    # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role
-    - name: Splunk splunk_search_head_captain tasks
-      include_role:
-        name: ../splunk-ansible/roles/splunk_search_head_captain
-      when: inventory_hostname in groups['splunk_search_head_captain']
-    
     # SEARCH HEADS - check for splunk_search_head role
     - name: Splunk search_head tasks
       include_role:
         name: ../splunk-ansible/roles/splunk_search_head
       when: inventory_hostname in groups['splunk_search_head']
     
-    # DEPLOYER- check for splunk_deployer role
-    - name: Splunk splunk_deployer tasks
+    # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role
+    - name: Splunk splunk_search_head_captain tasks
       include_role:
-        name: ../splunk-ansible/roles/splunk_deployer
-      when: inventory_hostname in groups['splunk_deployer']
+        name: ../splunk-ansible/roles/splunk_search_head_captain
+      when: inventory_hostname in groups['splunk_search_head_captain']
