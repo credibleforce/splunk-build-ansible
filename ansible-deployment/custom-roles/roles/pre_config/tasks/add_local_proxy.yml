@@ -10,12 +10,14 @@
   become: yes
 
 - name: Update httpd configuration for Splunk Web Proxy
-  command:
-    - "sed -i '/<VirtualHost _default_:443>/a ProxyPass \/ https:\/\/127.0.0.1:8000\/' /etc/httpd/conf.d/ssl.conf"
-    - "sed -i '/<VirtualHost _default_:443>/a ProxyPassReverse \/ https:\/\/127.0.0.1:8000\/' /etc/httpd/conf.d/ssl.conf"
-    - "sed -i '/<VirtualHost _default_:443>/a SSLProxyEngine on' /etc/httpd/conf.d/ssl.conf"
-    - "sed -i '/<VirtualHost _default_:443>/a SSLProxyVerify none' /etc/httpd/conf.d/ssl.conf"
-  become: yes
+  blockinfile:
+    path: /etc/httpd/conf.d/ssl.conf
+    insertafter: '<VirtualHost _default_:443>'
+    block: |
+      ProxyPass / https://127.0.0.1:8000/
+      ProxyPassReverse / https://127.0.0.1:8000/
+      SSLProxyEngine on
+      SSLProxyVerify none
 
 - name: Enable service httpd, and not touch the state
   service:
