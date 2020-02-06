@@ -18,6 +18,8 @@
       ProxyPassReverse / https://127.0.0.1:8000/
       SSLProxyEngine on
       SSLProxyVerify none
+      SSLProxyCheckPeerCN off
+      SSLProxyCheckPeerName off
 
 - name: Enable service httpd, and not touch the state
   service:
