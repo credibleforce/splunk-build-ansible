@@ -5,6 +5,7 @@ all:
     search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
     splunk:
       all_sites: "site1,site2"
+      deployment_server: "{{ groups['splunk_deployment_server'][0]|default(omit) }}"
       multisite_master: "{{ groups['splunk_cluster_master'][0]|default(omit) }}"
       search_head_cluster_url: "{{ search_head_cluster_host }}"
       hostname: "{{ inventory_hostname }}"
