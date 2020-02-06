@@ -87,11 +87,7 @@
         name: ../splunk-ansible/roles/splunk_deployment_server
       when: inventory_hostname in groups['splunk_deployment_server']
 
-    # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role
-    - name: Splunk splunk_search_head_captain tasks
-      include_role:
-        name: ../splunk-ansible/roles/splunk_search_head_captain
-      when: inventory_hostname in groups['splunk_search_head_captain']
+    
 
 # STAGE 2 - SEARCH HEAD CLUSTER
 - hosts: splunk_deployer:splunk_search_head_captain:splunk_search_head
@@ -119,6 +115,12 @@
       import_tasks: ../custom-roles/roles/post_config/tasks/main.yml
 
   tasks:  
+    # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role
+    - name: Splunk splunk_search_head_captain tasks
+      include_role:
+        name: ../splunk-ansible/roles/splunk_search_head_captain
+      when: inventory_hostname in groups['splunk_search_head_captain']
+    
     # SEARCH HEADS - check for splunk_search_head role
     - name: Splunk search_head tasks
       include_role:
