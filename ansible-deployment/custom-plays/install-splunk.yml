@@ -30,7 +30,8 @@
 # DEPLOPY INDEXING/LICENSING/DEPLOYMENT
 #########################################
 
-- hosts: splunk_license_master:splunk_cluster_master:splunk_deployment_server:splunk_indexer:splunk_deployer:splunk_search_head_captain:splunk_search_head
+# STAGE 1 - INDEX CLUSTER
+- hosts: splunk_license_master:splunk_cluster_master:splunk_deployment_server:splunk_indexer
   # STRATEGY - free allows multiple server(s) and roles installed simultaneous and is required for service availability checks
   strategy: free
   gather_facts: True
@@ -92,6 +93,32 @@
         name: ../splunk-ansible/roles/splunk_search_head_captain
       when: inventory_hostname in groups['splunk_search_head_captain']
 
+# STAGE 2 - SEARCH HEAD CLUSTER
+- hosts: splunk_deployer:splunk_search_head_captain:splunk_search_head
+  # STRATEGY - free allows multiple server(s) and roles installed simultaneous and is required for service availability checks
+  strategy: free
+  gather_facts: True
+  
+  environment:
+    SPLUNK_SEARCH_HEAD_CAPTAIN_URL: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
+  
+  pre_tasks:
+    # Force an ntp update as service check requires time sync to work (should not be required in production)
+    - name: Sync ntp
+      include_role: 
+        name: ../custom-roles/roles/ntp_sync
+
+    # PRE CONFIG - Add users
+    - name: Custom splunk server pre-config (setup user)
+      include_role:
+        name: ../custom-roles/roles/pre_config
+
+  post_tasks:
+    # Set ulimits by service (assumes systemd service deployment)
+    - name: Post install config
+      import_tasks: ../custom-roles/roles/post_config/tasks/main.yml
+
+  tasks:  
     # SEARCH HEADS - check for splunk_search_head role
     - name: Splunk search_head tasks
       include_role:
