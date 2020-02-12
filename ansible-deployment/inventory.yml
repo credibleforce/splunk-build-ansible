@@ -1,5 +1,6 @@
 all:
   vars:
+    private_domain: "psl.local"
     ansible_connection: ssh
     ansible_system: Linux
     search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
@@ -22,7 +23,7 @@ all:
         splunk:
           role: "splunk_standalone"
       hosts: 
-        splksh4.psl.local:
+        "splksh4.{{ private_domain }}":
     splunk_search_head_captain:
       vars:
         is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
@@ -31,7 +32,7 @@ all:
           role: 
             "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
       hosts: 
-        splksh1.psl.local:
+        "splksh1.{{ private_domain }}":
           splunk:
             site: site1
     splunk_search_head:
@@ -41,24 +42,24 @@ all:
           role: 
             "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
       hosts: 
-        splksh1.psl.local:
+        "splksh1.{{ private_domain }}":
           splunk:
             site: site1
-        splksh2.psl.local:
+        "splksh2.{{ private_domain }}":
           splunk:
             site: site1
-        splksh3.psl.local:
+        "splksh3.{{ private_domain }}":
           splunk:
             site: site1
-        #splksh4.psl.local:
-        #  splunk:
-        #    site: site1
+        "splksh4.{{ private_domain }}":
+          splunk:
+            site: site1
     splunk_cluster_master:
       vars:
         splunk:
           role: "splunk_cluster_master"
       hosts: 
-        splkcm1.psl.local:
+        "splkcm1.{{ private_domain }}":
           splunk:
             site: site1
     splunk_indexer:
@@ -66,16 +67,16 @@ all:
         splunk:
           role: "splunk_indexer"
       hosts: 
-        splkidx1.psl.local:
+        "splkidx1.{{ private_domain }}":
           splunk:
             site: site1
-        splkidx2.psl.local:
+        "splkidx2.{{ private_domain }}":
           splunk:
             site: site1
-        splkidx3.psl.local:
+        "splkidx3.{{ private_domain }}":
           splunk:
             site: site2
-        splkidx4.psl.local:
+        "splkidx4.{{ private_domain }}":
           splunk:
             site: site2
     splunk_deployment_server:
@@ -83,13 +84,13 @@ all:
         splunk:
           role: "splunk_license_master"
       hosts: 
-        splkdp1.psl.local:
+        "splkdp1.{{ private_domain }}":
     splunk_license_master:
       vars:
         splunk:
           role: "splunk_license_master"
       hosts: 
-        splkdp1.psl.local:
+        "splkdp1.{{ private_domain }}":
     splunk_deployer:
       vars:
         splunk:
@@ -98,6 +99,6 @@ all:
           # This cases delays in deployment and general non-goodness :)
           role: "splunk_license_master"
       hosts: 
-        splkdp1.psl.local:
+        "splkdp1.{{ private_domain }}":
           splunk:
             site: site1

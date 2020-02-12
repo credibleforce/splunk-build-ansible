@@ -68,7 +68,7 @@ splunk:
   indexer_cluster: true
   preferred_captaincy: false
   idxc:
-    enable: false
+    enable: true
     label: idxc_label
     replication_factor: 2
     replication_port: 9887
