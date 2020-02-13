@@ -2,6 +2,12 @@
 - hosts: splunk_distributed_monitoring_console
   gather_facts: True
   tasks:
+    # Check if systemd is running
+    - name: "Identify service system (Linux)"
+      command: "ps --no-headers -o comm 1"
+      register: pid1
+      when: splunk.enable_service and ansible_system is match("Linux")
+      
     - name: Set all indexers search heads, cluster master server as search peers
       command: "{{ splunk.exec }} add search-server {{ cert_prefix }}://{{ item }}:{{ splunk.svc_port }} -auth {{ splunk.admin_user }}:{{ splunk.password }} -remoteUsername {{ splunk.admin_user }} -remotePassword {{ splunk.password }}"
       become: yes
