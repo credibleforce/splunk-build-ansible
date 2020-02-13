@@ -15,31 +15,32 @@
       failed_when: set_dmc_peers.rc != 0 and 'already exists' not in set_dmc_peers.stderr
       no_log: "{{ hide_password }}"
       when: "'splunk_indexer' in groups or 'splunk_search_head' in groups or 'splunk_cluster_master' in groups"
-  - name: "Restart the splunkd service - Via CLI"
-    command: "{{ splunk.exec }} restart -f --answer-yes --accept-license"
-    become: yes
-    become_user: "{{ splunk.user }}"
-    register: task_result
-    until: task_result.rc == 0
-    retries: "{{ retry_num }}"
-    delay: "{{ retry_delay }}"
-    when: not splunk.enable_service
 
-  - name: "Restart the splunkd service - Via systemd"
-    service:
-      name: "{% if pid1.stdout.find('systemd') != -1 %}Splunkd{% else %}{{ splunk.service_name }}{% endif %}"
-      state: restarted
-    when: splunk.enable_service and ansible_system is match("Linux")
-    become: yes
-    become_user: "{{ privileged_user }}"
+    - name: "Restart the splunkd service - Via CLI"
+      command: "{{ splunk.exec }} restart -f --answer-yes --accept-license"
+      become: yes
+      become_user: "{{ splunk.user }}"
+      register: task_result
+      until: task_result.rc == 0
+      retries: "{{ retry_num }}"
+      delay: "{{ retry_delay }}"
+      when: not splunk.enable_service
 
-  - name: "Restart the splunkd service - Via windows system"
-    win_service:
-      name: splunkd
-      state: restarted
-    when: splunk.enable_service and not ansible_system is match("Linux")
+    - name: "Restart the splunkd service - Via systemd"
+      service:
+        name: "{% if pid1.stdout.find('systemd') != -1 %}Splunkd{% else %}{{ splunk.service_name }}{% endif %}"
+        state: restarted
+      when: splunk.enable_service and ansible_system is match("Linux")
+      become: yes
+      become_user: "{{ privileged_user }}"
 
-  - name: "Wait for splunkd management port"
-    wait_for:
-      port: "{{ splunk.svc_port }}"
+    - name: "Restart the splunkd service - Via windows system"
+      win_service:
+        name: splunkd
+        state: restarted
+      when: splunk.enable_service and not ansible_system is match("Linux")
+
+    - name: "Wait for splunkd management port"
+      wait_for:
+        port: "{{ splunk.svc_port }}"
 
