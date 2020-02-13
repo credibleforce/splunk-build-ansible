@@ -98,3 +98,9 @@ all:
         splkdp1.psl.local:
           splunk:
             site: site1
+    splunk_distributed_monitoring_console:
+      vars:
+        splunk:
+          role: "splunk_distributed_monitoring_console"
+      hosts:
+        splunkdp1.psl.local:
