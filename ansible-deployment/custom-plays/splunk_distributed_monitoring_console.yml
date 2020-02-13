@@ -2,53 +2,6 @@
 - hosts: splunk_distributed_monitoring_console
   gather_facts: True
   tasks:
-    # Check if systemd is running
-    - name: "Identify service system (Linux)"
-      command: "ps --no-headers -o comm 1"
-      register: pid1
-      when: splunk.enable_service and ansible_system is match("Linux")
-      
-    - name: Set all indexers search heads, cluster master server as search peers
-      command: "{{ splunk.exec }} add search-server {{ cert_prefix }}://{{ item }}:{{ splunk.svc_port }} -auth {{ splunk.admin_user }}:{{ splunk.password }} -remoteUsername {{ splunk.admin_user }} -remotePassword {{ splunk.password }}"
-      become: yes
-      become_user: "{{ splunk.user }}"
-      with_items: 
-        - "{{ groups['splunk_indexer'] }}"
-        - "{{ groups['splunk_search_head'] }}"
-        - "{{ groups['splunk_cluster_master'] }}"
-      register: set_dmc_peers
-      until: set_dmc_peers.rc == 0 or set_dmc_peers.rc == 24
-      retries: "{{ retry_num }}"
-      delay: "{{ retry_delay }}"
-      changed_when: set_dmc_peers.rc == 0
-      failed_when: set_dmc_peers.rc != 0 and 'already exists' not in set_dmc_peers.stderr
-      no_log: "{{ hide_password }}"
-      when: "'splunk_indexer' in groups or 'splunk_search_head' in groups or 'splunk_cluster_master' in groups"
-
-    - name: "Restart the splunkd service - Via CLI"
-      command: "{{ splunk.exec }} restart -f --answer-yes --accept-license"
-      become: yes
-      become_user: "{{ splunk.user }}"
-      register: task_result
-      until: task_result.rc == 0
-      retries: "{{ retry_num }}"
-      delay: "{{ retry_delay }}"
-      when: not splunk.enable_service
-
-    - name: "Restart the splunkd service - Via systemd"
-      service:
-        name: "{% if pid1.stdout.find('systemd') != -1 %}Splunkd{% else %}{{ splunk.service_name }}{% endif %}"
-        state: restarted
-      when: splunk.enable_service and ansible_system is match("Linux")
-      become: yes
-
-    - name: "Restart the splunkd service - Via windows system"
-      win_service:
-        name: splunkd
-        state: restarted
-      when: splunk.enable_service and not ansible_system is match("Linux")
-
-    - name: "Wait for splunkd management port"
-      wait_for:
-        port: "{{ splunk.svc_port }}"
-
+    - name: Splunk splunk_distributed_monitoring_console tasks
+      include_role:
+        name: ../custom-roles/roles/splunk_distributed_monitoring_console

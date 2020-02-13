@@ -132,3 +132,11 @@
       include_role:
         name: ../splunk-ansible/roles/splunk_search_head_captain
       when: inventory_hostname in groups['splunk_search_head_captain']
+
+# STAGE 3 - DISTRIBUTED MONITORING CONSOLE 
+- hosts: splunk_distributed_monitoring_console
+  gather_facts: True
+  tasks:
+    - name: Splunk splunk_distributed_monitoring_console tasks
+      include_role:
+        name: ../custom-roles/roles/splunk_distributed_monitoring_console
