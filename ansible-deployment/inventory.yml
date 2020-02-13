@@ -103,4 +103,4 @@ all:
         splunk:
           role: "splunk_distributed_monitoring_console"
       hosts:
-        splunkdp1.psl.local:
+        splkdp1.psl.local:
