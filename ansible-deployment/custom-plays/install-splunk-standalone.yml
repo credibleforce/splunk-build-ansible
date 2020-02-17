@@ -7,7 +7,7 @@
     # Force an ntp update as service check requires time sync to work (should not be required in production)
     - name: Sync ntp
       include_role: 
-        name: ntp_sync
+        name: ../custom-roles/roles/ntp_sync
 
 - hosts: splunk_license_master:splunk_standalone
   # STRATEGY - free allows multiple server(s) and roles installed simultaneous and is required for service availability checks
@@ -17,31 +17,27 @@
     # Force an ntp update as service check requires time sync to work (should not be required in production)
     - name: Sync ntp
       include_role: 
-        name: ntp_sync
+        name: ../custom-roles/roles/ntp_sync
 
     # PRE CONFIG - Add users
     - name: Custom splunk server pre-config (setup user)
       include_role:
-        name: pre_config
-        
+        name: ../custom-roles/roles/pre_config
+  
   post_tasks:
     # Set ulimits by service (assumes systemd service deployment)
     - name: Post install config
-      include_role: 
-        name: post_config
+      import_tasks: ../custom-roles/roles/post_config/tasks/main.yml
   tasks:
     
     # LICENSE MASTER- check for splunk_license_master role
     - name: Splunk splunk_license_master tasks
       include_role:
-        name: splunk_license_master
+        name: ../splunk-ansible/roles/splunk_license_master
       when: inventory_hostname in groups['splunk_license_master']
-
-    - debug:
-        msg: "{{ splunk.hostname }} => {{ inventory_hostname }}: splunk.role:{{ splunk.role }}; splunk_standalone:{{ inventory_hostname in groups['splunk_standalone'] }}; master_included:{{ inventory_hostname in groups['splunk_license_master'] }}; role check: {{ splunk.role != \"splunk_license_master\" }}"
 
     # STANDALONE - check for splunk_standalone role
     - name: Splunk splunk_standalone tasks
       include_role:
-        name: splunk_standalone
+        name: ../splunk-ansible/roles/splunk_standalone
       when: inventory_hostname in groups['splunk_standalone']
