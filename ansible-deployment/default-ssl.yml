@@ -61,8 +61,8 @@ splunk:
   hec_token: f7a5b222-7b57-41cf-9714-fb5fc333bef6
   home: /opt/splunk
   http_enableSSL: true
-  http_enableSSL_cert: "{{ splunk.home }}/etc/auth/mycerts/splunk.pem"
-  http_enableSSL_privKey: "{{ splunk.home }}/etc/auth/mycerts/splunk.key"
+  http_enableSSL_cert: "/opt/splunk/etc/auth/mycerts/splunk.pem"
+  http_enableSSL_privKey: "/opt/splunk/etc/auth/mycerts/splunk.key"
   http_enableSSL_privKey_password: null
   http_port: 8000
   indexer_cluster: true
@@ -90,8 +90,8 @@ splunk:
   s2s_port: 9997
   s2s:
     ssl: true
-    cert: "{{ splunk.home }}/etc/auth/mycerts/splunk.pem"
-    ca: "{{ splunk.home }}/etc/auth/mycerts/cacert.pem"
+    cert: "/opt/splunk/etc/auth/mycerts/splunk.pem"
+    ca: "/opt/splunk/etc/auth/mycerts/cacert.pem"
     password: null
   search_head_cluster: true
   deployer_included: true
