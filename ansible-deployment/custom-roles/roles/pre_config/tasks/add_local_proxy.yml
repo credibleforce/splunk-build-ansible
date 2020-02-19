@@ -51,8 +51,14 @@
       SSLProxyVerify none
       SSLProxyCheckPeerCN off
       SSLProxyCheckPeerName off
-      SSLCertificateFile /etc/apache2/ssl/splunk.crt
-      SSLCertificateKeyFile /etc/apache2/ssl/splunk.key
+      SSLCertificateFile /etc/httpd/ssl/splunk.crt
+      SSLCertificateKeyFile /etc/httpd/ssl/splunk.key
+
+- name: Update httpd configuration for Splunk Web Proxy ServerName
+  blockinfile:
+    path: /etc/httpd/conf.d/ssl.conf
+    block: |
+      ServerName localhost
 
 - name: Set httpd_can_network_connect flag on and keep it persistent across reboots
   seboolean:
