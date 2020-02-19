@@ -51,10 +51,7 @@
       SSLProxyVerify none
       SSLProxyCheckPeerCN off
       SSLProxyCheckPeerName off
-
-- name: Validate the sudoers file before saving
-  
-
+      
 - name: Update httpd SSLCertificateFile
   lineinfile:
     path: /etc/httpd/conf.d/ssl.conf
