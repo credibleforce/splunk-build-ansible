@@ -91,6 +91,7 @@ splunk:
   s2s:
     ssl: null
     cert: null
+    ca: null
     password: null
   search_head_cluster: true
   deployer_included: true
