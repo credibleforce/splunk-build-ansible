@@ -1,0 +1,6 @@
+---
+- name: Install libsemanage-python package
+  yum:
+    name: libsemanage-python
+    state: present
+  become: true

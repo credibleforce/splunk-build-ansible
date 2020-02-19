@@ -9,4 +9,5 @@
 - import_tasks: set_vm_swappiness.yml
 - import_tasks: set_ulimits.yml
 - import_tasks: set_splunk_home.yml
+- import_tasks: install_se_manage.yml
 - import_tasks: add_local_proxy.yml
