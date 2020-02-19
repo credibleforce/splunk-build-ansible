@@ -56,7 +56,7 @@
 
 - name: Update httpd configuration for Splunk Web Proxy ServerName
   blockinfile:
-    path: /etc/httpd/conf.d/ssl.conf
+    path: /etc/httpd/conf.d/servername.conf
     block: |
       ServerName localhost
 
