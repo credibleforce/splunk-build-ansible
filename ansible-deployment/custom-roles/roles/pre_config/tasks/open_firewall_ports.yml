@@ -8,6 +8,15 @@
   ignore_errors: yes
   become: yes
 
+- name: Splunk web proxy port
+  firewalld:
+    port: 443/tcp
+    permanent: yes
+    immediate: yes
+    state: enabled
+  when: "(firewalld_status.results[0].rc == 0)"
+  become: yes
+
 - name: Splunk web firewall port
   firewalld:
     port: 8000/tcp
