@@ -51,7 +51,7 @@
       SSLProxyVerify none
       SSLProxyCheckPeerCN off
       SSLProxyCheckPeerName off
-      
+
 - name: Update httpd SSLCertificateFile
   lineinfile:
     path: /etc/httpd/conf.d/ssl.conf
@@ -63,7 +63,7 @@
   lineinfile:
     path: /etc/httpd/conf.d/ssl.conf
     state: present
-    regexp: '^SSLCertificateFile'
+    regexp: '^SSLCertificateKeyFile'
     line: 'SSLCertificateKeyFile /etc/httpd/ssl/splunk.key'
 
 - name: Update httpd configuration for Splunk Web Proxy ServerName
