@@ -55,10 +55,11 @@
       SSLCertificateKeyFile /etc/httpd/ssl/splunk.key
 
 - name: Update httpd configuration for Splunk Web Proxy ServerName
-  blockinfile:
-    path: /etc/httpd/conf.d/servername.conf
-    block: |
-      ServerName localhost
+  copy:
+    content: |
+      ServerName localhost      
+    dest: /etc/httpd/conf.d/servername.conf
+    
 
 - name: Set httpd_can_network_connect flag on and keep it persistent across reboots
   seboolean:
