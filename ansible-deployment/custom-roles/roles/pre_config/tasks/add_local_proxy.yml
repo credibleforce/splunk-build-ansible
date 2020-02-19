@@ -15,14 +15,14 @@
     state: directory
     mode: '0755'
 
-- name: Copy splunk key to apache2 cert directory
+- name: Copy splunk key to httpd cert directory
   copy:
     src: "{{ splunk.home }}/etc/auth/mycerts/splunk.key"
-    dest: /etc/apache2/ssl/splunk.key
+    dest: /etc/httpd/ssl/splunk.key
     remote_src: yes
   become: yes
 
-- name: Copy splunk cert to apache2 cert directory
+- name: Copy splunk cert to httpd cert directory
   copy:
     src: "{{ splunk.home }}/etc/auth/mycerts/splunk.crt"
     dest: /etc/httpd/ssl/splunk.crt
