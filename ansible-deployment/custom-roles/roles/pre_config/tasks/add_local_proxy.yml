@@ -9,6 +9,37 @@
     state: present
   become: yes
 
+- name: Create httpd ssl directory if it does not exist
+  file:
+    path: /etc/httpd/ssl
+    state: directory
+    mode: '0755'
+
+- name: Copy splunk key to apache2 cert directory
+  copy:
+    src: "{{ splunk.home }}/etc/auth/mycerts/splunk.key"
+    dest: /etc/apache2/ssl/splunk.key
+    remote_src: yes
+  become: yes
+
+- name: Copy splunk cert to apache2 cert directory
+  copy:
+    src: "{{ splunk.home }}/etc/auth/mycerts/splunk.crt"
+    dest: /etc/httpd/ssl/splunk.crt
+    remote_src: yes
+  become: yes
+
+- name: Restrict access to cert material
+  file:
+    path: "{{ item }}"
+    owner: apache
+    group: apache
+    mode: '0400'
+  with_items:
+    - "/etc/httpd/ssl/splunk.key"
+    - "/etc/httpd/ssl/splunk.crt"
+  become: yes
+
 - name: Update httpd configuration for Splunk Web Proxy
   blockinfile:
     path: /etc/httpd/conf.d/ssl.conf
@@ -20,6 +51,8 @@
       SSLProxyVerify none
       SSLProxyCheckPeerCN off
       SSLProxyCheckPeerName off
+      SSLCertificateFile /etc/apache2/ssl/splunk.crt
+      SSLCertificateKeyFile /etc/apache2/ssl/splunk.key
 
 - name: Set httpd_can_network_connect flag on and keep it persistent across reboots
   seboolean:
