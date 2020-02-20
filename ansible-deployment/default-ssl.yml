@@ -92,7 +92,7 @@ splunk:
     ssl: true
     cert: "/opt/splunk/etc/auth/mycerts/splunk.pem"
     ca: "/opt/splunk/etc/auth/mycerts/cacert.pem"
-    password: null
+    password: password
   search_head_cluster: true
   deployer_included: true
   secret: null
