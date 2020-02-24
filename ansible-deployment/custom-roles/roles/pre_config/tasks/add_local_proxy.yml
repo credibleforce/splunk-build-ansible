@@ -1,5 +1,5 @@
 ---
-# tasks file for splunk_server (workaround for SPL-79993)
+# Tasks file for splunk_server (workaround for SPL-79993)
 
 - name: Install httpd and mod_ssl
   package:
@@ -9,11 +9,19 @@
     state: present
   become: yes
 
+# CUSTOM CERTS BEGIN - handle apache proxy setup when custom certs are being used
+
+- name: Check for custom splunk certs
+  stat: 
+    path: "{{ splunk.home }}/etc/auth/mycerts/splunk.key"
+  register: splunk_custom_certs
+
 - name: Create httpd ssl directory if it does not exist
   file:
     path: /etc/httpd/ssl
     state: directory
     mode: '0755'
+  when: splunk_custom_certs.exists == True
 
 - name: Copy splunk key to httpd cert directory
   copy:
@@ -21,6 +29,7 @@
     dest: /etc/httpd/ssl/splunk.key
     remote_src: yes
   become: yes
+  when: splunk_custom_certs.exists == True
 
 - name: Copy splunk cert to httpd cert directory
   copy:
@@ -28,6 +37,7 @@
     dest: /etc/httpd/ssl/splunk.crt
     remote_src: yes
   become: yes
+  when: splunk_custom_certs.exists == True
 
 - name: Restrict access to cert material
   file:
@@ -39,6 +49,25 @@
     - "/etc/httpd/ssl/splunk.key"
     - "/etc/httpd/ssl/splunk.crt"
   become: yes
+  when: splunk_custom_certs.exists == True
+
+- name: Update httpd SSLCertificateFile
+  lineinfile:
+    path: /etc/httpd/conf.d/ssl.conf
+    state: present
+    regexp: '^SSLCertificateFile'
+    line: 'SSLCertificateFile /etc/httpd/ssl/splunk.crt'
+  when: splunk_custom_certs.exists == True
+
+- name: Update httpd SSLCertificateKeyFile
+  lineinfile:
+    path: /etc/httpd/conf.d/ssl.conf
+    state: present
+    regexp: '^SSLCertificateKeyFile'
+    line: 'SSLCertificateKeyFile /etc/httpd/ssl/splunk.key'
+  when: splunk_custom_certs.exists == True
+
+# CUSTOM CERTS END - handle apache proxy setup when custom certs are being used
 
 - name: Update httpd configuration for Splunk Web Proxy
   blockinfile:
@@ -51,20 +80,6 @@
       SSLProxyVerify none
       SSLProxyCheckPeerCN off
       SSLProxyCheckPeerName off
-
-- name: Update httpd SSLCertificateFile
-  lineinfile:
-    path: /etc/httpd/conf.d/ssl.conf
-    state: present
-    regexp: '^SSLCertificateFile'
-    line: 'SSLCertificateFile /etc/httpd/ssl/splunk.crt'
-
-- name: Update httpd SSLCertificateKeyFile
-  lineinfile:
-    path: /etc/httpd/conf.d/ssl.conf
-    state: present
-    regexp: '^SSLCertificateKeyFile'
-    line: 'SSLCertificateKeyFile /etc/httpd/ssl/splunk.key'
 
 - name: Update httpd configuration for Splunk Web Proxy ServerName
   copy:
