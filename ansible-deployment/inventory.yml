@@ -22,7 +22,7 @@ all:
         splunk:
           role: "splunk_standalone"
       hosts: 
-        splksh4.psl.local:
+        splksh1.psl.local:
     splunk_search_head_captain:
       vars:
         is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
