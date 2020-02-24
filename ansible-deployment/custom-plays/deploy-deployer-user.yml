@@ -57,7 +57,7 @@
       with_file:
         - /tmp/id_rsa.pub
 
-    - name: Delete stale lock filesi
+    - name: Delete stale lock files
       file:
         path: "{{ item }}"
         state: absent

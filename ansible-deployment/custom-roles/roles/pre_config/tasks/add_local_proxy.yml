@@ -21,7 +21,7 @@
     path: /etc/httpd/ssl
     state: directory
     mode: '0755'
-  when: splunk_custom_certs.exists == True
+  when: splunk_custom_certs.stat.exists == True
 
 - name: Copy splunk key to httpd cert directory
   copy:
@@ -29,7 +29,7 @@
     dest: /etc/httpd/ssl/splunk.key
     remote_src: yes
   become: yes
-  when: splunk_custom_certs.exists == True
+  when: splunk_custom_certs.stat.exists == True
 
 - name: Copy splunk cert to httpd cert directory
   copy:
@@ -37,7 +37,7 @@
     dest: /etc/httpd/ssl/splunk.crt
     remote_src: yes
   become: yes
-  when: splunk_custom_certs.exists == True
+  when: splunk_custom_certs.stat.exists == True
 
 - name: Restrict access to cert material
   file:
@@ -49,7 +49,7 @@
     - "/etc/httpd/ssl/splunk.key"
     - "/etc/httpd/ssl/splunk.crt"
   become: yes
-  when: splunk_custom_certs.exists == True
+  when: splunk_custom_certs.stat.exists == True
 
 - name: Update httpd SSLCertificateFile
   lineinfile:
@@ -57,7 +57,7 @@
     state: present
     regexp: '^SSLCertificateFile'
     line: 'SSLCertificateFile /etc/httpd/ssl/splunk.crt'
-  when: splunk_custom_certs.exists == True
+  when: splunk_custom_certs.stat.exists == True
 
 - name: Update httpd SSLCertificateKeyFile
   lineinfile:
@@ -65,7 +65,7 @@
     state: present
     regexp: '^SSLCertificateKeyFile'
     line: 'SSLCertificateKeyFile /etc/httpd/ssl/splunk.key'
-  when: splunk_custom_certs.exists == True
+  when: splunk_custom_certs.stat.exists == True
 
 # CUSTOM CERTS END - handle apache proxy setup when custom certs are being used
 
