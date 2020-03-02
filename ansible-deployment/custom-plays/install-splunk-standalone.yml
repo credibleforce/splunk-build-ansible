@@ -8,6 +8,10 @@
     - name: Sync ntp
       include_role: 
         name: ../custom-roles/roles/ntp_sync
+        
+    - name: Download Splunk
+      include_role:
+        name: ../custom-roles/roles/download_splunk
 
 - hosts: splunk_license_master:splunk_standalone
   # STRATEGY - free allows multiple server(s) and roles installed simultaneous and is required for service availability checks

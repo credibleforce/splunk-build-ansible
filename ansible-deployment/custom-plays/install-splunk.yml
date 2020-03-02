@@ -10,6 +10,10 @@
       include_role: 
         name: ../custom-roles/roles/ntp_sync
 
+    - name: Download Splunk
+      include_role:
+        name: ../custom-roles/roles/download_splunk
+
 #########################################
 # ROLE ASSIGNMENTS BY INVENTORY
 #########################################

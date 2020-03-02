@@ -1,0 +1,5 @@
+---
+- name: Download splunk
+  get_url:
+    url: https://www.splunk.com/page/download_track?file=7.3.4/linux/splunk-7.3.4-13e97039fb65-linux-2.6-x86_64.rpm&ac=&wget=true&name=wget&platform=Linux&architecture=x86_64&version=7.3.4&product=splunk&typed=release
+    dest: /tmp/splunk.rpm
