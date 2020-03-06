@@ -1,14 +1,4 @@
 all:
-  vars:
-    ansible_connection: ssh
-    ansible_system: Linux
-    search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
-    splunk:
-      all_sites: "site1,site2"
-      deployment_server: "{{ groups['splunk_deployment_server'][0]|default(omit) }}"
-      multisite_master: "{{ groups['splunk_cluster_master'][0]|default(omit) }}"
-      search_head_cluster_url: "{{ search_head_cluster_host }}"
-      hostname: "{{ inventory_hostname }}"
   children:
     local:
       hosts:
@@ -16,91 +6,102 @@ all:
       vars:
         ansible_connection: local
         ansible_python_interpreter: "{{ansible_playbook_python}}"
-    
-    splunk_standalone:
+    splunk:
       vars:
+        ansible_connection: ssh
+        ansible_system: Linux
+        search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
         splunk:
-          role: "splunk_standalone"
-      hosts: 
-        splksh1.psl.local:
-    splunk_search_head_captain:
-      vars:
-        is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
-        splunk:
+          all_sites: "site1,site2"
+          deployment_server: "{{ groups['splunk_deployment_server'][0]|default(omit) }}"
+          multisite_master: "{{ groups['splunk_cluster_master'][0]|default(omit) }}"
+          search_head_cluster_url: "{{ search_head_cluster_host }}"
           hostname: "{{ inventory_hostname }}"
-          role: 
-            "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
-      hosts: 
-        splksh1.psl.local:
-          splunk:
-            site: site1
-    splunk_search_head:
-      vars:
-        is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
-        splunk:
-          role: 
-            "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
-      hosts: 
-        splksh1.psl.local:
-          splunk:
-            site: site1
-        splksh2.psl.local:
-          splunk:
-            site: site1
-        splksh3.psl.local:
-          splunk:
-            site: site1
-    splunk_cluster_master:
-      vars:
-        splunk:
-          role: "splunk_cluster_master"
-      hosts: 
-        splkcm1.psl.local:
-          splunk:
-            site: site1
-    splunk_indexer:
-      vars:
-        splunk:
-          role: "splunk_indexer"
-      hosts: 
-        splkidx1.psl.local:
-          splunk:
-            site: site1
-        splkidx2.psl.local:
-          splunk:
-            site: site1
-        splkidx3.psl.local:
-          splunk:
-            site: site2
-        splkidx4.psl.local:
-          splunk:
-            site: site2
-    splunk_deployment_server:
-      vars:
-        splunk:
-          role: "splunk_license_master"
-      hosts: 
-        splkdp1.psl.local:
-    splunk_license_master:
-      vars:
-        splunk:
-          role: "splunk_license_master"
-      hosts: 
-        splkdp1.psl.local:
-    splunk_deployer:
-      vars:
-        splunk:
-          # Note: this server has two roles (LM and DP) - we need to set the role to 
-          # splunk_license_master or it will get added as a local slave to itself.
-          # This cases delays in deployment and general non-goodness :)
-          role: "splunk_license_master"
-      hosts: 
-        splkdp1.psl.local:
-          splunk:
-            site: site1
-    splunk_distributed_monitoring_console:
-      vars:
-        splunk:
-          role: "splunk_distributed_monitoring_console"
-      hosts:
-        splkdp1.psl.local:
+      children:
+        splunk_standalone:
+          vars:
+            splunk:
+              role: "splunk_standalone"
+          hosts: 
+            splksh1.psl.local:
+        splunk_search_head_captain:
+          vars:
+            is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
+            splunk:
+              hostname: "{{ inventory_hostname }}"
+              role: 
+                "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
+          hosts: 
+            splksh1.psl.local:
+              splunk:
+                site: site1
+        splunk_search_head:
+          vars:
+            is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
+            splunk:
+              role: 
+                "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
+          hosts: 
+            splksh1.psl.local:
+              splunk:
+                site: site1
+            splksh2.psl.local:
+              splunk:
+                site: site1
+            splksh3.psl.local:
+              splunk:
+                site: site1
+        splunk_cluster_master:
+          vars:
+            splunk:
+              role: "splunk_cluster_master"
+          hosts: 
+            splkcm1.psl.local:
+              splunk:
+                site: site1
+        splunk_indexer:
+          vars:
+            splunk:
+              role: "splunk_indexer"
+          hosts: 
+            splkidx1.psl.local:
+              splunk:
+                site: site1
+            splkidx2.psl.local:
+              splunk:
+                site: site1
+            splkidx3.psl.local:
+              splunk:
+                site: site2
+            splkidx4.psl.local:
+              splunk:
+                site: site2
+        splunk_deployment_server:
+          vars:
+            splunk:
+              role: "splunk_license_master"
+          hosts: 
+            splkdp1.psl.local:
+        splunk_license_master:
+          vars:
+            splunk:
+              role: "splunk_license_master"
+          hosts: 
+            splkdp1.psl.local:
+        splunk_deployer:
+          vars:
+            splunk:
+              # Note: this server has two roles (LM and DP) - we need to set the role to 
+              # splunk_license_master or it will get added as a local slave to itself.
+              # This cases delays in deployment and general non-goodness :)
+              role: "splunk_license_master"
+          hosts: 
+            splkdp1.psl.local:
+              splunk:
+                site: site1
+        splunk_distributed_monitoring_console:
+          vars:
+            splunk:
+              role: "splunk_distributed_monitoring_console"
+          hosts:
+            splkdp1.psl.local:
