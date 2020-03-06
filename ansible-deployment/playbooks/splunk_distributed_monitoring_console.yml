@@ -4,4 +4,4 @@
   tasks:
     - name: Splunk splunk_distributed_monitoring_console tasks
       include_role:
-        name: ../custom-roles/roles/splunk_distributed_monitoring_console
+        name: splunk_distributed_monitoring_console
