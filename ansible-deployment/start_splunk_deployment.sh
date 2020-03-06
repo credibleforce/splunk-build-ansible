@@ -1,2 +1,2 @@
 #!/bin/bash
-ansible-playbook -i inventory.yml playbooks/install-splunk.yml
+ansible-playbook -i inventory playbooks/install-splunk.yml
