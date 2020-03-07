@@ -103,7 +103,6 @@ splunk:
     replication_port: 9887
     secret: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
     pass4SymmKey: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
-  service_name: splunk
   smartstore: null
   svc_port: 8089
   tar_dir: splunk
