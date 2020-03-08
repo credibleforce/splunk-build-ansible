@@ -15,7 +15,6 @@ all:
         splunk_multisite_master: "{{ groups['splunk_cluster_master'][0]|default(omit) }}"
         splunk:
           all_sites: "site1,site2"
-          deployment_server: "{{ splunk_deployment_server }}"
           multisite_master: "{{ splunk_multisite_master }}"
           search_head_cluster_url: "{{ splunk_search_head_cluster_host }}"
           hostname: "{{ inventory_hostname }}"
@@ -30,6 +29,7 @@ all:
           vars:
             is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
             splunk:
+              deployment_server: "{{ splunk_deployment_server }}"
               hostname: "{{ inventory_hostname }}"
               role: 
                 "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
@@ -41,6 +41,7 @@ all:
           vars:
             is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
             splunk:
+              deployment_server: "{{ splunk_deployment_server }}"
               role: 
                 "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
           hosts: 
@@ -56,6 +57,7 @@ all:
         splunk_cluster_master:
           vars:
             splunk:
+              deployment_server: "{{ splunk_deployment_server }}"
               role: "splunk_cluster_master"
           hosts: 
             splkcm1.psl.local:
@@ -64,6 +66,7 @@ all:
         splunk_indexer:
           vars:
             splunk:
+              deployment_server: "{{ splunk_deployment_server }}"
               role: "splunk_indexer"
           hosts: 
             splkidx1.psl.local:
@@ -81,18 +84,21 @@ all:
         splunk_deployment_server:
           vars:
             splunk:
+              deployment_server: "{{ splunk_deployment_server }}"
               role: "splunk_license_master"
           hosts: 
             splkdp1.psl.local:
         splunk_license_master:
           vars:
             splunk:
+              deployment_server: "{{ splunk_deployment_server }}"
               role: "splunk_license_master"
           hosts: 
             splkdp1.psl.local:
         splunk_deployer:
           vars:
             splunk:
+              deployment_server: "{{ splunk_deployment_server }}"
               # Note: this server has two roles (LM and DP) - we need to set the role to 
               # splunk_license_master or it will get added as a local slave to itself.
               # This cases delays in deployment and general non-goodness :)
@@ -100,10 +106,12 @@ all:
           hosts: 
             splkdp1.psl.local:
               splunk:
+                deployment_server: "{{ splunk_deployment_server }}"
                 site: site1
         splunk_distributed_monitoring_console:
           vars:
             splunk:
+              deployment_server: "{{ splunk_deployment_server }}"
               role: "splunk_distributed_monitoring_console"
           hosts:
             splkdp1.psl.local:
