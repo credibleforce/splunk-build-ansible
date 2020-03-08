@@ -15,7 +15,6 @@
       include_role:
         name: download_splunk
 
-#- hosts: splunk_license_master:splunk_standalone
 - hosts: splunk_standalone
   vars_files:
     - ../vars/default-standalone.yml
@@ -38,12 +37,6 @@
     - name: Post install config
       import_tasks: ../roles/post_config/tasks/main.yml
   tasks:
-    
-    # LICENSE MASTER- check for splunk_license_master role
-    #- name: Splunk splunk_license_master tasks
-    #  include_role:
-    #    name: splunk_license_master
-    #  when: inventory_hostname in groups['splunk_license_master']
 
     # STANDALONE - check for splunk_standalone role
     - name: Splunk splunk_standalone tasks
