@@ -5,7 +5,7 @@
 
 - hosts: local
   vars_files:
-    - ../vars/default.yml
+    - ../vars/default-searchhead-indexcluster.yml
   tasks:
     # Force an ntp update as service check requires time sync to work (should not be required in production)
     - name: Sync ntp
@@ -39,7 +39,7 @@
 # STAGE 1 - INDEX CLUSTER
 - hosts: splunk_license_master:splunk_cluster_master:splunk_deployment_server:splunk_deployer:splunk_indexer
   vars_files:
-    - ../vars/default.yml
+    - ../vars/default-searchhead-indexcluster.yml
   # STRATEGY - free allows multiple server(s) and roles installed simultaneous and is required for service availability checks
   strategy: free
   gather_facts: True
@@ -106,7 +106,7 @@
 # STAGE 2 - SEARCH HEAD CLUSTER
 - hosts: splunk_search_head_captain:splunk_search_head
   vars_files:
-    - ../vars/default.yml
+    - ../vars/default-searchhead-indexcluster.yml
   # STRATEGY - free allows multiple server(s) and roles installed simultaneous and is required for service availability checks
   strategy: free
   gather_facts: True
@@ -146,7 +146,7 @@
 # STAGE 3 - DISTRIBUTED MONITORING CONSOLE 
 - hosts: splunk_distributed_monitoring_console
   vars_files:
-    - ../vars/default.yml
+    - ../vars/default-searchhead-indexcluster.yml
   gather_facts: True
   tasks:
     - name: Splunk splunk_distributed_monitoring_console tasks
