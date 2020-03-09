@@ -10,7 +10,7 @@ splunk_home_ownership_enforcement: true
 cert_prefix: https
 
 config:
-  baked: default.yml
+  baked: default-standalone.yml
   defaults_dir: /tmp/defaults
   env:
     headers: null
