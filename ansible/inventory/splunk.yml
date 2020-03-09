@@ -10,13 +10,22 @@ all:
       vars:
         ansible_connection: ssh
         ansible_system: Linux
+        splunk_default_site: "{{ 'site1' if 'splunk_indexcluster' in deployment_type else omit }}"
+        splunk_cluster_master_host: "{{ groups['splunk_cluster_master'][0] if 'splunk_indexcluster' in deployment_type else omit }}"
         splunk_search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0] if 'splunk_searchheadcluster' in deployment_type else omit }}"
         splunk_deployment_server: "{{ groups['splunk_deployment_server'][0] if 'splunk_deploymentserver' in deployment_type else omit }}"
         splunk_multisite_master: "{{ groups['splunk_cluster_master'][0] if 'splunk_indexcluster' in deployment_type else omit }}"
         splunk:
-          all_sites: "{{ 'site1,site2' if 'splunk_indexcluster' in deployment_type else omit }}"
-          multisite_master: "{{ splunk_multisite_master }} if 'splunk_indexcluster' in deployment_type else omit"
-          search_head_cluster_url: "{{ splunk_search_head_cluster_host }} if 'splunk_indexcluster' in deployment_type else omit"
+          # multisite
+          all_sites: "{{ 'site1,site2' if 'splunk_indexcluster' in deployment_type and 'splunk_multisite' in deployment_type  else omit }}"
+          multisite_master: "{{ splunk_multisite_master if 'splunk_indexcluster' in deployment_type and 'splunk_multisite' in deployment_type  else omit }}"
+          
+          # index cluster
+          cluster_master_url: "{{ splunk_cluster_master_host if 'splunk_indexcluster' in deployment_type else omit }}"
+          
+          # searchhead cluster
+          search_head_cluster_url: "{{ splunk_search_head_cluster_host if 'splunk_searchheadcluster' in deployment_type else omit }}"
+          
           hostname: "{{ inventory_hostname }}"
       children:
         splunk_standalone:
@@ -35,7 +44,7 @@ all:
           hosts: 
             splksh1.psl.local:
               splunk:
-                site: site1
+                site: "{{ splunk_default_site }}"
         splunk_search_head:
           vars:
             is_captain: "{{ inventory_hostname == search_head_cluster_host }}"
@@ -45,13 +54,13 @@ all:
           hosts: 
             splksh1.psl.local:
               splunk:
-                site: site1
+                site: "{{ splunk_default_site }}"
             splksh2.psl.local:
               splunk:
-                site: site1
+                site: "{{ splunk_default_site }}"
             splksh3.psl.local:
               splunk:
-                site: site1
+                site: "{{ splunk_default_site }}"
         splunk_cluster_master:
           vars:
             splunk:
@@ -59,7 +68,7 @@ all:
           hosts: 
             splkcm1.psl.local:
               splunk:
-                site: site1
+                site: "{{ splunk_default_site }}"
         splunk_indexer:
           vars:
             splunk:
@@ -67,16 +76,18 @@ all:
           hosts: 
             splkidx1.psl.local:
               splunk:
-                site: site1
+                site: "{{ splunk_default_site }}"
             splkidx2.psl.local:
               splunk:
-                site: site1
+                site: "{{ splunk_default_site }}"
             splkidx3.psl.local:
               splunk:
-                site: site2
+                # example of multi site
+                site: "{{ 'site2' if splunk.all_sites is defined else splunk_default_site }}"
             splkidx4.psl.local:
               splunk:
-                site: site2
+                # example of multi site
+                site: "{{ 'site2' if splunk.all_sites is defined else splunk_default_site }}"
         splunk_deployment_server:
           vars:
             splunk:
@@ -99,7 +110,7 @@ all:
           hosts: 
             splkdp1.psl.local:
               splunk:
-                site: site1
+                site: "{{ splunk_default_site }}"
         splunk_distributed_monitoring_console:
           vars:
             splunk:
