@@ -41,7 +41,7 @@
       debug:
         msg: 
           - "Deployment Type: [{{ deployment_type }}]"
-          - "Deployment Server Value: [{{ splunk.deployment_server }}]"
+          - "Deployment Server Value: [{{ splunk.deployment_server | default(omit)}}]"
           - "Deployment Server Defined: [{{ splunk.deployment_server is defined }}]"
           
 
