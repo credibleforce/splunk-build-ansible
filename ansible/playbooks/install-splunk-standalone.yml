@@ -40,9 +40,10 @@
     - name: Splunk Deployment Server Variable
       debug:
         msg: 
+          - "Deployment Type: [{{ deployment_type }}]"
           - "Deployment Server Value: [{{ splunk.deployment_server }}]"
           - "Deployment Server Defined: [{{ splunk.deployment_server is defined }}]"
-          - "Deployment Type: [{{ deployment_type }}]"
+          
 
     # STANDALONE - check for splunk_standalone role
     - name: Splunk splunk_standalone tasks
