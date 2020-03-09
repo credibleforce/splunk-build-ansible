@@ -41,9 +41,9 @@
       debug:
         msg: 
           - "Deployment Type: [{{ deployment_type }}]"
-          - "Deployment Server Defined: [{{ splunk.deployment_server is defined }}]"
+          - "Splunk Index Cluster Variable: [{{splunk_indexer_cluster}}]"
+          - "Splunk Index Cluster Variable Defined: [{{splunk_indexer_cluster is defined}}]"
           
-
     # STANDALONE - check for splunk_standalone role
     - name: Splunk splunk_standalone tasks
       include_role:
