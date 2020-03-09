@@ -1,7 +1,7 @@
 ---
 - name: "Debug splunk"
   debug:
-    msg: "Splunk home: [{{ splunk.home|default(omit) }}]"
+    msg: "Splunk home: [{{ splunk }}]"
 
 - name: Add another bin dir to system-wide $PATH.
   become: yes
