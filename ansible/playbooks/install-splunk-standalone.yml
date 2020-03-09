@@ -37,6 +37,9 @@
     - name: Post install config
       import_tasks: ../roles/post_config/tasks/main.yml
   tasks:
+    - name: get facts
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/get_facts.yml
+      
     - name: Splunk Deployment Server Variable
       debug:
         msg: 
