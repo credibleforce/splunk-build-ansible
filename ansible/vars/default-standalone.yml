@@ -1,4 +1,6 @@
 ---
+deployment_type: 
+  - splunk_standalone
 ansible_post_tasks: null
 ansible_pre_tasks: null
 hide_password: false
@@ -10,7 +12,7 @@ splunk_home_ownership_enforcement: true
 cert_prefix: https
 
 config:
-  baked: default-standalone.yml
+  baked: default.yml
   defaults_dir: /tmp/defaults
   env:
     headers: null

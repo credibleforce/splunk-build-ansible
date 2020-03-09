@@ -1,4 +1,8 @@
 ---
+deployment_type: 
+  - splunk_searchheadcluster
+  - splunk_indexcluster
+  - splunk_ssl
 ansible_post_tasks: null
 ansible_pre_tasks: null
 hide_password: false
