@@ -16,6 +16,10 @@ all:
         splunk_deployment_server: "{{ groups['splunk_deployment_server'][0] if 'splunk_deploymentserver' in deployment_type else omit }}"
         splunk_multisite_master: "{{ groups['splunk_cluster_master'][0] if 'splunk_indexcluster' in deployment_type else omit }}"
         splunk:
+        
+          # disable forwarding if standalone
+          forward_servers: "{{ [] if 'splunk_standalone' in deployment_type else omit }}"
+
           # multisite
           all_sites: "{{ 'site1,site2' if 'splunk_indexcluster' in deployment_type and 'splunk_multisite' in deployment_type  else omit }}"
           multisite_master: "{{ splunk_multisite_master if 'splunk_indexcluster' in deployment_type and 'splunk_multisite' in deployment_type  else omit }}"
