@@ -43,6 +43,9 @@
           - "Deployment Type: [{{ deployment_type }}]"
           - "Splunk Index Cluster Variable: [{{splunk_indexer_cluster}}]"
           - "Splunk Index Cluster Variable Defined: [{{splunk_indexer_cluster is defined}}]"
+          - "Splunk Cluster Master URL: {{splunk.cluster_master_url}}"
+          - "Splunk Forward Servers: {{ splunk_forward_servers }}"
+          - "Splunk Forward Servers Defined: {{ splunk_forward_servers is defined }}"
           
     # STANDALONE - check for splunk_standalone role
     - name: Splunk splunk_standalone tasks
