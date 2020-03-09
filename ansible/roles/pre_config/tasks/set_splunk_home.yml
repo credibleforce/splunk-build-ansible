@@ -1,10 +1,6 @@
 ---
-- name: "Debug splunk"
-  debug:
-    msg: "Splunk home: [{{ splunk }}]"
-
-#- name: Add another bin dir to system-wide $PATH.
-#  become: yes
-#  copy:
-#    dest: /etc/profile.d/splunk.sh
-#    content: 'SPLUNK_HOME="{{ splunk.home }}"'
+- name: Add another bin dir to system-wide $PATH.
+  become: yes
+  copy:
+    dest: /etc/profile.d/splunk.sh
+    content: 'SPLUNK_HOME="{{ splunk.home }}"'
