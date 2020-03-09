@@ -10,11 +10,11 @@ all:
       vars:
         ansible_connection: ssh
         ansible_system: Linux
-        splunk_search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
+        splunk_search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0] if 'splunk_searchheadcluster' in deployment_type else omit }}"
         splunk_deployment_server: "{{ groups['splunk_deployment_server'][0] if 'splunk_deploymentserver' in deployment_type else omit }}"
         splunk_multisite_master: "{{ groups['splunk_cluster_master'][0] if 'splunk_indexcluster' in deployment_type else omit }}"
         splunk:
-          all_sites: "site1,site2 if 'splunk_indexcluster' in deployment_type else default(omit)"
+          all_sites: "{{ 'site1,site2' if 'splunk_indexcluster' in deployment_type else omit }}"
           multisite_master: "{{ splunk_multisite_master }} if 'splunk_indexcluster' in deployment_type else omit"
           search_head_cluster_url: "{{ splunk_search_head_cluster_host }} if 'splunk_indexcluster' in deployment_type else omit"
           hostname: "{{ inventory_hostname }}"
@@ -27,7 +27,7 @@ all:
             splksh1.psl.local:
         splunk_search_head_captain:
           vars:
-            is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
+            is_captain: "{{ inventory_hostname == search_head_cluster_host }}"
             splunk:
               hostname: "{{ inventory_hostname }}"
               role: 
@@ -38,7 +38,7 @@ all:
                 site: site1
         splunk_search_head:
           vars:
-            is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
+            is_captain: "{{ inventory_hostname == search_head_cluster_host }}"
             splunk:
               role: 
                 "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
