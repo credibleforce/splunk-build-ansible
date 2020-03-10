@@ -22,6 +22,7 @@ class ExampleInventory(object):
         self.loader = DataLoader()
         self.inventory_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)))
         self.local = os.path.join(self.inventory_dir,"local","hosts.yml")
+        self.splunk = os.path.join(self.inventory_dir,"splunk.yml")
         self.inventory = {}
         self.read_cli_args()
 
@@ -36,25 +37,28 @@ class ExampleInventory(object):
 
     # Example inventory for testing.
     def build_inventory(self):
-        deployment_types=os.environ.get('SPLUNK_DEPLOYMENT_TYPE', 'splunk_standalone')
-
+        # read deployment roles from environment and add local role
+        deployment_roles=os.environ.get('SPLUNK_DEPLOYMENT_ROLES', 'splunk_standalone').split(":")
+        deployment_roles.append("local")
+        
         # load the associated inventory for the associated deployment type
-        sources=[self.local]
-        for deployment_type in deployment_types.split(":"):
-            sources.append(os.path.join(self.inventory_dir,"splunk",deployment_type,"hosts.yml"))
-
+        sources=[self.local,self.splunk]
         inventory = InventoryManager(self.loader, sources=sources)
         inventory.parse_sources()
         
         out = {'_meta': {'hostvars': {}}}
+        hosts = []
         for group in inventory.groups.values():
-            out[group.name] = {
-                'hosts': [h.name for h in group.hosts],
-                'vars': group.vars,
-                'children': [c.name for c in group.child_groups]
-            }
+            if group.name in deployment_roles:
+                hosts.extend([h.name for h in group.hosts])
+                out[group.name] = {
+                    'hosts': [h.name for h in group.hosts],
+                    'vars': group.vars,
+                    'children': [c.name for c in group.child_groups]
+                }
         for host in inventory.get_hosts():
-            out['_meta']['hostvars'][host.name] = host.vars
+            if host in hosts:
+                out['_meta']['hostvars'][host.name] = host.vars
 
         return out
 

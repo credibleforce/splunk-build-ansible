@@ -1,10 +1,10 @@
 ---
 deployment_type: 
   - splunk_standalone
-  #- splunk_indexcluster
-  #- splunk_searchheadcluster
+  #- splunk_index_cluster
+  #- splunk_search_head_cluster
   #- splunk_multisite
-  #- splunk_deploymentserver
+  #- splunk_deployment_server
 
 ansible_post_tasks: null
 ansible_pre_tasks: null
