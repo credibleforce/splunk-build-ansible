@@ -29,7 +29,7 @@ all:
           hosts: 
             splksh1.psl.local:
               splunk:
-                site: "{{ splunk_default_site }}"
+                site: "{{ splunk_default_site|default(omit) }}"
         splunk_search_head:
           vars:
             is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
