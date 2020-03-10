@@ -47,7 +47,6 @@ class ExampleInventory(object):
         inventory = InventoryManager(self.loader, sources=sources)
         inventory.parse_sources()
         standalone = ('splunk_standalone' in deployment_roles)
-        print(standalone)
 
         #print(inventory.groups)
         out = {'_meta': {'hostvars': {}}}
@@ -65,10 +64,10 @@ class ExampleInventory(object):
                 for child_group in group.child_groups:
                     # a yukcy hack for some splunk-ansible splunk_search_head "logic" forcing empty list for standalone
                     hosts.extend([] if standalone else [h.name for h in child_group.hosts])
-                    out[child_group.name] = {
-                        'hosts': [] if standalone else [h.name for h in child_group.hosts],
-                        'vars': None if standalone else child_group.vars,
-                        'children': [] if standalone else [c.name for c in child_group.child_groups]
+                    out[child_group.name] = { 'hosts': [] } if standalone else {
+                        'hosts': [h.name for h in child_group.hosts],
+                        'vars': child_group.vars,
+                        'children': [c.name for c in child_group.child_groups]
                     }
         for host in inventory.get_hosts():
             if host.name in hosts:
