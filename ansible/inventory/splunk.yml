@@ -72,11 +72,11 @@ all:
             splkidx3.psl.local:
               splunk:
                 # example of multi site
-                site: "{{ 'site2' if splunk.all_sites is defined else splunk_default_site|default(omit) }}"
+                site: 'site2'
             splkidx4.psl.local:
               splunk:
                 # example of multi site
-                site: "{{ 'site2' if splunk.all_sites is defined else splunk_default_site|default(omit) }}"
+                site: 'site2'
         splunk_deployment_server:
           vars:
             splunk:
