@@ -1,5 +1,5 @@
 ---
-splunk_cluster_master_host: "{{ groups['splunk_cluster_master'][0] if 'splunk_indexcluster' in deployment_type else omit }}"
+splunk_cluster_master_host: "{{ groups['splunk_cluster_master'][0] }}"
 splunk:
   # index cluster
-  cluster_master_url: "{{ splunk_cluster_master_host if 'splunk_indexcluster' in deployment_type None}}"
+  cluster_master_url: "{{ splunk_cluster_master_host }}"
