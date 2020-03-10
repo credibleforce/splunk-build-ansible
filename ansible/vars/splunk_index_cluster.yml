@@ -1,15 +1,5 @@
 ---
 splunk_cluster_master_host: "{{ groups['splunk_cluster_master'][0] if 'splunk_indexcluster' in deployment_type else omit }}"
 splunk:
-  indexer_cluster: true
-  idxc:
-    enable: true
-    label: idxc_label
-    replication_factor: 2
-    replication_port: 9887
-    search_factor: 1
-    secret: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
-    pass4SymmKey: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
-
   # index cluster
   cluster_master_url: "{{ splunk_cluster_master_host if 'splunk_indexcluster' in deployment_type None}}"

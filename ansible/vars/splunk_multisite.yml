@@ -1,12 +1,5 @@
 ---
-splunk_default_site: "{{ 'site1' }}"
 splunk_multisite_master: "{{ groups['splunk_cluster_master'][0] }}"
 splunk:
-  multisite_replication_factor_origin: 1
-  multisite_replication_factor_total: 2
-  multisite_search_factor_origin: 1
-  multisite_search_factor_total: 2
-
   # multisite
-  all_sites: "{{ 'site1,site2' }}"
   multisite_master: "{{ splunk_multisite_master }}"

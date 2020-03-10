@@ -64,6 +64,10 @@
       import_tasks: ../roles/post_config/tasks/main.yml
 
   tasks:
+    # include deployment variables
+    - name: Include deployment vars
+      include_vars: ../vars/{{ item }}.yml
+      with_items: "{{ deployment_type }}"
 
     # LICENSE MASTER- check for splunk_license_master role
     - name: Splunk splunk_license_master tasks
@@ -131,6 +135,11 @@
       import_tasks: ../roles/post_config/tasks/main.yml
 
   tasks:  
+    # include deployment variables
+    - name: Include deployment vars
+      include_vars: ../vars/{{ item }}.yml
+      with_items: "{{ deployment_type }}"
+
     # SEARCH HEADS - check for splunk_search_head role
     - name: Splunk search_head tasks
       include_role:
@@ -149,6 +158,11 @@
     - ../vars/default-clustered.yml
   gather_facts: True
   tasks:
+    # include deployment variables
+    - name: Include deployment vars
+      include_vars: ../vars/{{ item }}.yml
+      with_items: "{{ deployment_type }}"
+
     - name: Splunk splunk_distributed_monitoring_console tasks
       include_role:
         name: splunk_distributed_monitoring_console

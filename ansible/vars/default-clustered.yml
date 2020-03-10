@@ -4,7 +4,8 @@ deployment_type:
   - splunk_index_cluster
   - splunk_deployment_server
   - splunk_multisite
-  
+splunk_default_site: 'site1'
+
 ansible_post_tasks: null
 ansible_pre_tasks: null
 hide_password: false
@@ -91,3 +92,33 @@ splunk:
   tar_dir: splunk
   user: splunk
   wildcard_license: true
+
+  # index cluster
+  indexer_cluster: true
+  idxc:
+    enable: true
+    label: idxc_label
+    replication_factor: 2
+    replication_port: 9887
+    search_factor: 1
+    secret: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
+    pass4SymmKey: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
+
+  # search_head cluster
+  deployer_included: true
+  search_head_cluster: true
+  preferred_captaincy: false
+  shc:
+    enable: true
+    label: shc_label
+    replication_factor: 3
+    replication_port: 9887
+    secret: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
+    pass4SymmKey: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
+
+  # multisite
+  all_sites: 'site1,site2'
+  multisite_replication_factor_origin: 1
+  multisite_replication_factor_total: 2
+  multisite_search_factor_origin: 1
+  multisite_search_factor_total: 2
