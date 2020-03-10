@@ -1,4 +1,4 @@
 ---
 splunk:
   # disable forwarding if standalone
-  forward_servers: []
+  forward_servers: 
