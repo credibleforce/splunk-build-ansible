@@ -18,8 +18,6 @@
 - hosts: splunk_standalone
   vars_files:
     - ../vars/default-standalone.yml
-  # STRATEGY - free allows multiple server(s) and roles installed simultaneous and is required for service availability checks
-  strategy: free
   gather_facts: True
   pre_tasks:
     # Force an ntp update as service check requires time sync to work (should not be required in production)
@@ -41,7 +39,7 @@
     - name: Include deployment vars
       include_vars: ../vars/{{ item }}.yml
       with_items: "{{ deployment_type }}"
-    
+
     - name: get facts
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/get_facts.yml
 
