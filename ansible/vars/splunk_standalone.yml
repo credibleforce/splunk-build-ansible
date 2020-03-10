@@ -1,2 +1,4 @@
 ---
 splunk_forward_servers: []
+splunk:
+  forward_servers: []
