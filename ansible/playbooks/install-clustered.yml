@@ -81,12 +81,6 @@
         name: splunk_cluster_master
       when: inventory_hostname in groups['splunk_cluster_master']
 
-    # STANDALONE - check for splunk_standalone role
-    - name: Splunk splunk_standalone tasks
-      include_role:
-        name: splunk_standalone
-      when: inventory_hostname in groups['splunk_standalone']
-
     # INDEXERS - check for splunk_indexer role
     - name: Splunk indexer tasks
       include_role:
@@ -104,7 +98,6 @@
       include_role:
         name: splunk_deployer
       when: inventory_hostname in groups['splunk_deployer']
-
     
 
 # STAGE 2 - SEARCH HEAD CLUSTER
