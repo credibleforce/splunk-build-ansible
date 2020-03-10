@@ -48,9 +48,7 @@
         msg: 
           - "Deployment Type: [{{ deployment_type }}]"
           - "Splunk Cluster Master URL Check: [{{ True if 'cluster_master_url' in splunk and splunk.cluster_master_url else False }}]"
-          - "Splunk Cluster Master URL: [{{ splunk.cluster_master_url }}]"
           - "Splunk Index Cluster Variable Defined: [{{splunk_indexer_cluster is defined}}]"
-          - "Splunk Cluster Master URL: [{{splunk.cluster_master_url}}]"
           - "Splunk Forward Servers Defined: [{{ splunk_forward_servers is defined }}]"
 
     - name: Pause
