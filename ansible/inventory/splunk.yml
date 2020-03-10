@@ -17,8 +17,8 @@ all:
           vars:
             splunk:
               role: "splunk_standalone"
-            hosts: 
-                splksh1.psl.local:
+          hosts: 
+              splksh1.psl.local:
           # leave this here to stop triggering event forwarding :(=====
           children:
             splunk_search_head:
