@@ -41,7 +41,7 @@
     permanent: yes
     immediate: yes
     state: enabled
-  when: "(inventory_hostname in groups['splunk_indexer']) and (firewalld_status.results[0].rc == 0)"
+  when: "(splunk_indexer in groups and inventory_hostname in groups['splunk_indexer']) and (firewalld_status.results[0].rc == 0)"
   become: yes
 
 - name: Splunk indexer firewall port
