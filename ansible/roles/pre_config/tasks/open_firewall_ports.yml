@@ -41,7 +41,7 @@
     permanent: yes
     immediate: yes
     state: enabled
-  when: "('splunk_indexer' in groups and inventory_hostname in groups['splunk_indexer']) and (firewalld_status.results[0].rc == 0)"
+  when: "(inventory_hostname in groups['splunk_indexer']|default([])) and (firewalld_status.results[0].rc == 0)"
   become: yes
 
 - name: Splunk indexer firewall port
@@ -50,7 +50,7 @@
     permanent: yes
     immediate: yes
     state: enabled
-  when: "(inventory_hostname in groups['splunk_indexer']) and (firewalld_status.results[0].rc == 0)"
+  when: "(inventory_hostname in groups['splunk_indexer']|default([])) and (firewalld_status.results[0].rc == 0)"
   become: yes
 
 - name: Splunk index cluster replication firewall port
@@ -59,7 +59,7 @@
     permanent: yes
     immediate: yes
     state: enabled
-  when: "(inventory_hostname in groups['splunk_indexer']) and (firewalld_status.results[0].rc == 0)"
+  when: "(inventory_hostname in groups['splunk_indexer']|default([])) and (firewalld_status.results[0].rc == 0)"
   become: yes
 
 - name: Splunk search head cluster replication firewall port
@@ -68,5 +68,5 @@
     permanent: yes
     immediate: yes
     state: enabled
-  when: "(inventory_hostname in groups['splunk_search_head']) and (firewalld_status.results[0].rc == 0)"
+  when: "(inventory_hostname in groups['splunk_search_head']|default([])) and (firewalld_status.results[0].rc == 0)"
   become: yes
