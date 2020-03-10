@@ -37,6 +37,11 @@
     - name: Post install config
       import_tasks: ../roles/post_config/tasks/main.yml
   tasks:
+
+    - name: Include deployment vars
+      include_vars: ../vars/{{ item }}.yml
+      with_items: "{{ deployment_type }}"
+    
     - name: get facts
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/get_facts.yml
 

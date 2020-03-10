@@ -1,6 +1,11 @@
 ---
 deployment_type: 
   - splunk_standalone
+  #- splunk_indexcluster
+  #- splunk_searchheadcluster
+  #- splunk_multisite
+  #- splunk_deploymentserver
+
 ansible_post_tasks: null
 ansible_pre_tasks: null
 hide_password: false
@@ -55,7 +60,6 @@ splunk:
     port: 9000
     spark_master_host: 127.0.0.1
     spark_master_webui_port: 8080
-
   # hec should be deployed via master-apps in cluster
   hec_disabled: true
   hec_enableSSL: true
@@ -67,44 +71,21 @@ splunk:
   http_enableSSL_privKey: null
   http_enableSSL_privKey_password: null
   http_port: 8000
-  indexer_cluster: false
-  preferred_captaincy: false
-  idxc:
-    enable: false
-    label: idxc_label
-    replication_factor: 2
-    replication_port: 9887
-    search_factor: 1
-    secret: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
-    pass4SymmKey: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
   ignore_license: false
   license_download_dest: /tmp/splunk.licences
-  multisite_replication_factor_origin: 1
-  multisite_replication_factor_total: 2
-  multisite_search_factor_origin: 1
-  multisite_search_factor_total: 2
   nfr_license: /tmp/splunk.lic
   opt: /opt
   password: uOOuUI5D2flIqVXchggUOE+h0DFQV/zo
   pid: /opt/splunk/var/run/splunk/splunkd.pid
   root_endpoint: null
-  s2s_enable: false
+  s2s_enable: true
   s2s_port: 9997
   s2s:
     ssl: null
     cert: null
     ca: null
     password: null
-  search_head_cluster: false
-  deployer_included: true
   secret: null
-  shc:
-    enable: false
-    label: shc_label
-    replication_factor: 3
-    replication_port: 9887
-    secret: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
-    pass4SymmKey: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
   smartstore: null
   svc_port: 8089
   tar_dir: splunk
