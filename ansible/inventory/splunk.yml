@@ -25,7 +25,7 @@ all:
           multisite_master: "{{ splunk_multisite_master if 'splunk_indexcluster' in deployment_type and 'splunk_multisite' in deployment_type  else omit }}"
           
           # index cluster
-          cluster_master_url: "{{ splunk_cluster_master_host if 'splunk_indexcluster' in deployment_type }}"
+          cluster_master_url: "{{ splunk_cluster_master_host if 'splunk_indexcluster' in deployment_type None}}"
           
           # searchhead cluster
           search_head_cluster_url: "{{ splunk_search_head_cluster_host if 'splunk_searchheadcluster' in deployment_type else omit }}"
