@@ -49,7 +49,11 @@
           - "Splunk Index Cluster Variable Defined: [{{splunk_indexer_cluster is defined}}]"
           - "Splunk Cluster Master URL: [{{splunk.cluster_master_url}}]"
           - "Splunk Forward Servers Defined: [{{ splunk_forward_servers is defined }}]"
-          
+
+    - name: Pause
+      pause:
+        prompt: "Press any key to continue"
+
     # STANDALONE - check for splunk_standalone role
     - name: Splunk splunk_standalone tasks
       include_role:
