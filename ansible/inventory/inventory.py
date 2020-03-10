@@ -7,6 +7,7 @@ Example custom dynamic inventory script for Ansible, in Python.
 import os
 import sys
 import argparse
+from dumper import dump
 
 try:
     import json
@@ -21,7 +22,7 @@ class ExampleInventory(object):
     def __init__(self):
         self.loader = DataLoader()
         self.inventory_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)))
-        self.local = os.path.join(self.inventory_dir,"local","hosts.yml")
+        self.local = os.path.join(self.inventory_dir,"local.yml")
         self.splunk = os.path.join(self.inventory_dir,"splunk.yml")
         self.inventory = {}
         self.read_cli_args()
@@ -33,22 +34,26 @@ class ExampleInventory(object):
         else:
             self.inventory = self.build_inventory()
 
-        print json.dumps(self.inventory);
+        print(json.dumps(self.inventory,indent=4));
 
     # Example inventory for testing.
     def build_inventory(self):
         # read deployment roles from environment and add local role
-        deployment_roles=os.environ.get('SPLUNK_DEPLOYMENT_ROLES', 'splunk_standalone').split(":")
-        deployment_roles.append("local")
-        
+        deployment_roles=['local']
+        deployment_roles.extend(os.environ.get('SPLUNK_DEPLOYMENT_ROLES', 'splunk_standalone').split(":"))
+
         # load the associated inventory for the associated deployment type
         sources=[self.local,self.splunk]
         inventory = InventoryManager(self.loader, sources=sources)
         inventory.parse_sources()
         
+        #print(inventory.groups)
         out = {'_meta': {'hostvars': {}}}
         hosts = []
+        # depth of child group discovery is one
         for group in inventory.groups.values():
+            dump(inventory.groups)
+            exit()
             if group.name in deployment_roles:
                 hosts.extend([h.name for h in group.hosts])
                 out[group.name] = {
@@ -56,8 +61,15 @@ class ExampleInventory(object):
                     'vars': group.vars,
                     'children': [c.name for c in group.child_groups]
                 }
+                for child_group in group.child_groups:
+                    hosts.extend([h.name for h in child_group.hosts])
+                    out[child_group.name] = {
+                        'hosts': [h.name for h in child_group.hosts],
+                        'vars': child_group.vars,
+                        'children': [c.name for c in child_group.child_groups]
+                    }
         for host in inventory.get_hosts():
-            if host in hosts:
+            if host.name in hosts:
                 out['_meta']['hostvars'][host.name] = host.vars
 
         return out
