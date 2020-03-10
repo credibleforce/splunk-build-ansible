@@ -1,5 +1,5 @@
 ---
-splunk_search_head_cluster_host: "{{ groups['splunk_search_head_captain'][0] }}"
+splunk_search_head_captain_host: "{{ groups['splunk_search_head_captain'][0] }}"
 splunk:
   # searchhead cluster
-  search_head_cluster_url: "{{ splunk_search_head_cluster_host }}"
+  search_head_captain_url: "{{ splunk_search_head_captain_host }}"
