@@ -17,10 +17,12 @@ all:
           vars:
             splunk:
               role: "splunk_standalone"
+            hosts: 
+                splksh1.psl.local:
+          # leave this here to stop triggering event forwarding :(=====
           children:
             splunk_search_head:
-              hosts: 
-                splksh1.psl.local:
+              hosts:
         splunk_search_head_captain:
           vars:
             is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"

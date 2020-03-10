@@ -52,8 +52,6 @@ class ExampleInventory(object):
         hosts = []
         # depth of child group discovery is one
         for group in inventory.groups.values():
-            dump(inventory.groups)
-            exit()
             if group.name in deployment_roles:
                 hosts.extend([h.name for h in group.hosts])
                 out[group.name] = {
