@@ -45,20 +45,6 @@ splunk:
     shc: /opt/splunk/etc/shcluster/apps
   exec: /opt/splunk/bin/splunk
   group: splunk
-  dfs:
-    dfc_num_slots: 4
-    dfw_num_slots: 10
-    dfw_num_slots_enabled: false
-    enable: false
-    port: 9000
-    spark_master_host: 127.0.0.1
-    spark_master_webui_port: 8080
-
-  # hec should be deployed via master-apps in cluster
-  hec_disabled: true
-  hec_enableSSL: true
-  hec_port: 8088
-  hec_token: f7a5b222-7b57-41cf-9714-fb5fc333bef6
   home: /opt/splunk
   http_enableSSL: true
   http_enableSSL_cert: null
@@ -71,7 +57,22 @@ splunk:
   opt: /opt
   password: uOOuUI5D2flIqVXchggUOE+h0DFQV/zo
   pid: /opt/splunk/var/run/splunk/splunkd.pid
-  root_endpoint: null
+  root_endpoint: null 
+  secret: null
+  smartstore: null
+  svc_port: 8089
+  tar_dir: splunk
+  user: splunk
+  wildcard_license: true
+
+  # hec
+  hec:
+      enable: False # hec should be deployed via master-apps in cluster
+      ssl: True
+      token: f7a5b222-7b57-41cf-9714-fb5fc333bef6
+      port: 8088
+
+  # s2s
   s2s_enable: true
   s2s_port: 9997
   s2s:
@@ -79,12 +80,16 @@ splunk:
     cert: null
     ca: null
     password: null
-  secret: null
-  smartstore: null
-  svc_port: 8089
-  tar_dir: splunk
-  user: splunk
-  wildcard_license: true
+
+  # dfs
+  dfs:
+    dfc_num_slots: 4
+    dfw_num_slots: 10
+    dfw_num_slots_enabled: false
+    enable: false
+    port: 9000
+    spark_master_host: 127.0.0.1
+    spark_master_webui_port: 8080
 
   # index cluster
   indexer_cluster: true
