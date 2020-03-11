@@ -7,7 +7,6 @@ Example custom dynamic inventory script for Ansible, in Python.
 import os
 import sys
 import argparse
-from dumper import dump
 
 try:
     import json
