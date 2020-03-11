@@ -190,17 +190,19 @@
       import_tasks: ../roles/post_config/tasks/main.yml
 
   tasks:  
+    # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role
+    - name: Splunk splunk_search_head_captain tasks
+      include_role:
+        name: splunk_search_head_captain
+      when: inventory_hostname in groups['splunk_search_head_captain']
+    
     # SEARCH HEADS - check for splunk_search_head role
     - name: Splunk search_head tasks
       include_role:
         name: splunk_search_head
       when: inventory_hostname in groups['splunk_search_head']
     
-    # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role
-    - name: Splunk splunk_search_head_captain tasks
-      include_role:
-        name: splunk_search_head_captain
-      when: inventory_hostname in groups['splunk_search_head_captain']
+    
 
 # STAGE 3 - DISTRIBUTED MONITORING CONSOLE 
 - hosts: splunk_distributed_monitoring_console
