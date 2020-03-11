@@ -190,7 +190,7 @@
       import_tasks: ../roles/post_config/tasks/main.yml
 
   tasks:  
-    # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role
+    # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role (depends on splunk_search_head)
     - name: Splunk splunk_search_head_captain tasks
       include_role:
         name: splunk_search_head_captain
@@ -200,7 +200,7 @@
     - name: Splunk search_head tasks
       include_role:
         name: splunk_search_head
-      when: inventory_hostname in groups['splunk_search_head']
+      when: inventory_hostname in groups['splunk_search_head'] and not inventory_hostname in groups['splunk_search_head_captain']
     
     
 
