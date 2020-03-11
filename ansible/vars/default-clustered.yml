@@ -10,11 +10,11 @@ splunk_home_ownership_enforcement: true
 cert_prefix: https
 
 # CUSTOM - enable/disable functional cluster config
-splunk_enable_multisite: true
-splunk_enable_shc: true
-splunk_enable_idxc: true
-splunk_enable_deployment_server: true
-splunk_enable_license_master: true
+splunk_enable_multisite: "{{ True if 'splunk_multisite' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
+splunk_enable_shc: "{{ True if 'splunk_search_head_captain' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
+splunk_enable_idxc: "{{ True if 'splunk_cluster_master' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
+splunk_enable_deployment_server: "{{ True if 'splunk_deployment_server' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
+splunk_enable_license_master: "{{ True if 'splunk_license_master' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
 
 config:
   baked: default.yml
