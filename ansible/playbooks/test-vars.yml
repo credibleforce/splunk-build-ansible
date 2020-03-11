@@ -29,4 +29,5 @@
     - debug:
         msg:
           - "Host: {{ inventory_hostname }}"
-          - "Hostvars: {{ hostvars[inventory_hostname] }}"
+          - "Hostvars: {{ hostvars[inventory_hostname].site_number }}"
+          - "Site Number: {{ site_number }}"
