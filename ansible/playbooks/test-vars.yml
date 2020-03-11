@@ -29,5 +29,4 @@
     - debug:
         msg:
           - "Host: {{ inventory_hostname }}"
-          - "Site: {{ site_number }}"
-          - "Splunk Site: {{ splunk.site }}"
+          - "Hostvars: {{ hostvars[inventory_hostname] }}"
