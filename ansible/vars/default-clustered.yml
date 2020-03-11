@@ -93,7 +93,7 @@ splunk:
     label: idxc_label
     replication_factor: 2
     replication_port: 9887
-    search_factor: 1
+    search_factor: 2
     secret: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
     pass4SymmKey: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
 
@@ -111,7 +111,7 @@ splunk:
 
   # multisite
   all_sites: 'site1,site2'
-  multisite_replication_factor_origin: 1
+  multisite_replication_factor_origin: 2
   multisite_replication_factor_total: 2
-  multisite_search_factor_origin: 1
+  multisite_search_factor_origin: 2
   multisite_search_factor_total: 2
