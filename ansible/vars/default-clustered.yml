@@ -73,9 +73,9 @@ splunk:
       port: 8088
 
   # s2s
-  s2s_enable: true
-  s2s_port: 9997
   s2s:
+    port: 9997
+    enable: true
     ssl: null
     cert: null
     ca: null
