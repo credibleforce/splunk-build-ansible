@@ -2,15 +2,32 @@
 - hosts: all
   vars:
     test: "{{ inventory_hostname == search_head_cluster_host|default(omit) and splunk.search_head_cluster }}"
+  pre_tasks:
+    # Include additional variables as required
+    - name: Include SHC Variable
+      include_vars: ../vars/splunk_search_head_cluster.yml
+      when: splunk_enable_shc is defined and splunk_enable_shc
+
+    - name: Include IDXC Variable
+      include_vars: ../vars/splunk_index_cluster.yml
+      when: splunk_enable_idxc is defined and splunk_enable_idxc
+
+    - name: Include Multisite Variable
+      include_vars: ../vars/splunk_multisite.yml
+      when: splunk_enable_multisite is defined and splunk_enable_multisite
+
+    - name: Include Deployment Server Variable
+      include_vars: ../vars/splunk_deployment_server.yml
+      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
+
+    - name: Include Multisite Variable
+      include_vars: ../vars/splunk_license_master.yml
+      when: splunk_enable_license_master is defined and splunk_enable_license_master
+
   tasks:
    
     - debug:
         msg:
-          - "{{ inventory_hostname }}"
-          - "{{ inventory_hostname == groups['splunk_search_head_captain'][0] if (splunk.search_head_cluster == true) else False |bool }}"
-          - "{{ splunk.role }}"
-          - "{{ splunk.search_head_cluster }}"
-          - "{{splunk.role}} == {{ \"splunk_search_head_captain\" }}  {{ splunk.role == \"splunk_search_head_captain\" }}"
-          - "{{ search_head_cluster_host|default(omit) }}"
-          - "{{ inventory_hostname == search_head_cluster_host|default(omit) and splunk.search_head_cluster }}"
-          - "{{ test }}"
+          - "Host: {{ inventory_hostname }}"
+          - "Site: {{ site_number }}"
+          - "Splunk Site: {{ splunk.site }}"
