@@ -10,12 +10,11 @@ all:
       vars:
         ansible_connection: ssh
         ansible_system: Linux
-        splunk:
-          hostname: "{{ inventory_hostname }}"
       children:
         splunk_standalone:
           vars:
             splunk:
+              hostname: "{{ inventory_hostname }}"
               role: "splunk_standalone"
           hosts: 
               splksh1.psl.local:
@@ -38,6 +37,7 @@ all:
           vars:
             is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
             splunk:
+              hostname: "{{ inventory_hostname }}"
               role: 
                 "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
           hosts: 
@@ -53,6 +53,7 @@ all:
         splunk_cluster_master:
           vars:
             splunk:
+              hostname: "{{ inventory_hostname }}"
               role: "splunk_cluster_master"
           hosts: 
             splkcm1.psl.local:
@@ -61,6 +62,7 @@ all:
         splunk_indexer:
           vars:
             splunk:
+              hostname: "{{ inventory_hostname }}"
               role: "splunk_indexer"
           hosts: 
             splkidx1.psl.local:
@@ -80,18 +82,21 @@ all:
         splunk_deployment_server:
           vars:
             splunk:
+              hostname: "{{ inventory_hostname }}"
               role: "splunk_license_master"
           hosts: 
             splkdp1.psl.local:
         splunk_license_master:
           vars:
             splunk:
+              hostname: "{{ inventory_hostname }}"
               role: "splunk_license_master"
           hosts: 
             splkdp1.psl.local:
         splunk_deployer:
           vars:
             splunk:
+              hostname: "{{ inventory_hostname }}"
               # Note: this server has two roles (LM and DP) - we need to set the role to 
               # splunk_license_master or it will get added as a local slave to itself.
               # This cases delays in deployment and general non-goodness :)
@@ -103,6 +108,7 @@ all:
         splunk_distributed_monitoring_console:
           vars:
             splunk:
+              hostname: "{{ inventory_hostname }}"
               role: "splunk_distributed_monitoring_console"
           hosts:
             splkdp1.psl.local:
