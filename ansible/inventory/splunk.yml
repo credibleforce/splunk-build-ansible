@@ -18,6 +18,7 @@ all:
               role: "splunk_standalone"
           hosts: 
               splksh1.psl.local:
+                site_number: 1
           # leave this here to stop triggering event forwarding :(=====
           children:
             splunk_search_head:
@@ -31,8 +32,7 @@ all:
                 "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
           hosts: 
             splksh1.psl.local:
-              splunk:
-                site: "{{ splunk_default_site|default(omit) }}"
+              site_number: 1
         splunk_search_head:
           vars:
             is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
@@ -43,13 +43,13 @@ all:
           hosts: 
             splksh1.psl.local:
               splunk:
-                site: "{{ splunk_default_site|default(omit) }}"
+                site_number: 1
             splksh2.psl.local:
               splunk:
-                site: "{{ splunk_default_site|default(omit) }}"
+                site_number: 1
             splksh3.psl.local:
               splunk:
-                site: "{{ splunk_default_site|default(omit) }}"
+                site_number: 1
         splunk_cluster_master:
           vars:
             splunk:
@@ -58,7 +58,7 @@ all:
           hosts: 
             splkcm1.psl.local:
               splunk:
-                site: "{{ splunk_default_site|default(omit) }}"
+                site_number: 1
         splunk_indexer:
           vars:
             splunk:
@@ -67,18 +67,16 @@ all:
           hosts: 
             splkidx1.psl.local:
               splunk:
-                site: "{{ splunk_default_site|default(omit) }}"
+                site_number: 1
             splkidx2.psl.local:
               splunk:
-                site: "{{ splunk_default_site|default(omit) }}"
+                site_number: 1
             splkidx3.psl.local:
               splunk:
-                # example of multi site
-                site: 'site2'
+                site_number: 2
             splkidx4.psl.local:
               splunk:
-                # example of multi site
-                site: 'site2'
+                site_number: 2
         splunk_deployment_server:
           vars:
             splunk:
@@ -86,6 +84,7 @@ all:
               role: "splunk_license_master"
           hosts: 
             splkdp1.psl.local:
+              site_number: 1
         splunk_license_master:
           vars:
             splunk:
@@ -93,6 +92,7 @@ all:
               role: "splunk_license_master"
           hosts: 
             splkdp1.psl.local:
+              site_number: 1
         splunk_deployer:
           vars:
             splunk:
@@ -103,8 +103,7 @@ all:
               role: "splunk_deployer"
           hosts: 
             splkdp1.psl.local:
-              splunk:
-                site: "{{ splunk_default_site|default(omit) }}"
+              site_number: 1
         splunk_distributed_monitoring_console:
           vars:
             splunk:
@@ -112,3 +111,4 @@ all:
               role: "splunk_distributed_monitoring_console"
           hosts:
             splkdp1.psl.local:
+              site_number: 1

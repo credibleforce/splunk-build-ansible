@@ -20,6 +20,27 @@
     - ../vars/default-standalone.yml
   gather_facts: True
   pre_tasks:
+    # Include additional variables as required
+    - name: Include SHC Variable
+      include_vars: ../splunk_search_head_cluster.yaml
+      when: "{{ splunk_enable_shc is defined and splunk_enable_shc }}"
+
+    - name: Include IDXC Variable
+      include_vars: ../splunk_index_cluster.yaml
+      when: "{{ splunk_enable_idxc is defined and splunk_enable_idxc }}"
+
+    - name: Include Multisite Variable
+      include_vars: ../splunk_multisite.yaml
+      when: "{{ splunk_enable_multisite is defined and splunk_enable_multisite }}"
+
+    - name: Include Deployment Server Variable
+      include_vars: ../splunk_deployment_server.yaml
+      when: "{{ splunk_enable_deployment_server is defined and splunk_enable_deployment_server }}"
+
+    - name: Include Multisite Variable
+      include_vars: ../splunk_license_master.yaml
+      when: "{{ splunk_enable_license_master is defined and splunk_enable_license_master }}"
+
     # Force an ntp update as service check requires time sync to work (should not be required in production)
     - name: Sync ntp
       include_role: 
@@ -35,21 +56,6 @@
     - name: Post install config
       import_tasks: ../roles/post_config/tasks/main.yml
   tasks:
-
-    - name: Include deployment vars
-      include_vars: ../vars/{{ item }}.yml
-      with_items: "{{ deployment_type }}"
-
-    - name: get facts
-      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/get_facts.yml
-
-    - name: Splunk Deployment Server Variable
-      debug:
-        msg: 
-          - "Deployment Type: [{{ deployment_type }}]"
-          - "Splunk Cluster Master URL Check: [{{ True if 'cluster_master_url' in splunk and splunk.cluster_master_url else False }}]"
-          - "Splunk Index Cluster Variable Defined: [{{splunk_indexer_cluster is defined}}]"
-          - "Splunk Forward Servers Defined: [{{ splunk_forward_servers is defined }}]"
 
     # STANDALONE - check for splunk_standalone role
     - name: Splunk splunk_standalone tasks

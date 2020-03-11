@@ -1,7 +1,16 @@
 ---
 splunk_search_head_captain_host: "{{ groups['splunk_search_head_captain'][0] }}"
 splunk_deployer: "{{ groups['splunk_deployer'][0] }}"
-splunk:
+splunk: 
   deployer_url: "{{splunk_deployer}}"
-  # searchhead cluster
   search_head_captain_url: "{{ splunk_search_head_captain_host }}"
+  deployer_included: true
+  search_head_cluster: true
+  preferred_captaincy: false
+  shc:
+    enable: true
+    label: shc_label
+    replication_factor: 3
+    replication_port: 9887
+    secret: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
+    pass4SymmKey: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C

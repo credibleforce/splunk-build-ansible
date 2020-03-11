@@ -1,6 +1,11 @@
 ---
-splunk_default_site: 'site1'
 splunk_multisite_master: "{{ groups['splunk_cluster_master'][0] }}"
 splunk:
   # multisite
+  site: "site{{ hostvars[inventory_hostname]['site_number']|default(0) }}" # use hostvar
   multisite_master: "{{ splunk_multisite_master }}"
+  all_sites: 'site1,site2'
+  multisite_replication_factor_origin: 2
+  multisite_replication_factor_total: 2
+  multisite_search_factor_origin: 2
+  multisite_search_factor_total: 2

@@ -3,3 +3,12 @@ splunk_cluster_master_host: "{{ groups['splunk_cluster_master'][0] }}"
 splunk:
   # index cluster
   cluster_master_url: "{{ splunk_cluster_master_host }}"
+  indexer_cluster: true
+  idxc:
+    enable: true
+    label: idxc_label
+    replication_factor: 2
+    replication_port: 9887
+    search_factor: 2
+    secret: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
+    pass4SymmKey: zTzElhY7EIEzDa1rgXUBk5J4x7ag7p8C
