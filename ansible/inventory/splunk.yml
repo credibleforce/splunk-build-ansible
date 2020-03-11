@@ -42,14 +42,11 @@ all:
                 "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
           hosts: 
             splksh1.psl.local:
-              splunk:
-                site_number: 1
+              site_number: 1
             splksh2.psl.local:
-              splunk:
-                site_number: 1
-            splksh3.psl.local:
-              splunk:
-                site_number: 1
+              site_number: 1
+            splksh3.psl.local:              
+              site_number: 1
         splunk_cluster_master:
           vars:
             splunk:
@@ -57,8 +54,7 @@ all:
               role: "splunk_cluster_master"
           hosts: 
             splkcm1.psl.local:
-              splunk:
-                site_number: 1
+              site_number: 1
         splunk_indexer:
           vars:
             splunk:
@@ -66,17 +62,13 @@ all:
               role: "splunk_indexer"
           hosts: 
             splkidx1.psl.local:
-              splunk:
-                site_number: 1
+              site_number: 1
             splkidx2.psl.local:
-              splunk:
-                site_number: 1
+              site_number: 1
             splkidx3.psl.local:
-              splunk:
-                site_number: 2
+              site_number: 2
             splkidx4.psl.local:
-              splunk:
-                site_number: 2
+              site_number: 2
         splunk_deployment_server:
           vars:
             splunk:
