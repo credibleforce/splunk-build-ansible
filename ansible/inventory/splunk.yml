@@ -100,7 +100,7 @@ all:
               # Note: this server has two roles (LM and DP) - we need to set the role to 
               # splunk_license_master or it will get added as a local slave to itself.
               # This cases delays in deployment and general non-goodness :)
-              role: "splunk_license_master"
+              role: "splunk_deployer"
           hosts: 
             splkdp1.psl.local:
               splunk:

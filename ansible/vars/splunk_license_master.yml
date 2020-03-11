@@ -1,0 +1,4 @@
+---
+splunk_license_master_url: "{{ groups['splunk_license_master'][0] }}"
+splunk:
+  license_master_url: "{{ splunk_license_master_url }}"

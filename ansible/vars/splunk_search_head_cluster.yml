@@ -1,5 +1,7 @@
 ---
 splunk_search_head_captain_host: "{{ groups['splunk_search_head_captain'][0] }}"
+splunk_deployer: "{{ groups['splunk_deployer'][0] }}"
 splunk:
+  deployer_url: "{{splunk_deployer}}"
   # searchhead cluster
   search_head_captain_url: "{{ splunk_search_head_captain_host }}"
