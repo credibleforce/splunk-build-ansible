@@ -1,13 +1,4 @@
 ---
-deployment_type: 
-  - splunk_search_head_cluster
-  - splunk_index_cluster
-  - splunk_deployment_server
-  - splunk_multisite
-  - splunk_license_master
-  
-splunk_default_site: 'site1'
-
 ansible_post_tasks: null
 ansible_pre_tasks: null
 hide_password: false

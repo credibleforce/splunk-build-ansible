@@ -1,4 +1,5 @@
 ---
+splunk_default_site: 'site1'
 splunk_multisite_master: "{{ groups['splunk_cluster_master'][0] }}"
 splunk:
   # multisite

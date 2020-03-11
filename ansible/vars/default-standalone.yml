@@ -1,7 +1,4 @@
 ---
-deployment_type: 
-  - splunk_standalone
-
 ansible_post_tasks: null
 ansible_pre_tasks: null
 hide_password: false
