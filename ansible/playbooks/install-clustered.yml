@@ -236,3 +236,37 @@
     - name: Splunk splunk_distributed_monitoring_console tasks
       include_role:
         name: splunk_distributed_monitoring_console
+
+
+# STAGE 4 - HEAVY FORWARDER
+- hosts: splunk_heavy_forwarder
+  vars_files:
+    - ../vars/default-clustered.yml
+  gather_facts: True
+  pre_tasks:
+    # Include additional variables as required
+    - name: Include SHC Variable
+      include_vars: ../vars/splunk_search_head_cluster.yml
+      when: splunk_enable_shc is defined and splunk_enable_shc
+
+    - name: Include IDXC Variable
+      include_vars: ../vars/splunk_index_cluster.yml
+      when: splunk_enable_idxc is defined and splunk_enable_idxc
+
+    - name: Include Multisite Variable
+      include_vars: ../vars/splunk_multisite.yml
+      when: splunk_enable_multisite is defined and splunk_enable_multisite
+
+    - name: Include Deployment Server Variable
+      include_vars: ../vars/splunk_deployment_server.yml
+      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
+
+    - name: Include Multisite Variable
+      include_vars: ../vars/splunk_license_master.yml
+      when: splunk_enable_license_master is defined and splunk_enable_license_master
+
+  tasks:
+
+    - name: Splunk splunk_heavy_forwarder tasks
+      include_role:
+        name: splunk_heavy_forwarder

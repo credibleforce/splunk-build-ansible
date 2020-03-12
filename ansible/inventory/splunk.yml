@@ -89,12 +89,17 @@ all:
           vars:
             splunk:
               hostname: "{{ inventory_hostname }}"
-              # Note: this server has two roles (LM and DP) - we need to set the role to 
-              # splunk_license_master or it will get added as a local slave to itself.
-              # This cases delays in deployment and general non-goodness :)
               role: "splunk_deployer"
           hosts: 
             splkdp1.psl.local:
+              site_number: 1
+        splunk_heavy_forwarder:
+          vars:
+            splunk:
+              hostname: "{{ inventory_hostname }}"
+              role: "splunk_heavy_forwarder"
+          hosts: 
+            splkhec1.psl.local:
               site_number: 1
         splunk_distributed_monitoring_console:
           vars:
