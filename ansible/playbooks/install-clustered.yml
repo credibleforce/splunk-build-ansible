@@ -93,6 +93,11 @@
       include_vars: ../vars/splunk_license_master.yml
       when: splunk_enable_license_master is defined and splunk_enable_license_master
 
+    # Set deployment_server
+    - name: Include Deployment Client Variable
+      include_vars: ../vars/splunk_deployment_client.yml
+      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server and not inventory_hostname in groups['splunk_deployment_server']
+
     # Force an ntp update as service check requires time sync to work (should not be required in production)
     - name: Sync ntp
       include_role: 
@@ -173,6 +178,11 @@
     - name: Include Multisite Variable
       include_vars: ../vars/splunk_license_master.yml
       when: splunk_enable_license_master is defined and splunk_enable_license_master
+
+    # Set deployment_server
+    - name: Include Deployment Client Variable
+      include_vars: ../vars/splunk_deployment_client.yml
+      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
 
     # Force an ntp update as service check requires time sync to work (should not be required in production)
     - name: Sync ntp
@@ -265,6 +275,11 @@
       include_vars: ../vars/splunk_license_master.yml
       when: splunk_enable_license_master is defined and splunk_enable_license_master
 
+    # Set deployment_server
+    - name: Include Deployment Client Variable
+      include_vars: ../vars/splunk_deployment_client.yml
+      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
+  
     # PRE CONFIG - Add users
     - name: Custom splunk server pre-config (setup user)
       include_role:

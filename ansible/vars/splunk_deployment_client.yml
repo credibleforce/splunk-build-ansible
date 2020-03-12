@@ -1,0 +1,4 @@
+---
+splunk_deployment_server: "{{ groups['splunk_deployment_server'][0] }}"
+splunk:
+    deployment_server: "{{ splunk_deployment_server }}"
