@@ -11,3 +11,4 @@ splunk:
         - ../files/search_head/Splunk_Security_Essentials
         - ../files/search_head/ThreatHunting
         - ../files/search_head/Splunk_ML_Toolkit
+        - ../files/search_head/Splunk_SA_Scientific_Python_linux_x86_64
