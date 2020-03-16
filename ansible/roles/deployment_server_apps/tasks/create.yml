@@ -26,7 +26,7 @@
 
         [indexAndForward]
         index = false
-  when: splunk_indexer_cluster | bool
+  when: splunk_enable_idxc | bool
   become: yes
   become_user: "{{ splunk.user }}"
 
@@ -46,7 +46,7 @@
         [indexAndForward]
         index = false
   when:
-    - not splunk_indexer_cluster | bool
+    - not splunk_enable_idxc | bool
     - splunk_forward_servers is defined
   become: yes
   become_user: "{{ splunk.user }}"
