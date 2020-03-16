@@ -116,10 +116,7 @@
       include_vars: ../vars/splunk_indexer_apps.yml
       when: 
         - splunk_install_indexer_apps is defined and splunk_install_indexer_apps 
-        - ((splunk.idxc.enabled is defined and not splunk.idxc.enabled) or splunk.idxc.enabled is not defined) and inventory_hostname in groups['splunk_indexer']
-        
-        
-        
+        - ((splunk.idxc.enabled is defined and not splunk.idxc.enabled) or splunk.idxc.enabled is not defined) and inventory_hostname in groups['splunk_indexer'] 
 
     # Force an ntp update as service check requires time sync to work (should not be required in production)
     - name: Sync ntp
@@ -209,9 +206,17 @@
 
     # APPS INSTALL VARIABLES
     # SEARCH HEAD Apps Variable
-    - name: Include Searchhead Apps variables
+    - name: Include Search Head Cluster Apps variables
       include_vars: ../vars/splunk_search_head_apps.yml
-      when: splunk_search_head_apps is defined and splunk_search_head_apps and ((splunk.shc.enabled is defined and splunk.shc.enabled and inventory_hostname in groups['splunk_deployer']) or (((splunk.shc.enabled is defined and not splunk.shc.enabled) or splunk.shc.enabled is not defined) and (inventory_hostname in groups['splunk_search_head'] or inventory_hostname in groups['splunk_standalone'])
+      when: 
+        - splunk_search_head_apps is defined and splunk_search_head_apps
+        - splunk.shc.enabled is defined and splunk.shc.enabled and inventory_hostname in groups['splunk_deployer']
+
+    - name: Include Search Head Cluster Apps variables
+      include_vars: ../vars/splunk_search_head_apps.yml
+      when: 
+        - splunk_search_head_apps is defined and splunk_search_head_apps
+        - ((splunk.shc.enabled is defined and not splunk.shc.enabled) or splunk.shc.enabled is not defined) and (inventory_hostname in groups['splunk_search_head'] or inventory_hostname in groups['splunk_standalone'])
     
     # Force an ntp update as service check requires time sync to work (should not be required in production)
     - name: Sync ntp
