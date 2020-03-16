@@ -52,4 +52,16 @@
     - splunk_forward_servers is defined
   become: yes
   become_user: "{{ splunk.user }}"
+
+- name: Update serverclass.conf with custom app
+  blockinfile:
+    path: "{{ splunk.home }}/etc/system/local/serverclass.conf"
+    block: |
+
+      [serverClass:all:app:psl_indexer_forward]
+      restartSplunkWeb = 0
+      restartSplunkd = 1
+      stateOnClient = enabled
+  become: yes
+  become_user: "{{ splunk.user }}"
   

@@ -160,7 +160,7 @@
         name: splunk_deployment_server
       when: inventory_hostname in groups['splunk_deployment_server']
 
-    # DEPLOYMENT SERVER - setup custom outpus app
+    # DEPLOYMENT SERVER CUSTOM APPS - setup custom outpus app
     - name: Splunk splunk_deployment_server tasks
       include_role:
         name: splunk_deployment_server_custom_apps
