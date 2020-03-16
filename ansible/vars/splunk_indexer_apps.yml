@@ -1,3 +1,6 @@
 ---
 splunk:
-    apps_location: ../files/indexer
+    apps_location: 
+        - ../files/indexer/indexes_cluster
+        - ../files/indexer/Splunk_TA_windows
+        - ../files/indexer/TA-microsoft-sysmon
