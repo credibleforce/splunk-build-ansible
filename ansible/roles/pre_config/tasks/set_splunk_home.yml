@@ -3,4 +3,4 @@
   become: yes
   copy:
     dest: /etc/profile.d/splunk.sh
-    content: 'SPLUNK_HOME="{{ splunk.home }}"'
+    content: 'export SPLUNK_HOME="{{ splunk.home }}"'
