@@ -9,6 +9,7 @@
 
 - name: Configure indexer cluster outputs deployment app
   blockinfile:
+    create: yes
     path: "{{ splunk.app_paths.deployment }}/outputs_index_cluster/local/outputs.conf"
     block: |
         [indexer_discovery:splunk-indexer]
@@ -32,6 +33,7 @@
 
 - name: Configure indexer cluster outputs deployment app
   blockinfile:
+    create: yes
     path: "{{ splunk.app_paths.deployment }}/outputs_index_cluster/local/outputs.conf"
     block: |
         [tcpout:group1]
