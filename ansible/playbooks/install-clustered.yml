@@ -98,6 +98,18 @@
       include_vars: ../vars/splunk_deployment_client.yml
       when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server and not inventory_hostname in groups['splunk_deployment_server']
 
+    # APPS INSTALL VARIABLES
+    # DEPLOYMENT SERVER Apps Variable
+    - name: Include Deployment Apps variables
+      include_vars: ../vars/splunk_deployment_apps.yml
+      when: splunk_install_deployment_apps is defined and splunk_install_deployment_apps and inventory_hostname in groups['splunk_deployment_server']
+
+    # INDEXER SERVER Apps Variable
+    # Include Indexer Apps Variable
+    - name: Include Indexer Apps variables
+      include_vars: ../vars/splunk_indexer_apps.yml
+      when: splunk_install_indexer_apps is defined and splunk_install_indexer_apps and ((splunk.idxc.enabled is defined and splunk.idxc.enabled and inventory_hostname in groups['splunk_cluster_master']) or (((splunk.idxc.enabled is defined and not splunk.idxc.enabled) or splunk.idxc.enabled is not defined) and inventory_hostname in groups['splunk_indexer'])
+
     # Force an ntp update as service check requires time sync to work (should not be required in production)
     - name: Sync ntp
       include_role: 
@@ -184,6 +196,12 @@
       include_vars: ../vars/splunk_deployment_client.yml
       when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
 
+    # APPS INSTALL VARIABLES
+    # SEARCH HEAD Apps Variable
+    - name: Include Searchhead Apps variables
+      include_vars: ../vars/splunk_search_head_apps.yml
+      when: splunk_search_head_apps is defined and splunk_search_head_apps and ((splunk.shc.enabled is defined and splunk.shc.enabled and inventory_hostname in groups['splunk_deployer']) or (((splunk.shc.enabled is defined and not splunk.shc.enabled) or splunk.shc.enabled is not defined) and (inventory_hostname in groups['splunk_search_head'] or inventory_hostname in groups['splunk_standalone'])
+    
     # Force an ntp update as service check requires time sync to work (should not be required in production)
     - name: Sync ntp
       include_role: 

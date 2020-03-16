@@ -1,0 +1,3 @@
+---
+splunk:
+    apps_location: ../files/indexer

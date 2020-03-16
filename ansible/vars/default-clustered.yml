@@ -15,6 +15,9 @@ splunk_enable_shc: "{{ True if 'splunk_search_head_captain' in lookup('env','SPL
 splunk_enable_idxc: "{{ True if 'splunk_cluster_master' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
 splunk_enable_deployment_server: "{{ True if 'splunk_deployment_server' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
 splunk_enable_license_master: "{{ True if 'splunk_license_master' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
+splunk_install_deployment_apps: "{{ True if 'splunk_deployment_apps' in lookup('env','SPLUNK_INSTALL_APPS').split(':') else False }}"
+splunk_install_indexer_apps: "{{ True if 'splunk_indexer_apps' in lookup('env','SPLUNK_INSTALL_APPS').split(':') else False }}"
+splunk_install_search_head_apps: "{{ True if 'splunk_search_head_apps' in lookup('env','SPLUNK_INSTALL_APPS').split(':') else False }}"
 
 config:
   baked: default.yml
@@ -32,7 +35,6 @@ config:
   max_timeout: 1200
 
 splunk:
-  apps_location: null
   enable_service: true
   admin_user: admin
   allow_upgrade: true
