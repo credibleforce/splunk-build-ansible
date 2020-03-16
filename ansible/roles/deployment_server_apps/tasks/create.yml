@@ -1,0 +1,53 @@
+---
+- name: Create outputs_indexer_cluster app directory
+  file:
+    path: "{{ splunk.apps_path.deployment }}/outputs_index_cluster/local"
+    state: directory
+    mode: '0755'
+  become: yes
+  become_user: "{{ splunk.user }}"
+
+- name: Configure indexer cluster outputs deployment app
+  blockinfile:
+    path: "{{ splunk.apps_path.deployment }}/outputs_index_cluster/local/outputs.conf"
+    block: |
+        [indexer_discovery:splunk-indexer]
+        master_uri = {{ cert_prefix }}://{{ splunk.cluster_master_url }}:{{ splunk.svc_port }}
+        pass4SymmKey = {{ splunk.idxc.pass4SymmKey }}
+
+        [tcpout:group1]
+        indexerDiscovery = splunk-indexer
+        clientCert = {{ splunk.s2s.cert if splunk.s2s is defined and splunk.s2s.cert is defined }}
+        sslPassword = {{ splunk.s2s.password if splunk.s2s is defined and splunk.s2s.password is defined }}
+        useClientSSLCompression = {{ 'true' if splunk.s2s is defined and splunk.s2s.ssl is defined and splunk.s2s.ssl else '' }}
+
+        [tcpout]
+        defaultGroup = group1
+
+        [indexAndForward]
+        index = false
+  when: splunk_indexer_cluster | bool
+  become: yes
+  become_user: "{{ splunk.user }}"
+
+- name: Configure indexer cluster outputs deployment app
+  blockinfile:
+    path: "{{ splunk.apps_path.deployment }}/outputs_index_cluster/local/outputs.conf"
+    block: |
+        [tcpout:group1]
+        server = {{ splunk_forward_servers }}
+        clientCert = {{ splunk.s2s.cert if splunk.s2s is defined and splunk.s2s.cert is defined }}
+        sslPassword = {{ splunk.s2s.password if splunk.s2s is defined and splunk.s2s.password is defined }}
+        useClientSSLCompression = {{ 'true' if splunk.s2s is defined and splunk.s2s.ssl is defined and splunk.s2s.ssl else '' }}
+
+        [tcpout]
+        defaultGroup = group1
+
+        [indexAndForward]
+        index = false
+  when:
+    - not splunk_indexer_cluster | bool
+    - splunk_forward_servers is defined
+  become: yes
+  become_user: "{{ splunk.user }}"
+  

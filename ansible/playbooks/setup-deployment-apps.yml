@@ -1,0 +1,77 @@
+---
+# STAGE 1 - DEPLOYMENT SERVER CONFIG
+- hosts: splunk_deployment_server
+  vars_files:
+    - ../vars/default-clustered.yml
+  gather_facts: True
+  
+  #environment:
+  #  SPLUNK_SEARCH_HEAD_CAPTAIN_URL: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
+  
+  pre_tasks:
+    # Include additional variables as required
+    - name: Include SHC Variable
+      include_vars: ../vars/splunk_search_head_cluster.yml
+      when: splunk_enable_shc is defined and splunk_enable_shc
+
+    - name: Include IDXC Variable
+      include_vars: ../vars/splunk_index_cluster.yml
+      when: splunk_enable_idxc is defined and splunk_enable_idxc
+
+    - name: Include Multisite Variable
+      include_vars: ../vars/splunk_multisite.yml
+      when: splunk_enable_multisite is defined and splunk_enable_multisite
+
+    - name: Include Deployment Server Variable
+      include_vars: ../vars/splunk_deployment_server.yml
+      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
+
+    - name: Include Multisite Variable
+      include_vars: ../vars/splunk_license_master.yml
+      when: splunk_enable_license_master is defined and splunk_enable_license_master
+
+    # Set deployment_server
+    - name: Include Deployment Client Variable
+      include_vars: ../vars/splunk_deployment_client.yml
+      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server and not inventory_hostname in groups['splunk_deployment_server']
+
+    # APPS INSTALL VARIABLES
+    # DEPLOYMENT SERVER Apps Variable
+    - name: Include Deployment Apps variables
+      include_vars: ../vars/splunk_deployment_apps.yml
+      when: splunk_install_deployment_apps is defined and splunk_install_deployment_apps and inventory_hostname in groups['splunk_deployment_server']
+
+    # INDEXER SERVER Apps Variable
+    # Include Indexer Apps Variable
+    - name: Include Indexer Apps variables
+      include_vars: ../vars/splunk_indexer_apps.yml
+      when: splunk_install_indexer_apps is defined and splunk_install_indexer_apps and ((splunk.idxc.enabled is defined and splunk.idxc.enabled and inventory_hostname in groups['splunk_cluster_master']) or (((splunk.idxc.enabled is defined and not splunk.idxc.enabled) or splunk.idxc.enabled is not defined) and inventory_hostname in groups['splunk_indexer'])
+
+    # Force an ntp update as service check requires time sync to work (should not be required in production)
+    - name: Sync ntp
+      include_role: 
+        name: ntp_sync
+
+    # PRE CONFIG - Add users
+    - name: Custom splunk server pre-config (setup user)
+      include_role:
+        name: pre_config
+
+  post_tasks:
+    # Set ulimits by service (assumes systemd service deployment)
+    - name: Post install config
+      import_tasks: ../roles/post_config/tasks/main.yml
+
+  tasks:
+
+    # DEPLOYMENT SERVER - check for splunk_deployment_server role
+    #- name: Splunk splunk_deployment_server tasks
+    #  include_role:
+    #    name: splunk_deployment_server
+    #  when: inventory_hostname in groups['splunk_deployment_server']
+
+    # DEPLOYMENT SERVER - setup custom outpus app
+    - name: Splunk splunk_deployment_server tasks
+      include_role:
+        name: deployment_server_apps
+      when: inventory_hostname in groups['splunk_deployment_server']
