@@ -102,10 +102,11 @@
     # DEPLOYMENT SERVER Apps Variable
     - name: Include Deployment Apps variables
       include_vars: ../vars/splunk_deployment_apps.yml
-      when: splunk_install_deployment_apps is defined and splunk_install_deployment_apps and inventory_hostname in groups['splunk_deployment_server']
+      when: 
+        - splunk_install_deployment_apps is defined splunk_install_deployment_apps
+        - inventory_hostname in groups['splunk_deployment_server']
 
     # INDEXER SERVER Apps Variable
-    # Include Indexer Apps Variable
     - name: Include Indexer Cluster Apps variables
       include_vars: ../vars/splunk_indexer_apps.yml
       when: 
