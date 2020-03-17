@@ -58,7 +58,7 @@
     path: "{{ splunk.home }}/etc/system/local/serverclass.conf"
     block: |
 
-      [serverClass:all:app:psl_indexer_forward]
+      [serverClass:all:app:outputs_indexer_cluster]
       restartSplunkWeb = 0
       restartSplunkd = 1
       stateOnClient = enabled
