@@ -35,6 +35,7 @@ config:
   max_timeout: 1200
 
 splunk:
+  apps_location: null
   enable_service: true
   admin_user: admin
   allow_upgrade: true
