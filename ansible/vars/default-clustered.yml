@@ -18,6 +18,8 @@ splunk_enable_license_master: "{{ True if 'splunk_license_master' in lookup('env
 splunk_install_deployment_apps: "{{ True if 'splunk_deployment_apps' in lookup('env','SPLUNK_INSTALL_APPS').split(':') else False }}"
 splunk_install_indexer_apps: "{{ True if 'splunk_indexer_apps' in lookup('env','SPLUNK_INSTALL_APPS').split(':') else False }}"
 splunk_install_search_head_apps: "{{ True if 'splunk_search_head_apps' in lookup('env','SPLUNK_INSTALL_APPS').split(':') else False }}"
+splunkbase_token: "{{ lookup('env','SPLUNKBASE_TOKEN') }}"
+
 
 config:
   baked: default.yml

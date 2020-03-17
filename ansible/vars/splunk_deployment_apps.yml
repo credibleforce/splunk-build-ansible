@@ -1,6 +1,6 @@
 ---
 splunk:
     apps_location: 
-        - ../files/deployment/indexes_cluster
-        - ../files/deployment/inputs_forwarded_events
-        - ../files/deployment/inputs_win_dns
+        - file://../files/deployment/indexes_cluster.tgz
+        - file://../files/deployment/inputs_forwarded_events.tgz
+        - file://../files/deployment/inputs_win_dns.tgz

@@ -1,6 +1,10 @@
 ---
 splunk:
     apps_location: 
-        - ../files/indexer/indexes_cluster
-        - ../files/indexer/Splunk_TA_windows
-        - ../files/indexer/TA-microsoft-sysmon
+        - file://../files/indexer/indexes_cluster.tgz
+        
+        # windows ta
+        - https://splunkbase.splunk.com/app/742/release/7.0.0/download/
+        
+        # sysmon ta
+        - https://splunkbase.splunk.com/app/1914/release/10.6.2/download/

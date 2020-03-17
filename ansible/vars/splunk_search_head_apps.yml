@@ -1,14 +1,41 @@
 ---
 splunk:
     apps_location: 
-        - ../files/search_head/indexes_cluster
-        - ../files/search_head/Splunk_TA_windows
-        - ../files/search_head/TA-microsoft-sysmon
-        - ../files/search_head/force_directed_viz
-        - ../files/search_head/lookup_editor
-        - ../files/search_head/punchcard_app
-        - ../files/search_head/sankey_diagram_app
-        - ../files/search_head/Splunk_Security_Essentials
-        - ../files/search_head/ThreatHunting
-        - ../files/search_head/Splunk_ML_Toolkit
-        - ../files/search_head/Splunk_SA_Scientific_Python_linux_x86_64
+        - file://../files/search_head/indexes_cluster.tgz
+        # windows ta
+        - https://splunkbase.splunk.com/app/742/release/7.0.0/download/
+        # sysmon ta
+        - https://splunkbase.splunk.com/app/1914/release/10.6.2/download/
+
+        # windows event log analysis
+        - https://splunkbase.splunk.com/app/3067/release/1.5.1/download/
+
+        # infosec app for splunk
+        - https://splunkbase.splunk.com/app/4240/release/1.5.2/download/
+
+        # force directed viz
+        - https://splunkbase.splunk.com/app/3767/release/3.0.1/download/
+
+        # lookup file editor
+        - https://splunkbase.splunk.com/app/1724/release/3.3.3/download/
+
+        # punchcard viz
+        - https://splunkbase.splunk.com/app/3129/release/1.4.0/download/
+
+        # sankey viz
+        - https://splunkbase.splunk.com/app/3112/release/1.4.0/download/
+
+        
+        # splunk machine learning toolkit
+        - https://splunkbase.splunk.com/app/2890/release/5.1.0/download/
+
+        # python for scientific computing (linux 64-bit)
+        - https://splunkbase.splunk.com/app/2882/release/2.0.0/download/
+
+        # security essentials
+        - https://splunkbase.splunk.com/app/3435/release/3.0.6/download/
+
+        # threathunting
+        - https://splunkbase.splunk.com/app/4305/release/1.4.1/download/
+
+        
