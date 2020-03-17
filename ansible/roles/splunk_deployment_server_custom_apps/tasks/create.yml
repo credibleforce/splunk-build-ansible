@@ -64,4 +64,16 @@
       stateOnClient = enabled
   become: yes
   become_user: "{{ splunk.user }}"
+
+- name: Reload deployment server
+  command: "{{ splunk.exec }} reload deploy-server -auth {{ splunk.admin_user }}:{{ splunk.password }}"
+  become: yes
+  become_user: "{{ splunk.user }}"
+  register: reload_depserver
+  until: reload_depserver.rc == 0
+  changed_when: reload_depserver.rc == 0
+  retries: "{{ retry_num }}"
+  delay: "{{ retry_delay }}"
+  ignore_errors: yes
+  no_log: "{{ hide_password }}"
   
