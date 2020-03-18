@@ -1,7 +1,8 @@
 ---
+installed_apps: [] # hack to work around disable task for installed apps
 splunk:
     apps_location: 
-        - file:///tmp/indexes.tgz
+        - /tmp/indexes.tgz
         # windows ta
         - https://splunkbase.splunk.com/app/742/release/7.0.0/download/
         # sysmon ta
@@ -24,7 +25,6 @@ splunk:
 
         # sankey viz
         - https://splunkbase.splunk.com/app/3112/release/1.4.0/download/
-
         
         # splunk machine learning toolkit
         - https://splunkbase.splunk.com/app/2890/release/5.1.0/download/
