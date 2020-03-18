@@ -1,7 +1,7 @@
 ---
 splunk:
     apps_location: 
-        - file://../files/indexer/indexes_cluster.tgz
+        - file:///tmp/indexes.tgz
         
         # windows ta
         - https://splunkbase.splunk.com/app/742/release/7.0.0/download/

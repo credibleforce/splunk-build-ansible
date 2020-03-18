@@ -12,3 +12,70 @@
   copy:
     src: /tmp/splunk.lic
     dest: /tmp/splunk.lic
+
+# archive all the apps
+- name: Compress directory apps
+  archive:
+    path: "{{ item }}"
+    dest: "/tmp/{{ item | basename }}.tgz"
+  with_items:
+    - ../files/indexes
+    - ../files/inputs_forwarded_events
+    - ../files/inputs_win_dns
+
+# copy deployment apps
+- name: Copy deployment apps
+  copy:
+    src: "{{ item }}"
+    dest: /tmp
+  when: 
+    - splunk_install_deployment_apps is defined and splunk_install_deployment_apps
+    - inventory_hostname in groups['splunk_deployment_server']
+  with_items:
+    - /tmp/indexes.tgz
+    - /tmp/inputs_forwarded_events.tgz
+    - /tmp/inputs_win_dns.tgz   
+
+# copy search head cluster apps
+- name: Copy search head cluster apps
+  copy:
+    src: "{{ item }}"
+    dest: /tmp
+  when: 
+    - splunk_search_head_apps is defined and splunk_search_head_apps
+    - splunk.shc.enabled is defined and splunk.shc.enabled and inventory_hostname in groups['splunk_deployer']
+  with_items:
+    - /tmp/indexes.tgz
+
+# copy search head apps
+- name: Copy search head cluster apps
+  copy:
+    src: "{{ item }}"
+    dest: /tmp
+  when: 
+    - splunk_search_head_apps is defined and splunk_search_head_apps
+    - ((splunk.shc.enabled is defined and not splunk.shc.enabled) or splunk.shc.enabled is not defined) and (inventory_hostname in groups['splunk_search_head'] or inventory_hostname in groups['splunk_standalone'])
+  with_items:
+    - /tmp/indexes.tgz
+
+# copy index cluster apps
+- name: Copy indexer cluster apps
+  copy:
+    src: "{{ item }}"
+    dest: /tmp
+  when: 
+    - splunk_install_indexer_apps is defined and splunk_install_indexer_apps 
+    - splunk.idxc.enabled is defined and splunk.idxc.enabled and inventory_hostname in groups['splunk_cluster_master']
+  with_items:
+    - /tmp/indexes.tgz
+
+# copy indexer apps
+- name: Copy indexer apps
+  copy:
+    src: "{{ item }}"
+    dest: /tmp
+  when: 
+    - splunk_install_indexer_apps is defined and splunk_install_indexer_apps 
+    - ((splunk.idxc.enabled is defined and not splunk.idxc.enabled) or splunk.idxc.enabled is not defined) and inventory_hostname in groups['splunk_indexer'] 
+  with_items:
+    - /tmp/indexes.tgz
