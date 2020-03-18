@@ -38,6 +38,10 @@
     - name: Download Splunk
       include_role:
         name: download_splunk
+    
+    - name: Compress Apps
+      include_role:
+        name: compress_apps
 
 #########################################
 # ROLE ASSIGNMENTS BY INVENTORY

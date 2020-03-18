@@ -1,0 +1,10 @@
+---
+# archive all the apps
+- name: Compress directory apps
+  archive:
+    path: "{{ item }}"
+    dest: "/tmp/{{ item | basename }}.tgz"
+  with_items:
+    - { path: '../files/indexes', dest: '/tmp/indexes.tgz' }
+    - { path: '../files/inputs_forwarded_events', dest: '/tmp/inputs_forwarded_events.tgz' }
+    - { path: '../files/inputs_win_dns', dest: '/tmp/inputs_win_dns.tgz' }

@@ -13,16 +13,6 @@
     src: /tmp/splunk.lic
     dest: /tmp/splunk.lic
 
-# archive all the apps
-- name: Compress directory apps
-  archive:
-    path: "{{ item }}"
-    dest: "/tmp/{{ item | basename }}.tgz"
-  with_items:
-    - ../files/indexes
-    - ../files/inputs_forwarded_events
-    - ../files/inputs_win_dns
-
 # copy deployment apps
 - name: Copy deployment apps
   copy:
