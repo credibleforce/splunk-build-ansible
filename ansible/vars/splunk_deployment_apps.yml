@@ -1,6 +1,7 @@
 ---
-installed_apps: [] # hack to work around disable task for installed apps
 splunk:
+    apps_path: # hack to potentially work around failing deployment server provisioning
+        default: null
     apps_location: 
         - /tmp/indexes.tgz
         - /tmp/inputs_forwarded_events.tgz
