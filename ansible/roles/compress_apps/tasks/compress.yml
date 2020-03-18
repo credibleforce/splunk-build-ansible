@@ -2,8 +2,9 @@
 # archive all the apps
 - name: Compress directory apps
   archive:
-    path: "{{ item }}"
-    dest: "/tmp/{{ item | basename }}.tgz"
+    path: "{{ item.path }}"
+    dest: "{{ item.dest }}"
+    format: gz
   with_items:
     - { path: '../files/indexes', dest: '/tmp/indexes.tgz' }
     - { path: '../files/inputs_forwarded_events', dest: '/tmp/inputs_forwarded_events.tgz' }
