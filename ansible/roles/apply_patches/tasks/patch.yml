@@ -1,5 +1,5 @@
 ---
 - name: Apply patch to one file
   patch:
-    src: "{{ ../files/patch/splunk_deployment_server.patch|realpath }}"
-    dest: "{{ ../splunk-ansible/roles/splunk_deployment_server/tasks/main.yml|realpath }}"
+    src: "{{ '../files/patch/splunk_deployment_server.patch' | realpath }}"
+    dest: "{{ '../splunk-ansible/roles/splunk_deployment_server/tasks/main.yml' | realpath }}"
