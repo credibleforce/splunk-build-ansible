@@ -91,7 +91,7 @@ all:
               hostname: "{{ inventory_hostname }}"
               role: "splunk_deployer"
           hosts: 
-            splkdp1.psl.local:
+            splkshd1.psl.local:
               site_number: 1
         splunk_heavy_forwarder:
           vars:
