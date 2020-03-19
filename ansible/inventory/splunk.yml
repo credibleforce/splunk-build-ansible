@@ -98,11 +98,6 @@ all:
             splunk:
               hostname: "{{ inventory_hostname }}"
               role: "splunk_heavy_forwarder"
-              hec:
-                enable: True # hec should be deployed via master-apps in cluster
-                ssl: True
-                token: f7a5b222-7b57-41cf-9714-fb5fc333bef6
-                port: 8088
           hosts: 
             splkhec1.psl.local:
               site_number: 1

@@ -106,6 +106,12 @@
       include_vars: ../vars/splunk_deployment_client.yml
       when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server and not inventory_hostname in groups['splunk_deployment_server']
 
+
+    # Set heavy_forwarder
+    - name: Include Heavy Forwarder Variable
+      include_vars: ../vars/splunk_heavy_forwarder.yml
+      when: splunk_enable_heavy_forwarder is defined and splunk_enable_heavy_forwarder and inventory_hostname in groups['splunk_heavy_forwarder']
+      
     # APPS INSTALL VARIABLES
     # DEPLOYMENT SERVER Apps Variable
     - name: Include Deployment Apps variables
@@ -219,6 +225,11 @@
       include_vars: ../vars/splunk_deployment_client.yml
       when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
 
+    # Set heavy_forwarder
+    - name: Include Heavy Forwarder Variable
+      include_vars: ../vars/splunk_heavy_forwarder.yml
+      when: splunk_enable_heavy_forwarder is defined and splunk_enable_heavy_forwarder and inventory_hostname in groups['splunk_heavy_forwarder']
+
     # APPS INSTALL VARIABLES
     # SEARCH HEAD Apps Variable
     - name: Include Search Head Cluster Apps variables
@@ -329,6 +340,11 @@
       include_vars: ../vars/splunk_deployment_client.yml
       when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
   
+    # Set heavy_forwarder
+    - name: Include Heavy Forwarder Variable
+      include_vars: ../vars/splunk_heavy_forwarder.yml
+      when: splunk_enable_heavy_forwarder is defined and splunk_enable_heavy_forwarder and inventory_hostname in groups['splunk_heavy_forwarder']
+
     # PRE CONFIG - Add users
     - name: Custom splunk server pre-config (setup user)
       include_role:
