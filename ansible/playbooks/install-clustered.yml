@@ -68,7 +68,7 @@
 #########################################
 
 # STAGE 1 - INDEX CLUSTER
-- hosts: splunk_license_master:splunk_cluster_master:splunk_deployment_server:splunk_deployer:splunk_indexer
+- hosts: splunk_license_master:splunk_cluster_master:splunk_deployment_server:splunk_indexer
   vars_files:
     - ../vars/default-clustered.yml
 
@@ -111,7 +111,7 @@
     - name: Include Heavy Forwarder Variable
       include_vars: ../vars/splunk_heavy_forwarder.yml
       when: splunk_enable_heavy_forwarder is defined and splunk_enable_heavy_forwarder and inventory_hostname in groups['splunk_heavy_forwarder']
-      
+
     # APPS INSTALL VARIABLES
     # DEPLOYMENT SERVER Apps Variable
     - name: Include Deployment Apps variables
@@ -179,16 +179,10 @@
       include_role:
         name: splunk_deployment_server_custom_apps
       when: inventory_hostname in groups['splunk_deployment_server']
-
-    # DEPLOYER- check for splunk_deployer role
-    - name: Splunk splunk_deployer tasks
-      include_role:
-        name: splunk_deployer
-      when: inventory_hostname in groups['splunk_deployer']
     
 
 # STAGE 2 - SEARCH HEAD CLUSTER
-- hosts: splunk_search_head_captain:splunk_search_head
+- hosts: splunk_deployer:splunk_search_head_captain:splunk_search_head
   vars_files:
     - ../vars/default-clustered.yml
   # STRATEGY - free allows multiple server(s) and roles installed simultaneous and is required for service availability checks
@@ -259,7 +253,13 @@
     - name: Post install config
       import_tasks: ../roles/post_config/tasks/main.yml
 
-  tasks:  
+  tasks:
+    # DEPLOYER- check for splunk_deployer role
+    - name: Splunk splunk_deployer tasks
+      include_role:
+        name: splunk_deployer
+      when: inventory_hostname in groups['splunk_deployer']
+      
     # SEARCH HEAD CAPTAIN - check for splunk_search_head_captain role (depends on splunk_search_head)
     - name: Splunk splunk_search_head_captain tasks
       include_role:
