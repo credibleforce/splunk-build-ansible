@@ -1,5 +1,4 @@
 ---
-installed_apps: [] # hack to work around disable task for installed apps
 splunk:
     apps_location: 
         - /tmp/indexes.tgz
