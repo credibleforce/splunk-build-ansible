@@ -58,7 +58,7 @@
         name: compress_apps
 
     - name: Apply Patches
-     include_role:
+      include_role:
        name: apply_patches
 
 #########################################
