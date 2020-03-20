@@ -232,7 +232,7 @@
 
     - name: Include Multisite Variable
       include_vars: ../vars/splunk_multisite.yml
-      when: plunk_enable_multisite
+      when: splunk_enable_multisite
 
     - name: Include Deployment Server Variable
       include_vars: ../vars/splunk_deployment_server.yml
