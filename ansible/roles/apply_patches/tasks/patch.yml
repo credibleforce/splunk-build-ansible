@@ -3,8 +3,10 @@
   patch:
     src: "{{ 'files/patch/splunk_deployment_server.patch' | realpath }}"
     dest: "{{ 'splunk-ansible/roles/splunk_deployment_server/tasks/main.yml' | realpath }}"
+  ignore_errors: true
 
 - name: Apply patch to one file
   patch:
     src: "{{ 'files/patch/splunk_common_hec_as_receiver.patch' | realpath }}"
     dest: "{{ 'splunk-ansible/roles/splunk_common/tasks/set_as_hec_receiver.yml' | realpath }}"
+  ignore_errors: true
