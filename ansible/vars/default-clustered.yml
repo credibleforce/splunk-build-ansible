@@ -79,11 +79,11 @@ splunk:
   wildcard_license: true
 
   # hec (should be deployed via master-apps in cluster)
-  hec:
-      enable: false 
-      ssl: true
-      token: 5ed09976-d87d-4b79-bfb0-f3cfd4c5e476
-      port: 8088
+  #hec:
+  #    enable: false 
+  #    ssl: true
+  #    token: 5ed09976-d87d-4b79-bfb0-f3cfd4c5e476
+  #    port: 8088
 
   # s2s
   s2s:

@@ -1,0 +1,10 @@
+--- splunk-ansible/roles/splunk_common/tasks/set_as_hec_receiver.yml	2020-03-17 13:29:10.000000000 -0700
++++ files/patch/set_as_hec_receiver.yml	2020-03-20 15:22:02.000000000 -0700
+@@ -15,6 +15,7 @@
+     body_format: "form-urlencoded"
+     status_code: 200
+     timeout: 10
++  when: ('hec' in splunk and 'token' in splunk.hec) or ('hec_token' in splunk)
+   no_log: "{{ hide_password }}"
+ 
+ - name: Get existing HEC token
