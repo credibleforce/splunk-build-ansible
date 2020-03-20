@@ -1,7 +1,7 @@
 ---
 - name: Create outputs_indexer_cluster app directory
   file:
-    path: "{{ splunk.app_paths.deployment }}/outputs_index_cluster/local"
+    path: "{{ splunk.app_paths.deployment }}/outputs_indexer_cluster/local"
     state: directory
     mode: '0755'
   become: yes
@@ -10,7 +10,7 @@
 - name: Configure indexer cluster outputs deployment app
   blockinfile:
     create: yes
-    path: "{{ splunk.app_paths.deployment }}/outputs_index_cluster/local/outputs.conf"
+    path: "{{ splunk.app_paths.deployment }}/outputs_indexer_cluster/local/outputs.conf"
     block: |
         [indexer_discovery:splunk-indexer]
         master_uri = {{ cert_prefix }}://{{ splunk.cluster_master_url }}:{{ splunk.svc_port }}
@@ -34,7 +34,7 @@
 - name: Configure indexer cluster outputs deployment app
   blockinfile:
     create: yes
-    path: "{{ splunk.app_paths.deployment }}/outputs_index_cluster/local/outputs.conf"
+    path: "{{ splunk.app_paths.deployment }}/outputs_indexer_cluster/local/outputs.conf"
     block: |
         [tcpout:group1]
         server = {{ splunk_forward_servers }}
