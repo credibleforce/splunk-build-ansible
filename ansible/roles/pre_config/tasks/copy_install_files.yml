@@ -19,7 +19,7 @@
     src: "{{ item }}"
     dest: /tmp
   when: 
-    - splunk_install_deployment_apps is defined and splunk_install_deployment_apps
+    - splunk_install_deployment_apps
     - inventory_hostname in groups['splunk_deployment_server']
   with_items:
     - /tmp/indexes.tgz
@@ -32,8 +32,8 @@
     src: "{{ item }}"
     dest: /tmp
   when: 
-    - splunk_search_head_apps is defined and splunk_search_head_apps
-    - splunk.shc.enabled is defined and splunk.shc.enabled and inventory_hostname in groups['splunk_deployer']
+    - splunk_enable_shc and splunk_search_head_apps
+    - inventory_hostname in groups['splunk_deployer']
   with_items:
     - /tmp/indexes.tgz
 
@@ -43,8 +43,8 @@
     src: "{{ item }}"
     dest: /tmp
   when: 
-    - splunk_search_head_apps is defined and splunk_search_head_apps
-    - ((splunk.shc.enabled is defined and not splunk.shc.enabled) or splunk.shc.enabled is not defined) and (inventory_hostname in groups['splunk_search_head'] or inventory_hostname in groups['splunk_standalone'])
+    - not splunk_enable_shc and splunk_search_head_apps
+    - (inventory_hostname in groups['splunk_search_head'] or inventory_hostname in groups['splunk_standalone'])
   with_items:
     - /tmp/indexes.tgz
 
@@ -54,8 +54,8 @@
     src: "{{ item }}"
     dest: /tmp
   when: 
-    - splunk_install_indexer_apps is defined and splunk_install_indexer_apps 
-    - splunk.idxc.enabled is defined and splunk.idxc.enabled and inventory_hostname in groups['splunk_cluster_master']
+    - splunk_enable_idxc and splunk_install_indexer_apps
+    - inventory_hostname in groups['splunk_cluster_master']
   with_items:
     - /tmp/indexes.tgz
 
@@ -65,7 +65,7 @@
     src: "{{ item }}"
     dest: /tmp
   when: 
-    - splunk_install_indexer_apps is defined and splunk_install_indexer_apps 
-    - ((splunk.idxc.enabled is defined and not splunk.idxc.enabled) or splunk.idxc.enabled is not defined) and inventory_hostname in groups['splunk_indexer'] 
+    - not splunk_enable_idxc and splunk_install_indexer_apps 
+    - inventory_hostname in groups['splunk_indexer'] 
   with_items:
     - /tmp/indexes.tgz

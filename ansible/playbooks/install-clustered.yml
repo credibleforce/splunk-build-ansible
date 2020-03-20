@@ -3,31 +3,45 @@
 # EXAMPLE DEPLOYMENT
 #########################################
 
+
+#########################################
+# LOCALHOST PLAY
+#########################################
+
 - hosts: local
   vars_files:
     - ../vars/default-clustered.yml
 
   pre_tasks:
+    #########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
     # Include additional variables as required
     - name: Include SHC Variable
       include_vars: ../vars/splunk_search_head_cluster.yml
-      when: splunk_enable_shc is defined and splunk_enable_shc
+      when: splunk_enable_shc
 
     - name: Include IDXC Variable
       include_vars: ../vars/splunk_index_cluster.yml
-      when: splunk_enable_idxc is defined and splunk_enable_idxc
+      when: splunk_enable_idxc
 
     - name: Include Multisite Variable
       include_vars: ../vars/splunk_multisite.yml
-      when: splunk_enable_multisite is defined and splunk_enable_multisite
+      when: splunk_enable_multisite
 
     - name: Include Deployment Server Variable
       include_vars: ../vars/splunk_deployment_server.yml
-      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
+      when: splunk_enable_deployment_server
 
-    - name: Include Multisite Variable
+    - name: Include License Master Variable
       include_vars: ../vars/splunk_license_master.yml
-      when: splunk_enable_license_master is defined and splunk_enable_license_master
+      when: splunk_enable_license_master
+
+    - name: Include Deployment Client Variable
+      include_vars: ../vars/splunk_deployment_client.yml
+      when: 
+        - splunk_enable_deployment_server
+        - not inventory_hostname in groups['splunk_deployment_server']
 
   tasks:
     # Force an ntp update as service check requires time sync to work (should not be required in production)
@@ -64,7 +78,7 @@
 # - hosts: splunk_standalone
 
 #########################################
-# DEPLOPY INDEXING/LICENSING/DEPLOYMENT
+# DEPLOPY INDEXING/LICENSING/DEPLOYMENT PLAY
 #########################################
 
 # STAGE 1 - INDEX CLUSTER
@@ -76,63 +90,67 @@
   strategy: free
   gather_facts: True
   
-  #environment:
-  #  SPLUNK_SEARCH_HEAD_CAPTAIN_URL: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
-  
   pre_tasks:
+    #########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
     # Include additional variables as required
     - name: Include SHC Variable
       include_vars: ../vars/splunk_search_head_cluster.yml
-      when: splunk_enable_shc is defined and splunk_enable_shc
+      when: splunk_enable_shc
 
     - name: Include IDXC Variable
       include_vars: ../vars/splunk_index_cluster.yml
-      when: splunk_enable_idxc is defined and splunk_enable_idxc
+      when: splunk_enable_idxc
 
     - name: Include Multisite Variable
       include_vars: ../vars/splunk_multisite.yml
-      when: splunk_enable_multisite is defined and splunk_enable_multisite
+      when: splunk_enable_multisite
 
     - name: Include Deployment Server Variable
       include_vars: ../vars/splunk_deployment_server.yml
-      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
+      when: splunk_enable_deployment_server
 
-    - name: Include Multisite Variable
+    - name: Include License Master Variable
       include_vars: ../vars/splunk_license_master.yml
-      when: splunk_enable_license_master is defined and splunk_enable_license_master
+      when: splunk_enable_license_master
 
-    # Set deployment_server
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
-      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server and not inventory_hostname in groups['splunk_deployment_server']
-
-
-    # Set heavy_forwarder
-    - name: Include Heavy Forwarder Variable
-      include_vars: ../vars/splunk_heavy_forwarder.yml
-      when: splunk_enable_heavy_forwarder is defined and splunk_enable_heavy_forwarder and inventory_hostname in groups['splunk_heavy_forwarder']
-
-    # APPS INSTALL VARIABLES
+      when: 
+        - splunk_enable_deployment_server
+        - not inventory_hostname in groups['splunk_deployment_server']
+    
+    #########################################
+    # VARIABLES DEFINING APP INSTALLATION
+    ##########################################
+    
     # DEPLOYMENT SERVER Apps Variable
     - name: Include Deployment Apps variables
       include_vars: ../vars/splunk_deployment_apps.yml
       when: 
-        - splunk_install_deployment_apps is defined and splunk_install_deployment_apps
+        - splunk_install_deployment_apps
         - inventory_hostname in groups['splunk_deployment_server']
 
     # INDEXER SERVER Apps Variable
+    # cluster
     - name: Include Indexer Cluster Apps variables
       include_vars: ../vars/splunk_indexer_apps.yml
       when: 
-        - splunk_install_indexer_apps is defined and splunk_install_indexer_apps 
-        - splunk.idxc.enabled is defined and splunk.idxc.enabled and inventory_hostname in groups['splunk_cluster_master']
+        - splunk_enable_idxc and splunk_install_indexer_apps 
+        - inventory_hostname in groups['splunk_cluster_master']
     
+    # standalone
     - name: Include Indexer Apps variables
       include_vars: ../vars/splunk_indexer_apps.yml
       when: 
-        - splunk_install_indexer_apps is defined and splunk_install_indexer_apps 
-        - ((splunk.idxc.enabled is defined and not splunk.idxc.enabled) or splunk.idxc.enabled is not defined) and inventory_hostname in groups['splunk_indexer'] 
+        - not splunk_enable_idxc and splunk_install_indexer_apps 
+        - inventory_hostname in groups['splunk_indexer'] 
 
+    #########################################
+    # PRECONFIG TASKS
+    ##########################################
+    
     # Force an ntp update as service check requires time sync to work (should not be required in production)
     - name: Sync ntp
       include_role: 
@@ -144,11 +162,18 @@
         name: pre_config
 
   post_tasks:
+    #########################################
+    # POSTCONFIG TASKS
+    ##########################################
+
     # Set ulimits by service (assumes systemd service deployment)
     - name: Post install config
       import_tasks: ../roles/post_config/tasks/main.yml
 
   tasks:
+    #########################################
+    # TASKS
+    ##########################################
 
     # LICENSE MASTER- check for splunk_license_master role
     - name: Splunk splunk_license_master tasks
@@ -180,6 +205,9 @@
         name: splunk_deployment_server_custom_apps
       when: inventory_hostname in groups['splunk_deployment_server']
     
+#########################################
+# DEPLOPY SEARCH HEADS PLAY
+#########################################
 
 # STAGE 2 - SEARCH HEAD CLUSTER
 - hosts: splunk_deployer:splunk_search_head_captain:splunk_search_head
@@ -189,54 +217,59 @@
   strategy: free
   gather_facts: True
   
-  environment:
-    SPLUNK_SEARCH_HEAD_CAPTAIN_URL: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
-  
   pre_tasks:
+    #########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
     # Include additional variables as required
     - name: Include SHC Variable
       include_vars: ../vars/splunk_search_head_cluster.yml
-      when: splunk_enable_shc is defined and splunk_enable_shc
+      when: splunk_enable_shc
 
     - name: Include IDXC Variable
       include_vars: ../vars/splunk_index_cluster.yml
-      when: splunk_enable_idxc is defined and splunk_enable_idxc
+      when: splunk_enable_idxc
 
     - name: Include Multisite Variable
       include_vars: ../vars/splunk_multisite.yml
-      when: splunk_enable_multisite is defined and splunk_enable_multisite
+      when: plunk_enable_multisite
 
     - name: Include Deployment Server Variable
       include_vars: ../vars/splunk_deployment_server.yml
-      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
+      when: splunk_enable_deployment_server
 
-    - name: Include Multisite Variable
+    - name: Include License Master Variable
       include_vars: ../vars/splunk_license_master.yml
-      when: splunk_enable_license_master is defined and splunk_enable_license_master
+      when: splunk_enable_license_master
 
-    # Set deployment_server
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
-      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
+      when: 
+        - splunk_enable_deployment_server
+        - not inventory_hostname in groups['splunk_deployment_server']
 
-    # Set heavy_forwarder
-    - name: Include Heavy Forwarder Variable
-      include_vars: ../vars/splunk_heavy_forwarder.yml
-      when: splunk_enable_heavy_forwarder is defined and splunk_enable_heavy_forwarder and inventory_hostname in groups['splunk_heavy_forwarder']
+    #########################################
+    # VARIABLES DEFINING APP INSTALLATION
+    ##########################################
 
-    # APPS INSTALL VARIABLES
     # SEARCH HEAD Apps Variable
+    # cluster
     - name: Include Search Head Cluster Apps variables
       include_vars: ../vars/splunk_search_head_apps.yml
       when: 
-        - splunk_search_head_apps is defined and splunk_search_head_apps
-        - splunk.shc.enabled is defined and splunk.shc.enabled and inventory_hostname in groups['splunk_deployer']
-
+        - splunk_enable_shc and splunk_search_head_apps
+        - inventory_hostname in groups['splunk_deployer']
+    
+    # standalone
     - name: Include Search Head Apps variables
       include_vars: ../vars/splunk_search_head_apps.yml
       when: 
-        - splunk_search_head_apps is defined and splunk_search_head_apps
-        - ((splunk.shc.enabled is defined and not splunk.shc.enabled) or splunk.shc.enabled is not defined) and (inventory_hostname in groups['splunk_search_head'] or inventory_hostname in groups['splunk_standalone'])
+        - not splunk_enable_shc and splunk_search_head_apps
+        - (inventory_hostname in groups['splunk_search_head'] or inventory_hostname in groups['splunk_standalone'])
+    
+    #########################################
+    # PRECONFIG TASKS
+    ##########################################
     
     # Force an ntp update as service check requires time sync to work (should not be required in production)
     - name: Sync ntp
@@ -249,11 +282,20 @@
         name: pre_config
 
   post_tasks:
+    #########################################
+    # POSTCONFIG TASKS
+    ##########################################
+
     # Set ulimits by service (assumes systemd service deployment)
     - name: Post install config
       import_tasks: ../roles/post_config/tasks/main.yml
 
   tasks:
+    
+    #########################################
+    # TASKS
+    ##########################################
+
     # DEPLOYER- check for splunk_deployer role
     - name: Splunk splunk_deployer tasks
       include_role:
@@ -270,9 +312,13 @@
     - name: Splunk search_head tasks
       include_role:
         name: splunk_search_head
-      when: inventory_hostname in groups['splunk_search_head'] and not inventory_hostname in groups['splunk_search_head_captain']
-    
-    
+      when: 
+        - inventory_hostname in groups['splunk_search_head'] 
+        - not inventory_hostname in groups['splunk_search_head_captain']
+
+#########################################
+# DEPLOPY MONITORING CONSOLE PLAY
+#########################################
 
 # STAGE 3 - DISTRIBUTED MONITORING CONSOLE 
 - hosts: splunk_distributed_monitoring_console
@@ -280,33 +326,49 @@
     - ../vars/default-clustered.yml
   gather_facts: True
   pre_tasks:
+    #########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
     # Include additional variables as required
     - name: Include SHC Variable
       include_vars: ../vars/splunk_search_head_cluster.yml
-      when: splunk_enable_shc is defined and splunk_enable_shc
+      when: splunk_enable_shc
 
     - name: Include IDXC Variable
       include_vars: ../vars/splunk_index_cluster.yml
-      when: splunk_enable_idxc is defined and splunk_enable_idxc
+      when: splunk_enable_idxc
 
     - name: Include Multisite Variable
       include_vars: ../vars/splunk_multisite.yml
-      when: splunk_enable_multisite is defined and splunk_enable_multisite
+      when: splunk_enable_multisite
 
     - name: Include Deployment Server Variable
       include_vars: ../vars/splunk_deployment_server.yml
-      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
+      when: splunk_enable_deployment_server
 
-    - name: Include Multisite Variable
+    - name: Include License Master Variable
       include_vars: ../vars/splunk_license_master.yml
-      when: splunk_enable_license_master is defined and splunk_enable_license_master
+      when: splunk_enable_license_master
+
+    - name: Include Deployment Client Variable
+      include_vars: ../vars/splunk_deployment_client.yml
+      when: 
+        - splunk_enable_deployment_server
+        - not inventory_hostname in groups['splunk_deployment_server']
 
   tasks:
+
+    #########################################
+    # TASKS
+    ##########################################
 
     - name: Splunk splunk_distributed_monitoring_console tasks
       include_role:
         name: splunk_distributed_monitoring_console
 
+#########################################
+# DEPLOPY HEAVY FORWARDER PLAY
+#########################################
 
 # STAGE 4 - HEAVY FORWARDER
 - hosts: splunk_heavy_forwarder
@@ -314,36 +376,50 @@
     - ../vars/default-clustered.yml
   gather_facts: True
   pre_tasks:
+    #########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
     # Include additional variables as required
     - name: Include SHC Variable
       include_vars: ../vars/splunk_search_head_cluster.yml
-      when: splunk_enable_shc is defined and splunk_enable_shc
+      when: splunk_enable_shc
 
     - name: Include IDXC Variable
       include_vars: ../vars/splunk_index_cluster.yml
-      when: splunk_enable_idxc is defined and splunk_enable_idxc
+      when: splunk_enable_idxc
 
     - name: Include Multisite Variable
       include_vars: ../vars/splunk_multisite.yml
-      when: splunk_enable_multisite is defined and splunk_enable_multisite
+      when: splunk_enable_multisite
 
     - name: Include Deployment Server Variable
       include_vars: ../vars/splunk_deployment_server.yml
-      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
+      when: splunk_enable_deployment_server
 
-    - name: Include Multisite Variable
+    - name: Include License Master Variable
       include_vars: ../vars/splunk_license_master.yml
-      when: splunk_enable_license_master is defined and splunk_enable_license_master
+      when: splunk_enable_license_master
 
-    # Set deployment_server
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
-      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
+      when: 
+        - splunk_enable_deployment_server
+        - not inventory_hostname in groups['splunk_deployment_server']
   
+    #########################################
+    # VARIABLES DEFINING HEAVY FORWARDER CONFIG
+    ##########################################
+
     # Set heavy_forwarder
     - name: Include Heavy Forwarder Variable
       include_vars: ../vars/splunk_heavy_forwarder.yml
-      when: splunk_enable_heavy_forwarder is defined and splunk_enable_heavy_forwarder and inventory_hostname in groups['splunk_heavy_forwarder']
+      when: 
+        - splunk_enable_heavy_forwarder 
+        - inventory_hostname in groups['splunk_heavy_forwarder']
+
+    #########################################
+    # PRECONFIG TASKS
+    ##########################################
 
     # PRE CONFIG - Add users
     - name: Custom splunk server pre-config (setup user)
@@ -351,6 +427,10 @@
         name: pre_config
 
   tasks:
+
+    #########################################
+    # TASKS
+    ##########################################
 
     - name: Splunk splunk_heavy_forwarder tasks
       include_role:
