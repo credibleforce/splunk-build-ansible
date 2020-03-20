@@ -33,7 +33,7 @@ class ExampleInventory(object):
         else:
             self.inventory = self.build_inventory()
 
-        print(json.dumps(self.inventory,indent=4));
+        print(json.dumps(self.inventory,indent=4))
 
     # Example inventory for testing.
     def build_inventory(self):
