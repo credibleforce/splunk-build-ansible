@@ -32,7 +32,7 @@
     src: "{{ item }}"
     dest: /tmp
   when: 
-    - splunk_enable_shc and splunk_search_head_apps
+    - splunk_enable_shc and splunk_install_search_head_apps
     - inventory_hostname in groups['splunk_deployer']
   with_items:
     - /tmp/indexes.tgz
@@ -43,7 +43,7 @@
     src: "{{ item }}"
     dest: /tmp
   when: 
-    - not splunk_enable_shc and splunk_search_head_apps
+    - not splunk_enable_shc and splunk_install_search_head_apps
     - (inventory_hostname in groups['splunk_search_head'] or inventory_hostname in groups['splunk_standalone'])
   with_items:
     - /tmp/indexes.tgz
