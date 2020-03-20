@@ -57,9 +57,9 @@
       include_role:
         name: compress_apps
 
-    #- name: Apply Patches
-    #  include_role:
-    #    name: apply_patches
+    - name: Apply Patches
+     include_role:
+       name: apply_patches
 
 #########################################
 # ROLE ASSIGNMENTS BY INVENTORY
