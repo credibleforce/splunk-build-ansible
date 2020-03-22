@@ -58,6 +58,7 @@
     - inventory_hostname in groups['splunk_cluster_master']
   with_items:
     - /tmp/indexes.tgz
+    - /tmp/props_win_dns.tgz
 
 # copy indexer apps
 - name: Copy indexer apps
@@ -69,3 +70,4 @@
     - inventory_hostname in groups['splunk_indexer'] 
   with_items:
     - /tmp/indexes.tgz
+    - /tmp/props_win_dns.tgz
