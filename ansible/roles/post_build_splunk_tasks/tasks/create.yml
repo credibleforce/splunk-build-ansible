@@ -1,0 +1,3 @@
+---
+# build lookup
+# /opt/splunk/bin/splunk search "|asngen | outputlookup asn" -auth 'admin:changeme'

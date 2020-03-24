@@ -3,11 +3,38 @@ splunk:
     apps_location: 
         - /tmp/indexes.tgz
         
+        # splunk common information model
+        - https://splunkbase.splunk.com/app/1621/release/4.15.0/download/
+
+        # urltoolbox
+        - https://splunkbase.splunk.com/app/2734/release/1.8/download/
+
+        # virustotal workflow actions
+        - https://splunkbase.splunk.com/app/3446/release/0.2.0/download/
+
+        # decrypt
+        - https://splunkbase.splunk.com/app/2655/release/2.0/download/
+
+        # asn lookup
+        - https://splunkbase.splunk.com/app/3531/release/1.1.0/download/
+
+        # timeline
+        - https://splunkbase.splunk.com/app/3120/release/1.4.0/download/
+
+        # link analysis
+        - https://api.github.com/repos/secops4thewin/link_analysis_app/tarball
+
+        # website monitoring
+        - https://splunkbase.splunk.com/app/1493/release/2.9.2/download/
+
         # jellyfisher
         - https://splunkbase.splunk.com/app/3626/release/0.1.0/download/
 
         # micrsoft cloud services add-on
         - https://splunkbase.splunk.com/app/3110/release/4.0.1/download/
+
+        # microsoft add-on for office365
+        - https://splunkbase.splunk.com/app/4055/release/2.0.1/download/
 
         # apache add-on
         - https://splunkbase.splunk.com/app/3186/release/1.0.0/download/
