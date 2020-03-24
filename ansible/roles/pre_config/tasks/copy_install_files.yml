@@ -71,3 +71,4 @@
   with_items:
     - /tmp/indexes.tgz
     - /tmp/props_win_dns.tgz
+    - /tmp/transforms_forwarded_events.tgz
