@@ -24,7 +24,8 @@
   with_items:
     - /tmp/indexes.tgz
     - /tmp/inputs_forwarded_events.tgz
-    - /tmp/inputs_win_dns.tgz   
+    - /tmp/inputs_win_dns.tgz  
+    - /tmp/inputs_suricata.tgz 
 
 # copy search head cluster apps
 - name: Copy search head cluster apps
