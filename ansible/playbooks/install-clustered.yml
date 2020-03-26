@@ -435,3 +435,70 @@
     - name: Splunk splunk_heavy_forwarder tasks
       include_role:
         name: splunk_heavy_forwarder
+
+
+#########################################
+# DEPLOPY UNIVERSAL FORWARDER PLAY
+#########################################
+
+# STAGE 5 - UNIVERSAL FORWARDER
+- hosts: splunk_universal_forwarder
+  vars_files:
+    - ../vars/default-clustered.yml
+  gather_facts: True
+  pre_tasks:
+    #########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
+    # Include additional variables as required
+    - name: Include SHC Variable
+      include_vars: ../vars/splunk_search_head_cluster.yml
+      when: splunk_enable_shc
+
+    - name: Include IDXC Variable
+      include_vars: ../vars/splunk_index_cluster.yml
+      when: splunk_enable_idxc
+
+    - name: Include Multisite Variable
+      include_vars: ../vars/splunk_multisite.yml
+      when: splunk_enable_multisite
+
+    - name: Include Deployment Server Variable
+      include_vars: ../vars/splunk_deployment_server.yml
+      when: splunk_enable_deployment_server
+
+    - name: Include Deployment Client Variable
+      include_vars: ../vars/splunk_deployment_client.yml
+      when: 
+        - splunk_enable_deployment_server
+        - not inventory_hostname in groups['splunk_deployment_server']
+  
+    #########################################
+    # VARIABLES DEFINING UNIVERSAL FORWARDER CONFIG
+    ##########################################
+
+    # Set universal_forwarder
+    - name: Include Universal Forwarder Variable
+      include_vars: ../vars/splunk_universal_forwarder.yml
+      when: 
+        - splunk_enable_universal_forwarder 
+        - inventory_hostname in groups['splunk_universal_forwarder']
+
+    #########################################
+    # PRECONFIG TASKS
+    ##########################################
+
+    # PRE CONFIG - Add users
+    - name: Custom splunk server pre-config (setup user)
+      include_role:
+        name: pre_config
+
+  tasks:
+
+    #########################################
+    # TASKS
+    ##########################################
+
+    - name: Splunk splunk_universal_forwarder tasks
+      include_role:
+        name: splunk_universal_forwarder
