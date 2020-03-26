@@ -3,6 +3,9 @@ splunk:
     apps_location: 
         - /tmp/indexes.tgz
         
+        # getwatchlist
+        - https://splunkbase.splunk.com/app/635/release/1.0/download/
+
         # splunk common information model
         - https://splunkbase.splunk.com/app/1621/release/4.15.0/download/
 
