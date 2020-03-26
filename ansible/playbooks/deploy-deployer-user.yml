@@ -53,7 +53,10 @@
       user: name=deployer groups=wheel append=yes state=present createhome=yes
 
     - name: Set up authorized keys for the deployer user
-      authorized_key: user=deployer key="{{item}}"
+      authorized_key: 
+        user: deployer
+        key: "{{item}}"
+        state: present
       with_file:
         - /tmp/id_rsa.pub
 
