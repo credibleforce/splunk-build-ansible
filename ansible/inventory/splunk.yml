@@ -101,6 +101,14 @@ all:
           hosts: 
             splkhec1.psl.local:
               site_number: 1
+        splunk_universal_forwarder:
+          vars:
+            splunk:
+              hostname: "{{ inventory_hostname }}"
+              role: "splunk_universal_forwarder"
+          hosts: 
+            splkids1.psl.local:
+              site_number: 1
         splunk_distributed_monitoring_console:
           vars:
             splunk:
