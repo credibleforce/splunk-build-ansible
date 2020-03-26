@@ -6,12 +6,23 @@
   copy:
     src: /tmp/splunk.rpm
     dest: /tmp/splunk.rpm
+  when:
+    - not inventory_hostname in groups['splunk_universal_forwarder']
+
+- name: Copy splunk installation
+  copy:
+    src: /tmp/splunkuf.rpm
+    dest: /tmp/splunkuf.rpm
+  when:
+    - inventory_hostname in groups['splunk_universal_forwarder']
 
 # copy install files
 - name: Copy splunk license
   copy:
     src: /tmp/splunk.lic
     dest: /tmp/splunk.lic
+  when:
+    - not inventory_hostname in groups['splunk_universal_forwarder']
 
 # copy deployment apps
 - name: Copy deployment apps

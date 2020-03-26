@@ -1,21 +1,21 @@
 ---
-    splunk:
-        role: splunk_universal_forwarder
-        license_uri: null
-        preferred_captaincy: true
-        build_remote_src: true
-        build_location: https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.0.2.1&product=universalforwarder&filename=splunkforwarder-8.0.2.1-f002026bad55-linux-2.6-x86_64.rpm&wget=true
-        admin_user: admin
-        app_paths:
-            default: /opt/splunkforwarder/etc/apps
-            deployment: /opt/splunkforwarder/etc/deployment-apps
-            httpinput: /opt/splunkforwarder/etc/apps/splunk_httpinput
-            idxc: /opt/splunkforwarder/etc/master-apps
-            shc: /opt/splunkforwarder/etc/shcluster/apps
-        enable_service: true
-        exec: /opt/splunkforwarder/bin/splunk
-        home: /opt/splunkforwarder
-        password: helloworld
-        pid: /opt/splunkforwarder/var/run/splunk/splunkd.pid
-        tar_dir: splunkforwarder
-        wildcard_license: false
+  splunk:
+    role: splunk_universal_forwarder
+    license_uri: null
+    preferred_captaincy: true
+    build_remote_src: true
+    build_location: /tmp/splunkuf.rpm
+    admin_user: admin
+    app_paths:
+        default: /opt/splunkforwarder/etc/apps
+        deployment: /opt/splunkforwarder/etc/deployment-apps
+        httpinput: /opt/splunkforwarder/etc/apps/splunk_httpinput
+        idxc: /opt/splunkforwarder/etc/master-apps
+        shc: /opt/splunkforwarder/etc/shcluster/apps
+    enable_service: true
+    exec: /opt/splunkforwarder/bin/splunk
+    home: /opt/splunkforwarder
+    password: helloworld
+    pid: /opt/splunkforwarder/var/run/splunk/splunkd.pid
+    tar_dir: splunkforwarder
+    wildcard_license: false
