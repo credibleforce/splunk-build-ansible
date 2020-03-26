@@ -91,10 +91,6 @@
       include_vars: ../vars/splunk_deployment_server.yml
       when: splunk_enable_deployment_server
 
-    - name: Include License Master Variable
-      include_vars: ../vars/splunk_license_master.yml
-      when: splunk_enable_license_master
-
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
