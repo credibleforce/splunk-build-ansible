@@ -55,8 +55,8 @@
     - name: Splunk splunk_deployment_server tasks
       include_tasks: "{{ item }}"
       with_items:
-        - ../../splunk-ansible/roles/splunk_deployment_server/create_deployment_apps.yml
-        - ../../splunk-ansible/roles/splunk_deployment_server/generate_server_classes.yml
+        - ../splunk-ansible/roles/splunk_deployment_server/create_deployment_apps.yml
+        - ../splunk-ansible/roles/splunk_deployment_server/generate_server_classes.yml
       when: 
         - inventory_hostname in groups['splunk_deployment_server']
         - splunk.apps_location
@@ -77,10 +77,10 @@
     - name: Splunk cluster_master tasks
       include_tasks: "{{ item }}"
       with_items:
-        - ../../splunk-ansible/roles/splunk_common/tasks/provision_apps.yml
-        - ../../splunk-ansible/roles/splunk_cluster_master/tasks/prepare_apps_bundle.yml
-        - ../../splunk-ansible/roles/splunk_cluster_master/tasks/apply_cluster_bundle.yml
-        - ../../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
+        - ../splunk-ansible/roles/splunk_common/tasks/provision_apps.yml
+        - ../splunk-ansible/roles/splunk_cluster_master/tasks/prepare_apps_bundle.yml
+        - ../splunk-ansible/roles/splunk_cluster_master/tasks/apply_cluster_bundle.yml
+        - ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
       when:
         - inventory_hostname in groups['splunk_cluster_master']
         - splunk.apps_location
@@ -90,9 +90,9 @@
     - name: Splunk splunk_deployer tasks
       include_tasks: "{{ item }}"
       with_items:
-        - ../../splunk-ansible/roles/splunk_common/tasks/provision_apps.yml
-        - ../../splunk-ansible/roles/splunk_deployer/tasks/push_apps_to_search_heads.yml
-        - ../../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
+        - ../splunk-ansible/roles/splunk_common/tasks/provision_apps.yml
+        - ../splunk-ansible/roles/splunk_deployer/tasks/push_apps_to_search_heads.yml
+        - ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
       when: 
         - inventory_hostname in groups['splunk_deployer']
         - splunk.apps_location
