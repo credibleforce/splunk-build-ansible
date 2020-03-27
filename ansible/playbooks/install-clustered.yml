@@ -239,25 +239,20 @@
       when: 
         - splunk_enable_deployment_server
         - not inventory_hostname in groups['splunk_deployment_server']
-
-    #########################################
-    # VARIABLES DEFINING APP INSTALLATION
-    ##########################################
-
-    # SEARCH HEAD Apps Variable
-    # cluster
-    # - name: Include Search Head Cluster Apps variables
-    #   include_vars: ../vars/splunk_search_head_apps.yml
-    #   when: 
-    #     - splunk_enable_shc and splunk_install_search_head_apps
-    #     - inventory_hostname in groups['splunk_deployer']
     
-    # # standalone
-    # - name: Include Search Head Apps variables
-    #   include_vars: ../vars/splunk_search_head_apps.yml
-    #   when: 
-    #     - not splunk_enable_shc and splunk_install_search_head_apps
-    #     - (inventory_hostname in groups['splunk_search_head'] or inventory_hostname in groups['splunk_standalone'])
+     #########################################
+    # VARIABLES DEFINING APP INSTALLATION
+    #
+    # Cluster app vars included as a final 
+    # step of build to reduce load
+    ##########################################
+    
+    # standalone
+    - name: Include Search Head Apps variables
+      include_vars: ../vars/splunk_search_head_apps.yml
+      when: 
+        - not splunk_enable_shc and splunk_install_search_head_apps
+        - (inventory_hostname in groups['splunk_search_head'] or inventory_hostname in groups['splunk_standalone'])
     
     #########################################
     # PRECONFIG TASKS
@@ -308,6 +303,28 @@
         - inventory_hostname in groups['splunk_search_head'] 
         - not inventory_hostname in groups['splunk_search_head_captain']
 
+    ##########################################
+    # VARIABLES DEFINING APP INSTALLATION
+    #
+    # To prevent unnecessary load during SHC 
+    # setup the app installation tasks are 
+    # run last after the cluster has stabilized
+    ##########################################
+
+    # SEARCH HEAD Apps Variable
+    # cluster
+    - name: Include Search Head Cluster Apps variables
+      include_vars: ../vars/splunk_search_head_apps.yml
+      when: 
+        - splunk_enable_shc and splunk_install_search_head_apps
+        - inventory_hostname in groups['splunk_deployer']
+    
+    # cluster apps push
+    - name: Splunk splunk_deployer tasks
+      include_role:
+        name: splunk_deployer
+      when: inventory_hostname in groups['splunk_deployer']
+    
 #########################################
 # DEPLOPY MONITORING CONSOLE PLAY
 #########################################
