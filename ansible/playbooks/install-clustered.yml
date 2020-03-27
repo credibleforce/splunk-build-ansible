@@ -186,12 +186,6 @@
       include_role:
         name: splunk_deployment_server
       when: inventory_hostname in groups['splunk_deployment_server']
-
-    # DEPLOYMENT SERVER CUSTOM APPS - setup custom outpus app
-    - name: Splunk splunk_deployment_server tasks
-      include_role:
-        name: splunk_deployment_server_custom_apps
-      when: inventory_hostname in groups['splunk_deployment_server']
     
     # CLUSTER MASTER - check for splunk_cluster_master role
     - name: Splunk cluster_master tasks
@@ -502,3 +496,40 @@
     - name: Splunk splunk_universal_forwarder tasks
       include_role:
         name: splunk_universal_forwarder
+
+#########################################
+# DEPLOPY CUSTOM DEPLOYMENT SERVER APPS PLAY
+#########################################
+
+# STAGE 6 - UNIVERSAL FORWARDER
+- hosts: splunk_deployment_server
+  vars_files:
+    - ../vars/default-clustered.yml
+  gather_facts: True
+  pre_tasks:
+    #########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
+    # Include additional variables as required
+    - name: Include SHC Variable
+      include_vars: ../vars/splunk_search_head_cluster.yml
+      when: splunk_enable_shc
+
+    - name: Include IDXC Variable
+      include_vars: ../vars/splunk_index_cluster.yml
+      when: splunk_enable_idxc
+
+    - name: Include Multisite Variable
+      include_vars: ../vars/splunk_multisite.yml
+      when: splunk_enable_multisite
+
+    - name: Include Deployment Server Variable
+      include_vars: ../vars/splunk_deployment_server.yml
+      when: splunk_enable_deployment_server
+
+  tasks:
+    # DEPLOYMENT SERVER CUSTOM APPS - setup custom outpus app
+    - name: Splunk splunk_deployment_server tasks
+      include_role:
+        name: splunk_deployment_server_custom_apps
+      when: inventory_hostname in groups['splunk_deployment_server']
