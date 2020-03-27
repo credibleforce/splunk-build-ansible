@@ -62,22 +62,6 @@
        name: apply_patches
 
 #########################################
-# ROLE ASSIGNMENTS BY INVENTORY
-#########################################
-
-# Indexer cluster and search head cluster
-# - hosts: splunk_license_master:splunk_cluster_master:splunk_deployer:splunk_search_head_captain:splunk_deployment_server:splunk_indexer:splunk_search_head
-
-# Indexer cluster only
-# - hosts: splunk_license_master:splunk_cluster_master:splunk_deployment_server:splunk_indexer:splunk_search_head
-
-# Distributed with no cluster
-# - hosts: splunk_license_master:splunk_deployment_server:splunk_indexer:splunk_search_head
-
-# Standalone
-# - hosts: splunk_standalone
-
-#########################################
 # DEPLOPY INDEXING/LICENSING/DEPLOYMENT PLAY
 #########################################
 
@@ -121,24 +105,9 @@
         - splunk_enable_deployment_server
         - not inventory_hostname in groups['splunk_deployment_server']
     
-    #########################################
-    # VARIABLES DEFINING APP INSTALLATION
-    ##########################################
-    
-    # DEPLOYMENT SERVER Apps Variable
-    - name: Include Deployment Apps variables
-      include_vars: ../vars/splunk_deployment_apps.yml
-      when: 
-        - splunk_install_deployment_apps
-        - inventory_hostname in groups['splunk_deployment_server']
-
-    # INDEXER SERVER Apps Variable
-    # cluster
-    - name: Include Indexer Cluster Apps variables
-      include_vars: ../vars/splunk_indexer_apps.yml
-      when: 
-        - splunk_enable_idxc and splunk_install_indexer_apps 
-        - inventory_hostname in groups['splunk_cluster_master']
+    ######################################################
+    # VARIABLES DEFINING APP INSTALLATION (NON-DISTRIBUTED)
+    ######################################################
     
     # standalone
     - name: Include Indexer Apps variables
@@ -240,12 +209,9 @@
         - splunk_enable_deployment_server
         - not inventory_hostname in groups['splunk_deployment_server']
     
-     #########################################
-    # VARIABLES DEFINING APP INSTALLATION
-    #
-    # Cluster app vars included as a final 
-    # step of build to reduce load
-    ##########################################
+    ######################################################
+    # VARIABLES DEFINING APP INSTALLATION (NON-DISTRIBUTED)
+    ######################################################
 
     # standalone
     - name: Include Search Head Apps variables
@@ -302,13 +268,36 @@
         name: splunk_search_head_captain
       when: inventory_hostname in groups['splunk_search_head_captain']
 
-    ##########################################
+
+###########################################################
+# PUSH APPS TO CLUSTER MASTER, DEPLOYMENT_SERVER, DEPLOYER
+############################################################
+
+# STAGE 3 - AFTER INFRATRUCTURE BUILD PUSH APPS IN DISTRIBUTED ENVIRONMENT
+- hosts: splunk_deployer:splunk_deployment_server:splunk_cluster_master
+  vars_files:
+    - ../vars/default-clustered.yml
+  gather_facts: True
+
+  pre_tasks:  
+    #########################################
     # VARIABLES DEFINING APP INSTALLATION
-    #
-    # To prevent unnecessary load during SHC 
-    # setup the app installation tasks are 
-    # run last after the cluster has stabilized
     ##########################################
+    
+    # DEPLOYMENT SERVER Apps Variable
+    - name: Include Deployment Apps variables
+      include_vars: ../vars/splunk_deployment_apps.yml
+      when: 
+        - splunk_install_deployment_apps
+        - inventory_hostname in groups['splunk_deployment_server']
+
+    # INDEXER SERVER Apps Variable
+    # cluster
+    - name: Include Indexer Cluster Apps variables
+      include_vars: ../vars/splunk_indexer_apps.yml
+      when: 
+        - splunk_enable_idxc and splunk_install_indexer_apps 
+        - inventory_hostname in groups['splunk_cluster_master']
 
     # SEARCH HEAD Apps Variable
     # cluster
@@ -317,62 +306,29 @@
       when: 
         - splunk_enable_shc and splunk_install_search_head_apps
         - inventory_hostname in groups['splunk_deployer']
-    
-    # cluster apps push
-    - name: Splunk splunk_deployer tasks
-      include_role:
-        name: splunk_deployer
-      when: inventory_hostname in groups['splunk_deployer']
-    
-#########################################
-# DEPLOPY MONITORING CONSOLE PLAY
-#########################################
-
-# STAGE 3 - DISTRIBUTED MONITORING CONSOLE 
-- hosts: splunk_distributed_monitoring_console
-  vars_files:
-    - ../vars/default-clustered.yml
-  gather_facts: True
-  pre_tasks:
-    #########################################
-    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
-    ##########################################
-    # Include additional variables as required
-    - name: Include SHC Variable
-      include_vars: ../vars/splunk_search_head_cluster.yml
-      when: splunk_enable_shc
-
-    - name: Include IDXC Variable
-      include_vars: ../vars/splunk_index_cluster.yml
-      when: splunk_enable_idxc
-
-    - name: Include Multisite Variable
-      include_vars: ../vars/splunk_multisite.yml
-      when: splunk_enable_multisite
-
-    - name: Include Deployment Server Variable
-      include_vars: ../vars/splunk_deployment_server.yml
-      when: splunk_enable_deployment_server
-
-    - name: Include License Master Variable
-      include_vars: ../vars/splunk_license_master.yml
-      when: splunk_enable_license_master
-
-    - name: Include Deployment Client Variable
-      include_vars: ../vars/splunk_deployment_client.yml
-      when: 
-        - splunk_enable_deployment_server
-        - not inventory_hostname in groups['splunk_deployment_server']
-
   tasks:
 
     #########################################
     # TASKS
     ##########################################
 
-    - name: Splunk splunk_distributed_monitoring_console tasks
+    # DEPLOYMENT SERVER - check for splunk_deployment_server role
+    - name: Splunk splunk_deployment_server tasks
       include_role:
-        name: splunk_distributed_monitoring_console
+        name: splunk_deployment_server
+      when: inventory_hostname in groups['splunk_deployment_server']
+    
+    # CLUSTER MASTER - check for splunk_cluster_master role
+    - name: Splunk cluster_master tasks
+      include_role:
+        name: splunk_cluster_master
+      when: inventory_hostname in groups['splunk_cluster_master']
+
+     # DEPLOYER
+    - name: Splunk splunk_deployer tasks
+      include_role:
+        name: splunk_deployer
+      when: inventory_hostname in groups['splunk_deployer']
 
 #########################################
 # DEPLOPY HEAVY FORWARDER PLAY
@@ -384,9 +340,11 @@
     - ../vars/default-clustered.yml
   gather_facts: True
   pre_tasks:
+
     #########################################
     # VARIABLES DEFINING DEPLOYED ENVIRONMENT
     ##########################################
+
     # Include additional variables as required
     - name: Include SHC Variable
       include_vars: ../vars/splunk_search_head_cluster.yml
@@ -455,9 +413,11 @@
     - ../vars/default-clustered.yml
   gather_facts: True
   pre_tasks:
+
     #########################################
     # VARIABLES DEFINING DEPLOYED ENVIRONMENT
     ##########################################
+
     # Include additional variables as required
     - name: Include SHC Variable
       include_vars: ../vars/splunk_search_head_cluster.yml
@@ -521,9 +481,11 @@
     - ../vars/default-clustered.yml
   gather_facts: True
   pre_tasks:
+
     #########################################
     # VARIABLES DEFINING DEPLOYED ENVIRONMENT
     ##########################################
+
     # Include additional variables as required
     - name: Include SHC Variable
       include_vars: ../vars/splunk_search_head_cluster.yml
@@ -547,3 +509,55 @@
       include_role:
         name: splunk_deployment_server_custom_apps
       when: inventory_hostname in groups['splunk_deployment_server']
+
+#########################################
+# DEPLOPY MONITORING CONSOLE PLAY (TBD)
+#########################################
+
+# STAGE 7 - DISTRIBUTED MONITORING CONSOLE 
+- hosts: splunk_distributed_monitoring_console
+  vars_files:
+    - ../vars/default-clustered.yml
+  gather_facts: True
+  pre_tasks:
+
+    #########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
+
+    # Include additional variables as required
+    - name: Include SHC Variable
+      include_vars: ../vars/splunk_search_head_cluster.yml
+      when: splunk_enable_shc
+
+    - name: Include IDXC Variable
+      include_vars: ../vars/splunk_index_cluster.yml
+      when: splunk_enable_idxc
+
+    - name: Include Multisite Variable
+      include_vars: ../vars/splunk_multisite.yml
+      when: splunk_enable_multisite
+
+    - name: Include Deployment Server Variable
+      include_vars: ../vars/splunk_deployment_server.yml
+      when: splunk_enable_deployment_server
+
+    - name: Include License Master Variable
+      include_vars: ../vars/splunk_license_master.yml
+      when: splunk_enable_license_master
+
+    - name: Include Deployment Client Variable
+      include_vars: ../vars/splunk_deployment_client.yml
+      when: 
+        - splunk_enable_deployment_server
+        - not inventory_hostname in groups['splunk_deployment_server']
+
+  tasks:
+
+    #########################################
+    # TASKS
+    ##########################################
+
+    - name: Splunk splunk_distributed_monitoring_console tasks
+      include_role:
+        name: splunk_distributed_monitoring_console
