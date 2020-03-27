@@ -1,0 +1,7 @@
+[props]
+access = read : [ * ], write : [ admin, power ]
+export = system
+
+[transforms]
+access = read : [ * ], write : [ admin, power ]
+export = system
