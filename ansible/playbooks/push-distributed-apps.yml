@@ -22,6 +22,13 @@
     #########################################
     # VARIABLES DEFINING APP INSTALLATION
     ##########################################
+    
+    # DEPLOYMENT SERVER Apps Variable
+    - name: Include Deployment Apps variables
+      include_vars: ../vars/splunk_deployment_apps.yml
+      when: 
+        - splunk_install_deployment_apps
+        - inventory_hostname in groups['splunk_deployment_server']
 
     # INDEXER SERVER Apps Variable
     # cluster
@@ -30,13 +37,6 @@
       when: 
         - splunk_enable_idxc and splunk_install_indexer_apps 
         - inventory_hostname in groups['splunk_cluster_master']
-
-    # DEPLOYMENT SERVER Apps Variable
-    - name: Include Deployment Apps variables
-      include_vars: ../vars/splunk_deployment_apps.yml
-      when: 
-        - splunk_install_deployment_apps
-        - inventory_hostname in groups['splunk_deployment_server']
 
     # SEARCH HEAD Apps Variable
     # cluster
@@ -53,46 +53,18 @@
 
     # DEPLOYMENT SERVER - check for splunk_deployment_server role
     - name: Splunk splunk_deployment_server tasks
-      include_tasks: "{{ item }}"
-      with_items:
-        - ../splunk-ansible/roles/splunk_deployment_server/tasks/create_deployment_apps.yml
-        - ../splunk-ansible/roles/splunk_deployment_server/tasks/generate_server_classes.yml
-      when: 
-        - inventory_hostname in groups['splunk_deployment_server']
-        - splunk.apps_location
-    
-    - name: Reload deployment server
-      command: "{{ splunk.exec }} reload deploy-server -auth {{ splunk.admin_user }}:{{ splunk.password }}"
-      become: yes
-      become_user: "{{ splunk.user }}"
-      register: reload_depserver
-      until: reload_depserver.rc == 0
-      changed_when: reload_depserver.rc == 0
-      retries: "{{ retry_num }}"
-      delay: "{{ retry_delay }}"
-      ignore_errors: yes
-      no_log: "{{ hide_password }}"
+      include_role:
+        name: splunk_deployment_server
+      when: inventory_hostname in groups['splunk_deployment_server']
     
     # CLUSTER MASTER - check for splunk_cluster_master role
     - name: Splunk cluster_master tasks
-      include_tasks: "{{ item }}"
-      with_items:
-        - ../splunk-ansible/roles/splunk_common/tasks/provision_apps.yml
-        - ../splunk-ansible/roles/splunk_cluster_master/tasks/prepare_apps_bundle.yml
-        - ../splunk-ansible/roles/splunk_cluster_master/tasks/apply_cluster_bundle.yml
-        - ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
-      when:
-        - inventory_hostname in groups['splunk_cluster_master']
-        - splunk.apps_location
-
+      include_role:
+        name: splunk_cluster_master
+      when: inventory_hostname in groups['splunk_cluster_master']
 
      # DEPLOYER
     - name: Splunk splunk_deployer tasks
-      include_tasks: "{{ item }}"
-      with_items:
-        - ../splunk-ansible/roles/splunk_common/tasks/provision_apps.yml
-        - ../splunk-ansible/roles/splunk_deployer/tasks/push_apps_to_search_heads.yml
-        - ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
-      when: 
-        - inventory_hostname in groups['splunk_deployer']
-        - splunk.apps_location
+      include_role:
+        name: splunk_deployer
+      when: inventory_hostname in groups['splunk_deployer']
