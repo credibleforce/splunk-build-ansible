@@ -179,6 +179,38 @@
   gather_facts: True
   
   pre_tasks:
+
+    #########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
+    
+    # Include additional variables as required
+    - name: Include SHC Variable
+      include_vars: ../vars/splunk_search_head_cluster.yml
+      when: splunk_enable_shc
+
+    - name: Include IDXC Variable
+      include_vars: ../vars/splunk_index_cluster.yml
+      when: splunk_enable_idxc
+
+    - name: Include Multisite Variable
+      include_vars: ../vars/splunk_multisite.yml
+      when: splunk_enable_multisite
+
+    - name: Include Deployment Server Variable
+      include_vars: ../vars/splunk_deployment_server.yml
+      when: splunk_enable_deployment_server
+
+    - name: Include License Master Variable
+      include_vars: ../vars/splunk_license_master.yml
+      when: splunk_enable_license_master
+
+    - name: Include Deployment Client Variable
+      include_vars: ../vars/splunk_deployment_client.yml
+      when: 
+        - splunk_enable_deployment_server
+        - not inventory_hostname in groups['splunk_deployment_server']
+
     #########################################
     # VARIABLES DEFINING DEPLOYED ENVIRONMENT
     ##########################################
