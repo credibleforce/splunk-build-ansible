@@ -207,8 +207,6 @@
 - hosts: splunk_deployer:splunk_search_head_captain:splunk_search_head
   vars_files:
     - ../vars/default-clustered.yml
-  # STRATEGY - free allows multiple server(s) and roles installed simultaneous and is required for service availability checks
-  strategy: free
   gather_facts: True
   
   pre_tasks:
