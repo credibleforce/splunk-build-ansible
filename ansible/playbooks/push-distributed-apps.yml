@@ -59,9 +59,14 @@
     
     # CLUSTER MASTER - check for splunk_cluster_master role
     - name: Splunk cluster_master tasks
-      include_role:
-        name: splunk_cluster_master
-      when: inventory_hostname in groups['splunk_cluster_master']
+      include_tasks: 
+        - ../splunk-ansible/roles/splunk_common/tasks/provision_apps.yml
+        - ../splunk-ansible/roles/splunk_common/tasks/prepare_apps_bundle.yml
+        - ../splunk-ansible/roles/splunk_common/tasks/apply_cluster_bundle.yml
+        - ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
+      when:
+        - inventory_hostname in groups['splunk_cluster_master']
+        - splunk.apps_location
 
      # DEPLOYER
     - name: Splunk splunk_deployer tasks
