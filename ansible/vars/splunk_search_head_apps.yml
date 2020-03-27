@@ -84,4 +84,7 @@ splunk:
         # threathunting
         - https://splunkbase.splunk.com/app/4305/release/1.4.1/download/
 
+        # suricata
+        - https://splunkbase.splunk.com/app/4242/release/2.3.4/download/
+
         
