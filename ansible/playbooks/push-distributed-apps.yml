@@ -23,7 +23,7 @@
     ##########################################
     # VARIABLES DEFINING DEPLOYED ENVIRONMENT
     ##########################################
-    
+
     # Include additional variables as required
     - name: Include SHC Variable
       include_vars: ../vars/splunk_search_head_cluster.yml
@@ -82,12 +82,6 @@
     #########################################
     # TASKS
     ##########################################
-
-    # SPLUNK COMMON - set all facts for splunk
-    - name: Splunk splunk_common get facts
-      include_role:
-        name: splunk_common
-      when: inventory_hostname in groups['splunk_deployment_server']
 
     # DEPLOYMENT SERVER - check for splunk_deployment_server role
     - name: Splunk splunk_deployment_server tasks
