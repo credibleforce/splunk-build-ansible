@@ -181,18 +181,6 @@
         name: splunk_license_master
       when: inventory_hostname in groups['splunk_license_master']
 
-    # CLUSTER MASTER - check for splunk_cluster_master role
-    - name: Splunk cluster_master tasks
-      include_role:
-        name: splunk_cluster_master
-      when: inventory_hostname in groups['splunk_cluster_master']
-
-    # INDEXERS - check for splunk_indexer role
-    - name: Splunk indexer tasks
-      include_role:
-        name: splunk_indexer
-      when: inventory_hostname in groups['splunk_indexer']
-
     # DEPLOYMENT SERVER - check for splunk_deployment_server role
     - name: Splunk splunk_deployment_server tasks
       include_role:
@@ -204,6 +192,18 @@
       include_role:
         name: splunk_deployment_server_custom_apps
       when: inventory_hostname in groups['splunk_deployment_server']
+    
+    # CLUSTER MASTER - check for splunk_cluster_master role
+    - name: Splunk cluster_master tasks
+      include_role:
+        name: splunk_cluster_master
+      when: inventory_hostname in groups['splunk_cluster_master']
+
+    # INDEXERS - check for splunk_indexer role
+    - name: Splunk indexer tasks
+      include_role:
+        name: splunk_indexer
+      when: inventory_hostname in groups['splunk_indexer']
     
 #########################################
 # DEPLOPY SEARCH HEADS PLAY
