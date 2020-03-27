@@ -55,8 +55,8 @@
     - name: Splunk splunk_deployment_server tasks
       include_tasks: "{{ item }}"
       with_items:
-        - ../splunk-ansible/roles/splunk_deployment_server/create_deployment_apps.yml
-        - ../splunk-ansible/roles/splunk_deployment_server/generate_server_classes.yml
+        - ../splunk-ansible/roles/splunk_deployment_server/tasks/create_deployment_apps.yml
+        - ../splunk-ansible/roles/splunk_deployment_server/tasks/generate_server_classes.yml
       when: 
         - inventory_hostname in groups['splunk_deployment_server']
         - splunk.apps_location
