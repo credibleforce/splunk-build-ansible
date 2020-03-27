@@ -2,6 +2,16 @@
 # PUSH APPS TO CLUSTER MASTER, DEPLOYMENT_SERVER, DEPLOYER
 ############################################################
 
+- hosts: local
+  vars_files:
+    - ../vars/default-clustered.yml
+  tasks:
+
+    # compress local apps
+    - name: Compress Apps
+      include_role:
+        name: compress_apps
+
 # STAGE 3 - AFTER INFRATRUCTURE BUILD PUSH APPS IN DISTRIBUTED ENVIRONMENT
 - hosts: splunk_deployer:splunk_deployment_server:splunk_cluster_master
   vars_files:
@@ -12,13 +22,6 @@
     #########################################
     # VARIABLES DEFINING APP INSTALLATION
     ##########################################
-    
-    # DEPLOYMENT SERVER Apps Variable
-    - name: Include Deployment Apps variables
-      include_vars: ../vars/splunk_deployment_apps.yml
-      when: 
-        - splunk_install_deployment_apps
-        - inventory_hostname in groups['splunk_deployment_server']
 
     # INDEXER SERVER Apps Variable
     # cluster
@@ -27,6 +30,13 @@
       when: 
         - splunk_enable_idxc and splunk_install_indexer_apps 
         - inventory_hostname in groups['splunk_cluster_master']
+
+    # DEPLOYMENT SERVER Apps Variable
+    - name: Include Deployment Apps variables
+      include_vars: ../vars/splunk_deployment_apps.yml
+      when: 
+        - splunk_install_deployment_apps
+        - inventory_hostname in groups['splunk_deployment_server']
 
     # SEARCH HEAD Apps Variable
     # cluster
