@@ -1,12 +1,12 @@
 ---
-#########################################
+#######################################################################################################################
 # EXAMPLE DEPLOYMENT
-#########################################
+#######################################################################################################################
 
 
-#########################################
+#######################################################################################################################
 # LOCALHOST PLAY
-#########################################
+#######################################################################################################################
 
 - hosts: local
   vars_files:
@@ -61,9 +61,9 @@
       include_role:
        name: apply_patches
 
-#########################################
+#######################################################################################################################
 # DEPLOPY INDEXING/LICENSING/DEPLOYMENT PLAY
-#########################################
+#######################################################################################################################
 
 # STAGE 1 - INDEX CLUSTER
 - hosts: splunk_license_master:splunk_cluster_master:splunk_deployment_server:splunk_indexer
@@ -168,9 +168,9 @@
         name: splunk_indexer
       when: inventory_hostname in groups['splunk_indexer']
     
-#########################################
+#######################################################################################################################
 # DEPLOPY SEARCH HEADS PLAY
-#########################################
+#######################################################################################################################
 
 # STAGE 2 - SEARCH HEAD CLUSTER
 - hosts: splunk_deployer:splunk_search_head_captain:splunk_search_head
@@ -183,7 +183,7 @@
     #########################################
     # VARIABLES DEFINING DEPLOYED ENVIRONMENT
     ##########################################
-    
+
     # Include additional variables as required
     - name: Include SHC Variable
       include_vars: ../vars/splunk_search_head_cluster.yml
@@ -301,9 +301,9 @@
       when: inventory_hostname in groups['splunk_search_head_captain']
 
 
-###########################################################
+#######################################################################################################################
 # PUSH APPS TO CLUSTER MASTER, DEPLOYMENT_SERVER, DEPLOYER
-############################################################
+#######################################################################################################################
 
 # STAGE 3 - AFTER INFRATRUCTURE BUILD PUSH APPS IN DISTRIBUTED ENVIRONMENT
 - hosts: splunk_deployer:splunk_deployment_server:splunk_cluster_master
@@ -311,7 +311,39 @@
     - ../vars/default-clustered.yml
   gather_facts: True
 
-  pre_tasks:  
+  pre_tasks:
+
+    #########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
+
+    # Include additional variables as required
+    - name: Include SHC Variable
+      include_vars: ../vars/splunk_search_head_cluster.yml
+      when: splunk_enable_shc
+
+    - name: Include IDXC Variable
+      include_vars: ../vars/splunk_index_cluster.yml
+      when: splunk_enable_idxc
+
+    - name: Include Multisite Variable
+      include_vars: ../vars/splunk_multisite.yml
+      when: splunk_enable_multisite
+
+    - name: Include Deployment Server Variable
+      include_vars: ../vars/splunk_deployment_server.yml
+      when: splunk_enable_deployment_server
+
+    - name: Include License Master Variable
+      include_vars: ../vars/splunk_license_master.yml
+      when: splunk_enable_license_master
+
+    - name: Include Deployment Client Variable
+      include_vars: ../vars/splunk_deployment_client.yml
+      when: 
+        - splunk_enable_deployment_server
+        - not inventory_hostname in groups['splunk_deployment_server']
+
     #########################################
     # VARIABLES DEFINING APP INSTALLATION
     ##########################################
@@ -344,6 +376,12 @@
     # TASKS
     ##########################################
 
+    # SPLUNK COMMON - set all facts for splunk
+    - name: Splunk splunk_common get facts
+      include_role:
+        name: splunk_common
+      when: inventory_hostname in groups['splunk_deployment_server']
+
     # DEPLOYMENT SERVER - check for splunk_deployment_server role
     - name: Splunk splunk_deployment_server tasks
       include_role:
@@ -362,9 +400,9 @@
         name: splunk_deployer
       when: inventory_hostname in groups['splunk_deployer']
 
-#########################################
+#######################################################################################################################
 # DEPLOPY HEAVY FORWARDER PLAY
-#########################################
+#######################################################################################################################
 
 # STAGE 4 - HEAVY FORWARDER
 - hosts: splunk_heavy_forwarder
@@ -435,9 +473,9 @@
         name: splunk_heavy_forwarder
 
 
-#########################################
+#######################################################################################################################
 # DEPLOPY UNIVERSAL FORWARDER PLAY
-#########################################
+#######################################################################################################################
 
 # STAGE 5 - UNIVERSAL FORWARDER
 - hosts: splunk_universal_forwarder
@@ -503,9 +541,9 @@
       include_role:
         name: splunk_universal_forwarder
 
-#########################################
+#######################################################################################################################
 # DEPLOPY CUSTOM DEPLOYMENT SERVER APPS PLAY
-#########################################
+#######################################################################################################################
 
 # STAGE 6 - UNIVERSAL FORWARDER
 - hosts: splunk_deployment_server
@@ -542,9 +580,9 @@
         name: splunk_deployment_server_custom_apps
       when: inventory_hostname in groups['splunk_deployment_server']
 
-#########################################
+#######################################################################################################################
 # DEPLOPY MONITORING CONSOLE PLAY (TBD)
-#########################################
+#######################################################################################################################
 
 # STAGE 7 - DISTRIBUTED MONITORING CONSOLE 
 - hosts: splunk_distributed_monitoring_console
