@@ -246,18 +246,18 @@
 
     # SEARCH HEAD Apps Variable
     # cluster
-    - name: Include Search Head Cluster Apps variables
-      include_vars: ../vars/splunk_search_head_apps.yml
-      when: 
-        - splunk_enable_shc and splunk_install_search_head_apps
-        - inventory_hostname in groups['splunk_deployer']
+    # - name: Include Search Head Cluster Apps variables
+    #   include_vars: ../vars/splunk_search_head_apps.yml
+    #   when: 
+    #     - splunk_enable_shc and splunk_install_search_head_apps
+    #     - inventory_hostname in groups['splunk_deployer']
     
-    # standalone
-    - name: Include Search Head Apps variables
-      include_vars: ../vars/splunk_search_head_apps.yml
-      when: 
-        - not splunk_enable_shc and splunk_install_search_head_apps
-        - (inventory_hostname in groups['splunk_search_head'] or inventory_hostname in groups['splunk_standalone'])
+    # # standalone
+    # - name: Include Search Head Apps variables
+    #   include_vars: ../vars/splunk_search_head_apps.yml
+    #   when: 
+    #     - not splunk_enable_shc and splunk_install_search_head_apps
+    #     - (inventory_hostname in groups['splunk_search_head'] or inventory_hostname in groups['splunk_standalone'])
     
     #########################################
     # PRECONFIG TASKS
