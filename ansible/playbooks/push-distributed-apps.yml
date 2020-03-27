@@ -1,0 +1,60 @@
+###########################################################
+# PUSH APPS TO CLUSTER MASTER, DEPLOYMENT_SERVER, DEPLOYER
+############################################################
+
+# STAGE 3 - AFTER INFRATRUCTURE BUILD PUSH APPS IN DISTRIBUTED ENVIRONMENT
+- hosts: splunk_deployer:splunk_deployment_server:splunk_cluster_master
+  vars_files:
+    - ../vars/default-clustered.yml
+  gather_facts: True
+
+  pre_tasks:  
+    #########################################
+    # VARIABLES DEFINING APP INSTALLATION
+    ##########################################
+    
+    # DEPLOYMENT SERVER Apps Variable
+    - name: Include Deployment Apps variables
+      include_vars: ../vars/splunk_deployment_apps.yml
+      when: 
+        - splunk_install_deployment_apps
+        - inventory_hostname in groups['splunk_deployment_server']
+
+    # INDEXER SERVER Apps Variable
+    # cluster
+    - name: Include Indexer Cluster Apps variables
+      include_vars: ../vars/splunk_indexer_apps.yml
+      when: 
+        - splunk_enable_idxc and splunk_install_indexer_apps 
+        - inventory_hostname in groups['splunk_cluster_master']
+
+    # SEARCH HEAD Apps Variable
+    # cluster
+    - name: Include Search Head Cluster Apps variables
+      include_vars: ../vars/splunk_search_head_apps.yml
+      when: 
+        - splunk_enable_shc and splunk_install_search_head_apps
+        - inventory_hostname in groups['splunk_deployer']
+  tasks:
+
+    #########################################
+    # TASKS
+    ##########################################
+
+    # DEPLOYMENT SERVER - check for splunk_deployment_server role
+    - name: Splunk splunk_deployment_server tasks
+      include_role:
+        name: splunk_deployment_server
+      when: inventory_hostname in groups['splunk_deployment_server']
+    
+    # CLUSTER MASTER - check for splunk_cluster_master role
+    - name: Splunk cluster_master tasks
+      include_role:
+        name: splunk_cluster_master
+      when: inventory_hostname in groups['splunk_cluster_master']
+
+     # DEPLOYER
+    - name: Splunk splunk_deployer tasks
+      include_role:
+        name: splunk_deployer
+      when: inventory_hostname in groups['splunk_deployer']
