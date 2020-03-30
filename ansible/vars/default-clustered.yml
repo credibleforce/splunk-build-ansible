@@ -23,8 +23,8 @@ splunk_install_search_head_apps: "{{ True if 'splunk_search_head_apps' in lookup
 splunkbase_token: "{{ lookup('env','SPLUNKBASE_TOKEN') }}"
 
 # hack to bypass global hec
-hec_token:
-  status: 200
+#hec_token:
+#  status: 200
 
 
 config:
