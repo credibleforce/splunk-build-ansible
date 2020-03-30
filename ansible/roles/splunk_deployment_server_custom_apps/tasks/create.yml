@@ -1,7 +1,7 @@
 ---
 - name: Create outputs_indexer_cluster app directory
   file:
-    path: "{{ splunk.app_paths.deployment }}/outputs_indexer_cluster/local"
+    path: "{{ splunk.app_paths.deployment }}/outputs_indexer_cluster/default"
     state: directory
     mode: '0755'
   become: yes
@@ -10,7 +10,7 @@
 - name: Configure indexer cluster outputs deployment app
   blockinfile:
     create: yes
-    path: "{{ splunk.app_paths.deployment }}/outputs_indexer_cluster/local/outputs.conf"
+    path: "{{ splunk.app_paths.deployment }}/outputs_indexer_cluster/default/outputs.conf"
     block: |
         [indexer_discovery:splunk-indexer]
         master_uri = {{ cert_prefix }}://{{ splunk.cluster_master_url }}:{{ splunk.svc_port }}
@@ -34,7 +34,7 @@
 - name: Configure indexer cluster outputs deployment app
   blockinfile:
     create: yes
-    path: "{{ splunk.app_paths.deployment }}/outputs_indexer_cluster/local/outputs.conf"
+    path: "{{ splunk.app_paths.deployment }}/outputs_indexer_cluster/default/outputs.conf"
     block: |
         [tcpout:group1]
         server = {{ splunk_forward_servers }}
@@ -57,14 +57,14 @@
   blockinfile:
     path: "{{ splunk.home }}/etc/system/local/serverclass.conf"
     block: |
-
       # default is to reload all splunk components override at app level as required
       [global]
       restartSplunkWeb = true
       restartSplunkd = true
       issueReload = true
       stateOnClient = enabled
-
+      
+      # server classes based on ansible inventory
       [serverClass:splunk_heavy_forwarder]
       whitelist.select_field = Client
       whitelist.from_pathname = etc/system/local/splunk_inventory.csv
@@ -101,13 +101,16 @@
       whitelist.where_field = ServerType
       whitelist.where_equals = wef_server
       
+      # linux splunk deployment 
       [serverClass:splunk_heavy_forwarder:app:indexes]
-
       [serverClass:splunk_universal_forwarder:app:inputs_suricata]
       
+      # windows lab deployment 
       [serverClass:wef_server:app:inputs_forwarded_events]
+      [serverClass:wef_server:app:outputs_indexer_cluster]
 
       [serverClass:domain_controller:app:inputs_win_dns]
+      [serverClass:domain_controller:app:outputs_indexer_cluster]
 
 
 
