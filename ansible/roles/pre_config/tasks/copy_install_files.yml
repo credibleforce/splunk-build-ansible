@@ -37,6 +37,9 @@
     - /tmp/inputs_forwarded_events.tgz
     - /tmp/inputs_win_dns.tgz  
     - /tmp/inputs_suricata.tgz 
+    - /tmp/splunk_inventory.csv
+    - /tmp/lab_inventory.csv
+  ignore_errors: true
   become: "{{ splunk.user }}"
 
 # copy search head cluster apps
@@ -49,6 +52,8 @@
     - inventory_hostname in groups['splunk_deployer']
   with_items:
     - /tmp/indexes.tgz
+  ignore_errors: true
+  become: "{{ splunk.user }}"
 
 # copy search head apps
 - name: Copy search head cluster apps
@@ -60,6 +65,8 @@
     - (inventory_hostname in groups['splunk_search_head'] or inventory_hostname in groups['splunk_standalone'])
   with_items:
     - /tmp/indexes.tgz
+  ignore_errors: true
+  become: "{{ splunk.user }}"
 
 # copy index cluster apps
 - name: Copy indexer cluster apps
@@ -72,6 +79,8 @@
   with_items:
     - /tmp/indexes.tgz
     - /tmp/props_win_dns.tgz
+  ignore_errors: true
+  become: "{{ splunk.user }}"
 
 # copy indexer apps
 - name: Copy indexer apps
@@ -85,3 +94,5 @@
     - /tmp/indexes.tgz
     - /tmp/props_win_dns.tgz
     - /tmp/transforms_forwarded_events.tgz
+  ignore_errors: true
+  become: "{{ splunk.user }}"

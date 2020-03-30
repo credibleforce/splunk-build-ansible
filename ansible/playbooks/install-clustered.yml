@@ -60,6 +60,11 @@
     - name: Apply Patches
       include_role:
        name: apply_patches
+    
+    #  build importable inventory for splunk serverclasses.conf (copied over during splunk build)
+    - name: Build serverclasses inventor
+      include_role:
+        name: create_serverclasses_csv
 
 #######################################################################################################################
 # DEPLOPY INDEXING/LICENSING/DEPLOYMENT PLAY
