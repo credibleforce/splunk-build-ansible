@@ -79,6 +79,8 @@
   with_items:
     - /tmp/indexes.tgz
     - /tmp/props_win_dns.tgz
+    - /tmp/transforms_forwarded_events.tgz
+    - /tmp/props_suricata.tgz
   ignore_errors: true
   become: "{{ splunk.user }}"
 
@@ -94,5 +96,6 @@
     - /tmp/indexes.tgz
     - /tmp/props_win_dns.tgz
     - /tmp/transforms_forwarded_events.tgz
+    - /tmp/props_suricata.tgz
   ignore_errors: true
   become: "{{ splunk.user }}"

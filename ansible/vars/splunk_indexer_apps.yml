@@ -7,6 +7,9 @@ splunk:
         # win dns query parsing
         - /tmp/props_win_dns.tgz
 
+        # suricata parsing
+        - /tmp/props_suricata.tgz
+
         # windows ta
         - https://splunkbase.splunk.com/app/742/release/7.0.0/download/
         
