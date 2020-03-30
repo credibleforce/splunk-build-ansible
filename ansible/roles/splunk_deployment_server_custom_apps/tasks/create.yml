@@ -57,11 +57,60 @@
   blockinfile:
     path: "{{ splunk.home }}/etc/system/local/serverclass.conf"
     block: |
-
-      [serverClass:all:app:outputs_indexer_cluster]
-      restartSplunkWeb = 0
-      restartSplunkd = 1
+      
+      # default is to reload all splunk components override at app level as required
+      [global]
+      restartSplunkWeb = true
+      restartSplunkd = true
+      issueReload = true
       stateOnClient = enabled
+
+      [serverClass:splunk_heavy_forwarder]
+      whitelist.select_field = Client
+      whitelist.from_pathname = etc/system/local/splunk.csv
+      whitelist.where_field = ServerType
+      whitelist.where_equals = splunk_heavy_forwarder
+
+      [serverClass:splunk_universal_forwarder]
+      whitelist.select_field = Client
+      whitelist.from_pathname = etc/system/local/splunk.csv
+      whitelist.where_field = ServerType
+      whitelist.where_equals = splunk_universal_forwarder
+
+      [serverClass:domain_controller]
+      whitelist.select_field = Client
+      whitelist.from_pathname = etc/system/local/lab.csv
+      whitelist.where_field = ServerType
+      whitelist.where_equals = domain_controller
+
+      [serverClass:certificate_authority]
+      whitelist.select_field = Client
+      whitelist.from_pathname = etc/system/local/lab.csv
+      whitelist.where_field = ServerType
+      whitelist.where_equals = certificate_authority
+
+      [serverClass:member_server]
+      whitelist.select_field = Client
+      whitelist.from_pathname = etc/system/local/lab.csv
+      whitelist.where_field = ServerType
+      whitelist.where_equals = member_server
+
+      [serverClass:wef_server]
+      whitelist.select_field = Client
+      whitelist.from_pathname = etc/system/local/lab.csv
+      whitelist.where_field = ServerType
+      whitelist.where_equals = wef_server
+      
+      [serverClass:splunk_heavy_forwarder:app:indexes]
+
+      [serverClass:splunk_universal_forwarder:app:inputs_suricata]
+      
+      [serverClass:wef_server:app:inputs_forwarded_events]
+
+      [serverClass:domain_controller:app:inputs_win_dns]
+
+
+
   become: yes
   become_user: "{{ splunk.user }}"
 

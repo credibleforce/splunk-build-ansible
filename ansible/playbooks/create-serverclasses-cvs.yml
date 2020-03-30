@@ -1,0 +1,17 @@
+---
+- hosts: all
+  tasks:
+    - copy:
+      content: |
+        
+        Client,ServerType,IPAddress
+        {% for group in groups %}
+        {% for host in hostvars %}
+        {% set vars = hostvars[host|string] %}
+        {% if vars.ansible_hostname in groups[group] %} {{ vars.ansible_hostname }},{{ group }},{{ vars.ansible_ip_addresses[0] }} {% endif %}
+        {% endfor %}
+        {% endfor %}
+      dest: /tmp/splunk.csv
+      backup: yes
+      run_once: yes
+      delegate_to: localhost
