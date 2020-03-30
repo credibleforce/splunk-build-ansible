@@ -57,7 +57,7 @@
   blockinfile:
     path: "{{ splunk.home }}/etc/system/local/serverclass.conf"
     block: |
-      
+
       # default is to reload all splunk components override at app level as required
       [global]
       restartSplunkWeb = true
@@ -67,37 +67,37 @@
 
       [serverClass:splunk_heavy_forwarder]
       whitelist.select_field = Client
-      whitelist.from_pathname = etc/system/local/splunk.csv
+      whitelist.from_pathname = etc/system/local/splunk_inventory.csv
       whitelist.where_field = ServerType
       whitelist.where_equals = splunk_heavy_forwarder
 
       [serverClass:splunk_universal_forwarder]
       whitelist.select_field = Client
-      whitelist.from_pathname = etc/system/local/splunk.csv
+      whitelist.from_pathname = etc/system/local/splunk_inventory.csv
       whitelist.where_field = ServerType
       whitelist.where_equals = splunk_universal_forwarder
 
       [serverClass:domain_controller]
       whitelist.select_field = Client
-      whitelist.from_pathname = etc/system/local/lab.csv
+      whitelist.from_pathname = etc/system/local/lab_inventory.csv
       whitelist.where_field = ServerType
       whitelist.where_equals = domain_controller
 
       [serverClass:certificate_authority]
       whitelist.select_field = Client
-      whitelist.from_pathname = etc/system/local/lab.csv
+      whitelist.from_pathname = etc/system/local/lab_inventory.csv
       whitelist.where_field = ServerType
       whitelist.where_equals = certificate_authority
 
       [serverClass:member_server]
       whitelist.select_field = Client
-      whitelist.from_pathname = etc/system/local/lab.csv
+      whitelist.from_pathname = etc/system/local/lab_inventory.csv
       whitelist.where_field = ServerType
       whitelist.where_equals = member_server
 
       [serverClass:wef_server]
       whitelist.select_field = Client
-      whitelist.from_pathname = etc/system/local/lab.csv
+      whitelist.from_pathname = etc/system/local/lab_inventory.csv
       whitelist.where_field = ServerType
       whitelist.where_equals = wef_server
       
