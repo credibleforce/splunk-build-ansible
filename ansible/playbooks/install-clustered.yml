@@ -178,7 +178,7 @@
       register: task_response
       until:
         - task_response.status == 200
-        - task_response.json.entry[0].content.multisite | boolean
+        - task_response.json.entry[0].content.multisite|bool
       retries: "{{ retry_num }}"
       delay: "{{ retry_delay }}"
       ignore_errors: true
