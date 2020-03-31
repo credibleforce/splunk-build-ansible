@@ -59,7 +59,7 @@
 +  
 +  - name: Check Splunk instance is running
 +    uri:
-+      url: https://{{ splunk_instance_address }}:{{ splunk.svc_port }}/services/server/info?output_mode=json
++      url: https://127.0.0.1:{{ splunk.svc_port }}/services/server/info?output_mode=json
 +      method: GET
 +      user: "{{ splunk.admin_user }}"
 +      password: "{{ splunk.password }}"
