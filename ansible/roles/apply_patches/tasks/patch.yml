@@ -5,8 +5,8 @@
 #     dest: "{{ 'splunk-ansible/roles/splunk_common/tasks/set_as_hec_receiver.yml' | realpath }}"
 #   ignore_errors: true
 
-# - name: Apply patch to one file
-#   patch:
-#     src: "{{ 'files/patch/splunk_common_restart_splunk.patch' | realpath }}"
-#     dest: "{{ 'splunk-ansible/roles/splunk_common/handlers/restart_splunk.yml' | realpath }}"
-#   ignore_errors: true
+- name: Apply patch to one file
+  patch:
+    src: "{{ 'files/patch/splunk_common_restart_splunk.patch' | realpath }}"
+    dest: "{{ 'splunk-ansible/roles/splunk_common/handlers/restart_splunk.yml' | realpath }}"
+  ignore_errors: true
