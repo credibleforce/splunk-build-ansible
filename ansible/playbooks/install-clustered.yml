@@ -169,22 +169,20 @@
 
     # INEXERS - Check for splunk_cluster_master multisite readiness
     - name: Splunk cluster_master multisite check
-      tasks:
-        - name: Check Splunk multisite ready
-          uri:
-            url: https://{{ groups['splunk_cluster_master'][0] }}:{{ splunk.svc_port }}/services/cluster/config/config?output_mode=json
-            method: GET
-            user: "{{ splunk.admin_user }}"
-            password: "{{ splunk.password }}"
-            validate_certs: false
-          register: task_response
-          until:
-            - task_response.status == 200
-            - task_response.json.entry[0].content.multisite | boolean
-          retries: "{{ retry_num }}"
-          delay: "{{ retry_delay }}"
-          ignore_errors: true
-          no_log: "{{ hide_password }}"
+      uri:
+        url: https://{{ groups['splunk_cluster_master'][0] }}:{{ splunk.svc_port }}/services/cluster/config/config?output_mode=json
+        method: GET
+        user: "{{ splunk.admin_user }}"
+        password: "{{ splunk.password }}"
+        validate_certs: false
+      register: task_response
+      until:
+        - task_response.status == 200
+        - task_response.json.entry[0].content.multisite | boolean
+      retries: "{{ retry_num }}"
+      delay: "{{ retry_delay }}"
+      ignore_errors: true
+      no_log: "{{ hide_password }}"
       when:
         - splunk_enable_multisite 
         - inventory_hostname in groups['splunk_indexer']
