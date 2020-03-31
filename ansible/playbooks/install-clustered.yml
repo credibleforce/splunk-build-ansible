@@ -187,11 +187,6 @@
         - splunk_enable_multisite 
         - inventory_hostname in groups['splunk_indexer']
 
-    - name: Response output
-      debug:
-        msg:
-          - "Response: {{ task_response }}"
-
     # INDEXERS - check for splunk_indexer role
     - name: Splunk indexer tasks
       include_role:
