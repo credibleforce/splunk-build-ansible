@@ -1,0 +1,75 @@
+--- ../../splunk-ansible/roles/splunk_common/handlers/restart_splunk.yml	2020-03-17 13:29:10.000000000 -0700
++++ restart_splunk.yml	2020-03-30 21:53:21.000000000 -0700
+@@ -1,28 +1,44 @@
+ ---
+-- name: "Restart the splunkd service - Via CLI"
+-  command: "{{ splunk.exec }} restart -f --answer-yes --accept-license"
+-  become: yes
+-  become_user: "{{ splunk.user }}"
+-  register: task_result
+-  until: task_result.rc == 0
+-  retries: "{{ retry_num }}"
+-  delay: "{{ retry_delay }}"
+-  when: not splunk.enable_service
+-
+-- name: "Restart the splunkd service - Via Linux systemd or init"
+-  service:
+-    name: "{{ splunk_service_name }}"
+-    state: restarted
+-  when: splunk.enable_service and ansible_system is match("Linux")
+-  become: yes
+-  become_user: "{{ privileged_user }}"
+-
+-- name: "Restart the splunkd service - Via windows system"
+-  win_service:
+-    name: "{{ splunk_service_name }}"
+-    state: restarted
+-  when: splunk.enable_service and not ansible_system is match("Linux")
+-
+-- name: "Wait for splunkd management port"
+-  wait_for:
+-    port: "{{ splunk.svc_port }}"
++  - name: "Restart the splunkd service - Via CLI"
++    command: "{{ splunk.exec }} restart -f --answer-yes --accept-license"
++    become: yes
++    become_user: "{{ splunk.user }}"
++    register: task_result
++    until: task_result.rc == 0
++    retries: "{{ retry_num }}"
++    delay: "{{ retry_delay }}"
++    when: not splunk.enable_service
++  
++  - name: "Restart the splunkd service - Via Linux systemd or init"
++    service:
++      name: "{{ splunk_service_name }}"
++      state: restarted
++    when: splunk.enable_service and ansible_system is match("Linux")
++    become: yes
++    become_user: "{{ privileged_user }}"
++  
++  - name: "Restart the splunkd service - Via windows system"
++    win_service:
++      name: "{{ splunk_service_name }}"
++      state: restarted
++    when: splunk.enable_service and not ansible_system is match("Linux")
++  
++  - name: "Wait for splunkd management port"
++    wait_for:
++      port: "{{ splunk.svc_port }}"
++  
++  - name: Check Splunk instance is running
++    uri:
++      url: https://{{ splunk_instance_address }}:{{ splunk.svc_port }}/services/server/info?output_mode=json
++      method: GET
++      user: "{{ splunk.admin_user }}"
++      password: "{{ splunk.password }}"
++      validate_certs: false
++    register: task_response
++    until:
++      - task_response.status == 200
++      - lookup('pipe', 'date +"%s"')|int - task_response.json.entry[0].content.startup_time > 10
++    retries: "{{ retry_num }}"
++    delay: "{{ retry_delay }}"
++    ignore_errors: true
++    no_log: "{{ hide_password }}"
+\ No newline at end of file
