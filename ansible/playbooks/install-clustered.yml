@@ -325,7 +325,7 @@
         name: splunk_search_head_captain
       when: inventory_hostname in groups['splunk_search_head_captain']
 
-
+      
 #######################################################################################################################
 # PUSH APPS TO CLUSTER MASTER, DEPLOYMENT_SERVER, DEPLOYER
 #######################################################################################################################
@@ -400,6 +400,27 @@
     #########################################
     # TASKS
     ##########################################
+
+    # Check replication and search factors
+    - name: Splunk cluster_master replication and search factors
+      uri:
+        url: https://{{ groups['splunk_cluster_master'][0] }}:{{ splunk.svc_port }}/services/cluster/master/generation?output_mode=json
+        method: GET
+        user: "{{ splunk.admin_user }}"
+        password: "{{ splunk.password }}"
+        validate_certs: false
+      register: task_response
+      until:
+        - task_response.status == 200
+        - task_response.json.entry[0].content.replication_factor_met|bool
+        - task_response.json.entry[0].content.search_factor_met|bool
+      retries: "{{ retry_num }}"
+      delay: "{{ retry_delay }}"
+      ignore_errors: true
+      no_log: "{{ hide_password }}"
+      when:
+        - splunk_enable_idxc 
+        - inventory_hostname in groups['splunk_indexer']
 
     # DEPLOYMENT SERVER - check for splunk_deployment_server role
     - name: Splunk splunk_deployment_server tasks
