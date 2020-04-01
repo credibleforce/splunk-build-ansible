@@ -1,0 +1,34 @@
+all:
+  children:
+    local:
+      hosts:
+        localhost:
+      vars:
+        ansible_connection: local
+        ansible_python_interpreter: "{{ansible_playbook_python}}"
+    splunk:
+      vars:
+        ansible_connection: ssh
+        ansible_system: Linux
+      children:
+        splunk_deployment_server:
+          vars:
+            splunk:
+              hostname: "{{ inventory_hostname }}"
+              role: "splunk_deployment_server"
+          hosts: 
+            splkdp1.psl.local:
+        splunk_heavy_forwarder:
+          vars:
+            splunk:
+              hostname: "{{ inventory_hostname }}"
+              role: "splunk_heavy_forwarder"
+          hosts: 
+            splkhec1.psl.local:  
+        splunk_universal_forwarder:
+          vars:
+            splunk:
+              hostname: "{{ inventory_hostname }}"
+              role: "splunk_universal_forwarder"
+          hosts: 
+            splkuf1.psl.local:
