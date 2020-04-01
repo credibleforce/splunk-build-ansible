@@ -24,7 +24,7 @@ Playbooks use a named account `deployer` for ansible ansible tasks on inventory 
 
 In scenarios where ansible testing is taking place or where it cannot be installed via pacakge manager (e.g. yum), it is possible to run a _portable_ ansible installation. The following steps outline the requirements for setting this up:
 
-1. Clone the ansible repo `git clone https://github.com/ansible/ansible.git`
+1. Clone the ansible repo `git clone --single-branch --branch 'stable-2.9' https://github.com/ansible/ansible.git`
 2. Change director to ansible directory `cd ansible`
 3. Install required python modules `pip-3 install -r requirements.txt`
 4. Setup ansible environment `source ./hacking/env-setup`
