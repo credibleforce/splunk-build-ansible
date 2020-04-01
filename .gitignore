@@ -1,5 +1,5 @@
 .DS_Store
 dist/
 **/**/output/*
-*.code-workspace%
+**.code-workspace*
 ansible/files/*.tgz
