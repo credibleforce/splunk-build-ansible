@@ -1,4 +1,6 @@
 ---
+  # force universal forwarder to apply only basic configuration (add user)
+  splunk_preconfig_level: 1
   splunk:
     role: splunk_universal_forwarder
     preferred_captaincy: true

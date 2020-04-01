@@ -1,13 +1,38 @@
 ---
 # tasks file for splunk_server
 
-# kernel settings for splunk
+# custom variable defining the level of pre-config 
+# 0 = none
+# 1 = splunk user (example: usage forwarders)
+# 2 = spkunk user, ulimits, disable thp (example usage: search head, indexer)
+# 3 = firewall, ulimits, splunk user, local proxy (example usage: aws elb as load balancer for search heads)
+
+# always copy install files
 - import_tasks: copy_install_files.yml
+
+# level 1 tasks (basic)
 - import_tasks: add_splunk_user_accounts.yml
-- import_tasks: open_firewall_ports.yml
-- import_tasks: disable_thp.yml
-- import_tasks: set_vm_swappiness.yml
-- import_tasks: set_ulimits.yml
+  when: splunk_preconfig_level is defined and splunk_preconfig_level >= 1
+
 - import_tasks: set_splunk_home.yml
+  when: splunk_preconfig_level is defined and splunk_preconfig_level >= 1
+
+# level 2 tasks (intermediate)
+- import_tasks: disable_thp.yml
+  when: splunk_preconfig_level is defined and splunk_preconfig_level >= 2
+
+- import_tasks: set_ulimits.yml
+  when: splunk_preconfig_level is defined and splunk_preconfig_level >= 2
+
+# level 3 tasks (advanced)
+- import_tasks: open_firewall_ports.yml
+  when: splunk_preconfig_level is defined and splunk_preconfig_level >= 3
+
+- import_tasks: set_vm_swappiness.yml
+  when: splunk_preconfig_level is defined and splunk_preconfig_level >= 3
+
 - import_tasks: install_se_manage.yml
+  when: splunk_preconfig_level is defined and splunk_preconfig_level >= 3
+  
 - import_tasks: add_local_proxy.yml
+  when: splunk_preconfig_level is defined and splunk_preconfig_level >= 3
