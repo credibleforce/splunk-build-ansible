@@ -5,9 +5,7 @@
 - hosts: local
   vars_files:
     - ../vars/default-standalone.yml 
-  
   tasks:
-
     # download splunk enterprise and uf to /tmp/splunk.rpm and /tmp/splunkuf.rpm
     - name: Download Splunk
       include_role:
