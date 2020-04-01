@@ -24,8 +24,11 @@
 
     # PRE CONFIG - Add users
     - name: Custom splunk server pre-config (setup user)
-      include_role:
-        name: pre_config
+      include_tasks: "{{ item }}"
+      with_items:
+        - "../roles/pre_config/tasks/copy_install_files.yml"
+        - "../roles/pre_config/tasks/add_splunk_user_accounts.yml"
+        - "../roles/pre_config/tasks/disable_thp.yml"
   
   post_tasks:
     # Set ulimits by service (assumes systemd service deployment)
@@ -60,8 +63,8 @@
     - name: Custom splunk server pre-config (setup user)
       include_tasks: "{{ item }}"
       with_items:
-        - "../roles/pre_conf/tasks/copy_install_files.yml"
-        - "../roles/pre_conf/tasks/add_splunk_user_accounts.yml"
+        - "../roles/pre_config/tasks/copy_install_files.yml"
+        - "../roles/pre_config/tasks/add_splunk_user_accounts.yml"
         
   tasks:
 
