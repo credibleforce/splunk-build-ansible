@@ -74,11 +74,6 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
 
-    # Force an ntp update as service check requires time sync to work (should not be required in production)
-    #- name: Sync ntp
-    #  include_role: 
-    #   name: ntp_sync
-
     # PRE CONFIG - Add users
     - name: Custom splunk server pre-config (setup user)
       include_role:
@@ -107,14 +102,9 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
 
-    # Force an ntp update as service check requires time sync to work (should not be required in production)
-    #- name: Sync ntp
-    #  include_role: 
-    #   name: ntp_sync
-
     # PRE CONFIG - Add users
     - name: Custom splunk server pre-config (setup user)
-      import_tasks: "{{ item }}"
+      include_tasks: "{{ item }}"
       with_items:
         - "../roles/pre_conf/tasks/copy_install_files.yml"
         - "../roles/pre_conf/tasks/add_splunk_user_accounts.yml"
