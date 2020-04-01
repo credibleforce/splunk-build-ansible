@@ -401,6 +401,8 @@
     # TASKS
     ##########################################
 
+    
+    
     # Check replication and search factors
     - name: Splunk cluster_master replication and search factors
       uri:
@@ -422,7 +424,17 @@
         - splunk_enable_idxc 
         - inventory_hostname in groups['splunk_indexer']
 
-    # DEPLOYMENT SERVER - check for splunk_deployment_server role
+    # DEPLOYMENT SERVER - push csv inventory files
+    - name: Splunk splunk_deployment_server inventory copy
+      copy: 
+        src: "/tmp/{{ item }}"
+        dest: "{{ splunk.opt }}/etc/system/local/{{ item }}"
+        remote_src: yes
+      with_items:
+        - "splunk_inventory.csv"
+        - "lab_inventory.csv"
+      when: inventory_hostname in groups['splunk_deployment_server']
+
     - name: Splunk splunk_deployment_server tasks
       include_role:
         name: splunk_deployment_server
