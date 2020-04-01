@@ -1,7 +1,7 @@
 ---
-#########################################
+#######################################################################################################################
 # EXAMPLE DEPLOYMENT SERVER AND UNIVERSAL FORWARDER DEPLOYMENT
-#########################################
+#######################################################################################################################
 - hosts: local
   vars_files:
     - ../vars/default-standalone.yml 
@@ -10,6 +10,10 @@
     - name: Download Splunk
       include_role:
         name: download_splunk
+
+#######################################################################################################################
+# INSTALL DEPLOYMENT SERVER
+#######################################################################################################################
 
 - hosts: splunk_deployment_server
   vars_files:
@@ -45,7 +49,12 @@
       include_role:
         name: splunk_universal_forwarder
       when: inventory_hostname in groups['splunk_universal_forwarder']
+ 
       
+#######################################################################################################################
+# INSTALL UNIVERSAL FORWARDER
+#######################################################################################################################
+
 - hosts: splunk_universal_forwarder
   vars_files:
     - ../vars/default-standalone.yml
@@ -61,7 +70,17 @@
     - name: Custom splunk server pre-config (setup user)
       include_role:
         name: pre_config
-  
+
+    #########################################
+    # VARIABLES DEFINING UNIVERSAL FORWARDER CONFIG
+    ##########################################
+
+    # Set universal_forwarder
+    - name: Include Universal Forwarder Variable
+      include_vars: ../vars/splunk_universal_forwarder.yml
+      when: 
+        - splunk_enable_universal_forwarder 
+        - inventory_hostname in groups['splunk_universal_forwarder']
   post_tasks:
     # Set ulimits by service (assumes systemd service deployment)
     - name: Post install config

@@ -1,73 +1,25 @@
 ---
-#########################################
+#######################################################################################################################
 # EXAMPLE STANDALONE DEPLOYMENT
-#########################################
+#######################################################################################################################
 - hosts: local
   vars_files:
     - ../vars/default-standalone.yml 
-
   pre_tasks:
-    # Include additional variables as required
-    - name: Include SHC Variable
-      include_vars: ../vars/splunk_search_head_cluster.yml
-      when: splunk_enable_shc is defined and splunk_enable_shc
-
-    - name: Include IDXC Variable
-      include_vars: ../vars/splunk_index_cluster.yml
-      when: splunk_enable_idxc is defined and splunk_enable_idxc
-
-    - name: Include Multisite Variable
-      include_vars: ../vars/splunk_multisite.yml
-      when: splunk_enable_multisite is defined and splunk_enable_multisite
-
-    - name: Include Deployment Server Variable
-      include_vars: ../vars/splunk_deployment_server.yml
-      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
-
-    - name: Include Multisite Variable
-      include_vars: ../vars/splunk_license_master.yml
-      when: splunk_enable_license_master is defined and splunk_enable_license_master
-
   tasks:
-    # Force an ntp update as service check requires time sync to work (should not be required in production)
-    - name: Sync ntp
-      include_role: 
-        name: ntp_sync
-        
     - name: Download Splunk
       include_role:
         name: download_splunk
+
+#######################################################################################################################
+# INSTALL STANDALONE
+#######################################################################################################################
 
 - hosts: splunk_standalone
   vars_files:
     - ../vars/default-standalone.yml
   gather_facts: True
   pre_tasks:
-    # Include additional variables as required
-    - name: Include SHC Variable
-      include_vars: ../vars/splunk_search_head_cluster.yml
-      when: splunk_enable_shc is defined and splunk_enable_shc
-
-    - name: Include IDXC Variable
-      include_vars: ../vars/splunk_index_cluster.yml
-      when: splunk_enable_idxc is defined and splunk_enable_idxc
-
-    - name: Include Multisite Variable
-      include_vars: ../vars/splunk_multisite.yml
-      when: splunk_enable_multisite is defined and splunk_enable_multisite
-
-    - name: Include Deployment Server Variable
-      include_vars: ../vars/splunk_deployment_server.yml
-      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server
-
-    - name: Include Multisite Variable
-      include_vars: ../vars/splunk_license_master.yml
-      when: splunk_enable_license_master is defined and splunk_enable_license_master
-
-    # Force an ntp update as service check requires time sync to work (should not be required in production)
-    - name: Sync ntp
-      include_role: 
-        name: ntp_sync
 
     # PRE CONFIG - Add users
     - name: Custom splunk server pre-config (setup user)
