@@ -44,34 +44,6 @@
       include_role:
         name: splunk_universal_forwarder
       when: inventory_hostname in groups['splunk_universal_forwarder']
-
-- hosts: splunk_universal_forwarder
-  vars_files:
-    - ../vars/default-standalone.yml
-  gather_facts: True
-  pre_tasks:
-    - name: Include Deployment Server Variable
-      include_vars: ../vars/splunk_deployment_server.yml
-    
-    - name: Include Deployment Client Variable
-      include_vars: ../vars/splunk_deployment_client.yml
-
-    # PRE CONFIG - Add users
-    - name: Custom splunk server pre-config (setup user)
-      include_role:
-        name: pre_config
-  
-  post_tasks:
-    # Set ulimits by service (assumes systemd service deployment)
-    - name: Post install config
-      import_tasks: ../roles/post_config/tasks/main.yml
-  tasks:
-
-    # DEPLOYMENTSERVER - check for splunk_deployment_server role
-    - name: Splunk splunk_deployment_server tasks
-      include_role:
-        name: splunk_deployment_server
-      when: inventory_hostname in groups['splunk_deployment_server']
       
 - hosts: splunk_universal_forwarder
   vars_files:
