@@ -24,7 +24,7 @@ all:
               hostname: "{{ inventory_hostname }}"
               role: "splunk_heavy_forwarder"
           hosts: 
-            splkhec1.psl.local:  
+            splkhf1.psl.local:  
         splunk_universal_forwarder:
           vars:
             splunk:
