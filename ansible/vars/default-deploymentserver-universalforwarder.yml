@@ -37,10 +37,6 @@ splunk:
   admin_user: admin
   allow_upgrade: true
   build_location: /tmp/splunk.rpm
-  #build_location: https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=7.3.1&product=splunk&filename=splunk-7.3.1-bd63e13aa157-Linux-x86_64.tgz&wget=true
-  # Splunk 7.3.4 Download
-  #build_location: https://www.splunk.com/page/download_track?file=7.3.4/linux/splunk-7.3.4-13e97039fb65-linux-2.6-x86_64.rpm&ac=&wget=true&name=wget&platform=Linux&architecture=x86_64&version=7.3.4&product=splunk&typed=release
-  #build_location: https://www.splunk.com/page/download_track?file=7.3.4/linux/splunk-7.3.4-13e97039fb65-Linux-x86_64.tgz&ac=&wget=true&name=wget&platform=Linux&architecture=x86_64&version=7.3.4&product=splunk&typed=release
   license_master_included: false
   license_uri: /tmp/splunk.lic
   build_remote_src: true
