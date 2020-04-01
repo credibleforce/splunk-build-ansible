@@ -42,13 +42,6 @@
     - name: Splunk splunk_deployment_server tasks
       include_role:
         name: splunk_deployment_server
-      when: inventory_hostname in groups['splunk_deployment_server']
-
-    # UNIVERSAL FORWARDER - check for splunk_universal_forwarder role
-    - name: Splunk splunk_universal_forwarder tasks
-      include_role:
-        name: splunk_universal_forwarder
-      when: inventory_hostname in groups['splunk_universal_forwarder']
  
       
 #######################################################################################################################
@@ -78,9 +71,7 @@
     # Set universal_forwarder
     - name: Include Universal Forwarder Variable
       include_vars: ../vars/splunk_universal_forwarder.yml
-      when: 
-        - splunk_enable_universal_forwarder 
-        - inventory_hostname in groups['splunk_universal_forwarder']
+
   post_tasks:
     # Set ulimits by service (assumes systemd service deployment)
     - name: Post install config
@@ -92,4 +83,3 @@
     - name: Splunk splunk_universal_forwarder tasks
       include_role:
         name: splunk_universal_forwarder
-      when: inventory_hostname in groups['splunk_universal_forwarder']
