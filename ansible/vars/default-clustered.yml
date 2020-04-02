@@ -9,31 +9,6 @@ shc_sync_retry_num: 60
 splunk_home_ownership_enforcement: true
 cert_prefix: https
 
-# custom variable defining the level of pre-config 
-# 0 = none
-# 1 = splunk user (example: usage forwarders)
-# 2 = spkunk user, ulimits, disable thp (example usage: search head, indexer)
-# 3 = firewall, ulimits, splunk user, local proxy (example usage: aws elb as load balancer for search heads)
-splunk_preconfig_level: 3
-
-# CUSTOM - enable/disable functional cluster config
-splunk_enable_multisite: "{{ True if 'splunk_multisite' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
-splunk_enable_shc: "{{ True if 'splunk_search_head_captain' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
-splunk_enable_idxc: "{{ True if 'splunk_cluster_master' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
-splunk_enable_deployment_server: "{{ True if 'splunk_deployment_server' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
-splunk_enable_license_master: "{{ True if 'splunk_license_master' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
-splunk_enable_heavy_forwarder: "{{ True if 'splunk_heavy_forwarder' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
-splunk_enable_universal_forwarder: "{{ True if 'splunk_universal_forwarder' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
-splunk_install_deployment_apps: "{{ True if 'splunk_deployment_apps' in lookup('env','SPLUNK_INSTALL_APPS').split(':') else False }}"
-splunk_install_indexer_apps: "{{ True if 'splunk_indexer_apps' in lookup('env','SPLUNK_INSTALL_APPS').split(':') else False }}"
-splunk_install_search_head_apps: "{{ True if 'splunk_search_head_apps' in lookup('env','SPLUNK_INSTALL_APPS').split(':') else False }}"
-splunkbase_token: "{{ lookup('env','SPLUNKBASE_TOKEN') }}"
-
-# hack to bypass global hec
-#hec_token:
-#  status: 200
-
-
 config:
   baked: default.yml
   defaults_dir: /tmp/defaults
@@ -50,6 +25,7 @@ config:
   max_timeout: 1200
 
 splunk:
+  search_head_captain_url: null
   apps_location: null
   enable_service: true
   admin_user: admin
@@ -92,23 +68,4 @@ splunk:
       ssl: true
       token: 5ed09976-d87d-4b79-bfb0-f3cfd4c5e476
       port: 8088
-
-  # s2s
-  s2s:
-    port: 9997
-    enable: true
-    ssl: null
-    cert: null
-    ca: null
-    password: null
-
-  # dfs
-  dfs:
-    dfc_num_slots: 4
-    dfw_num_slots: 10
-    dfw_num_slots_enabled: false
-    enable: false
-    port: 9000
-    spark_master_host: 127.0.0.1
-    spark_master_webui_port: 8080
 

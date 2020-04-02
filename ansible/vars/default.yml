@@ -9,13 +9,6 @@ shc_sync_retry_num: 60
 splunk_home_ownership_enforcement: true
 cert_prefix: https
 
-# custom variable defining the level of pre-config 
-# 0 = none
-# 1 = splunk user (example: usage forwarders)
-# 2 = spkunk user, ulimits, disable thp (example usage: search head, indexer)
-# 3 = firewall, ulimits, splunk user, local proxy (example usage: aws elb as load balancer for search heads)
-splunk_preconfig_level: 2
-
 config:
   baked: default.yml
   defaults_dir: /tmp/defaults

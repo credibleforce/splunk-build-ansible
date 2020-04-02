@@ -1,0 +1,6 @@
+# custom variable defining the level of pre-config 
+# 0 = none
+# 1 = splunk user (example: usage forwarders)
+# 2 = spkunk user, ulimits, disable thp (example usage: search head, indexer)
+# 3 = firewall, ulimits, splunk user, local proxy (example usage: aws elb as load balancer for search heads)
+splunk_preconfig_level: 3

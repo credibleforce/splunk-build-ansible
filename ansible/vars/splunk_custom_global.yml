@@ -1,0 +1,12 @@
+# CUSTOM - enable/disable functional cluster config based on environment
+splunk_enable_multisite: "{{ True if 'splunk_multisite' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
+splunk_enable_shc: "{{ True if 'splunk_search_head_captain' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
+splunk_enable_idxc: "{{ True if 'splunk_cluster_master' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
+splunk_enable_deployment_server: "{{ True if 'splunk_deployment_server' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
+splunk_enable_license_master: "{{ True if 'splunk_license_master' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
+splunk_enable_heavy_forwarder: "{{ True if 'splunk_heavy_forwarder' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
+splunk_enable_universal_forwarder: "{{ True if 'splunk_universal_forwarder' in lookup('env','SPLUNK_DEPLOYMENT_ROLES').split(':') else False }}"
+splunk_install_deployment_apps: "{{ True if 'splunk_deployment_apps' in lookup('env','SPLUNK_INSTALL_APPS').split(':') else False }}"
+splunk_install_indexer_apps: "{{ True if 'splunk_indexer_apps' in lookup('env','SPLUNK_INSTALL_APPS').split(':') else False }}"
+splunk_install_search_head_apps: "{{ True if 'splunk_search_head_apps' in lookup('env','SPLUNK_INSTALL_APPS').split(':') else False }}"
+splunkbase_token: "{{ lookup('env','SPLUNKBASE_TOKEN') }}"
