@@ -4,7 +4,7 @@
 #######################################################################################################################
 - hosts: local
   vars_files:
-    - ../vars/default.yml 
+    - ../vars/default-standalone.yml 
   pre_tasks:
   tasks:
     - name: Download Splunk
@@ -17,7 +17,7 @@
 
 - hosts: splunk_standalone
   vars_files:
-    - ../vars/default.yml
+    - ../vars/default-standalone.yml
   gather_facts: True
   pre_tasks:
 
