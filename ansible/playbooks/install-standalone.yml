@@ -26,6 +26,13 @@
       include_role:
         name: pre_config
   
+    #########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
+    # Include additional variables as required
+    - name: Include Standalone Variables
+      include_vars: ../vars/splunk_standalone.yml
+
   post_tasks:
     # Set ulimits by service (assumes systemd service deployment)
     - name: Post install config

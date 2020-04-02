@@ -74,3 +74,22 @@ splunk:
       ssl: True
       token: f7a5b222-7b57-41cf-9714-fb5fc333bef6
       port: 8088
+
+  # s2s
+  s2s:
+    port: 9997
+    enable: false
+    ssl: null
+    cert: null
+    ca: null
+    password: null
+
+  #dfs
+  dfs:
+    dfc_num_slots: 4
+    dfw_num_slots: 10
+    dfw_num_slots_enabled: false
+    enable: false
+    port: 9000
+    spark_master_host: 127.0.0.1
+    spark_master_webui_port: 8080
