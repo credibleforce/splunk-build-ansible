@@ -48,12 +48,6 @@
     - name: Get facts
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/get_facts.yml
 
-    - name: Debug
-      debug:
-        msg:
-          - "Forward Servers: {{ splunk_forward_servers }}"
-          - "Splunk: {{ splunk }}"
-
 
     # determine if we need to set up forward servers
     # First, if they are manually specified in the config, use them
@@ -98,7 +92,12 @@
         # (Only standalone and search heads) we should not automatically forward the data to
         # standalone instances UNLESS they are specified by forward-servers
         - "'splunk_search_head' not in groups"
-
+    
+    - name: Debug
+      debug:
+        msg:
+          - "Splunk Role: {{ splunk.role }}"
+          - "Forward Servers: {{ splunk_forward_servers }}"
     
     # STANDALONE - check for splunk_standalone role
     #- name: Splunk splunk_standalone tasks
