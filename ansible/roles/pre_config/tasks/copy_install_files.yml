@@ -2,18 +2,19 @@
 # tasks file for splunk_server
 
 # copy install files
-- name: Copy splunk installation
+- name: Copy splunk enterprise installation
   copy:
     src: /tmp/splunk.rpm
     dest: /tmp/splunk.rpm
   when:
-    - not inventory_hostname in groups['splunk_universal_forwarder']
+    - "(not 'splunk_universal_forwarder' in groups) or (not inventory_hostname in groups['splunk_universal_forwarder'])"
 
-- name: Copy splunk installation
+- name: Copy splunk universal forwarder installation
   copy:
     src: /tmp/splunkuf.rpm
     dest: /tmp/splunkuf.rpm
   when:
+    - "'splunk_universal_forwarder' in groups"
     - inventory_hostname in groups['splunk_universal_forwarder']
 
 # copy license files
@@ -28,7 +29,7 @@
     dest: "{{ splunk.license_uri }}"
   when:
     - lic_source.stat.exists
-    - not inventory_hostname in groups['splunk_universal_forwarder']
+    - "(not 'splunk_universal_forwarder' in groups) or (not inventory_hostname in groups['splunk_universal_forwarder'])"
 
 # copy deployment apps
 - name: Copy deployment apps
@@ -37,6 +38,7 @@
     dest: /tmp
   when: 
     - splunk_install_deployment_apps
+    - "'splunk_deployment_server' in groups"
     - inventory_hostname in groups['splunk_deployment_server']
   with_items:
     - /tmp/indexes.tgz
@@ -55,6 +57,7 @@
     dest: /tmp
   when: 
     - splunk_enable_shc and splunk_install_search_head_apps
+    - "'splunk_deployer' in groups"
     - inventory_hostname in groups['splunk_deployer']
   with_items:
     - /tmp/indexes.tgz
@@ -68,7 +71,7 @@
     dest: /tmp
   when: 
     - not splunk_enable_shc and splunk_install_search_head_apps
-    - (inventory_hostname in groups['splunk_search_head'] or inventory_hostname in groups['splunk_standalone'])
+    - "('splunk_search_head' in groups and inventory_hostname in groups['splunk_search_head']) or ('splunk_search_head' in groups and inventory_hostname in groups['splunk_standalone'])"
   with_items:
     - /tmp/indexes.tgz
   ignore_errors: true
@@ -97,6 +100,7 @@
     dest: /tmp
   when: 
     - not splunk_enable_idxc and splunk_install_indexer_apps 
+    - "'splunk_indexer' in groups"
     - inventory_hostname in groups['splunk_indexer'] 
   with_items:
     - /tmp/indexes.tgz
