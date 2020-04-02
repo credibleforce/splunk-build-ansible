@@ -45,6 +45,13 @@
     - name: Post install config
       import_tasks: ../roles/post_config/tasks/main.yml
   tasks:
+    
+    - name: Debug
+      debug:
+        msg:
+          - "Splunk Role: {{ splunk.role }}"
+          - "Forward Servers: {{ splunk_forward_servers|default('Undefined') }}"
+    
     - name: Get facts
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/get_facts.yml
 
