@@ -52,6 +52,7 @@
       include_vars: ../vars/splunk_license_master.yml
       when:
         - "'splunk_license_master' in groups"
+        - "(not 'splunk_universal_forwarder' in groups) or (not inventory_hostname in groups['splunk_universal_forwarder'])"
 
     # setup deployment server variables
     - name: Include Deployment Server Variable
