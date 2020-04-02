@@ -45,53 +45,8 @@
     - name: Post install config
       import_tasks: ../roles/post_config/tasks/main.yml
   tasks:
-    
-    - name: Debug
-      debug:
-        msg:
-          - "Splunk Role: {{ splunk.role }}"
-          - "Forward Servers: {{ splunk_forward_servers|default('Undefined') }}"
-    
-    - name: Get facts
-      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/get_facts.yml
-
-
-    # determine if we need to set up forward servers
-    # First, if they are manually specified in the config, use them
-    - name: "Setting forward servers fact from config - check"
-      debug:
-        msg:
-          - "'forward_servers' in splunk: {{ 'forward_servers' in splunk }}"
-
-    # If not in the config, is there an index cluster to use?
-    # Configure forwarding to indexers directly
-    # See: https://docs.splunk.com/Documentation/Splunk/latest/Indexer/forwardersdirecttopeers
-    - name: "Setting forward servers fact from index cluster group - check"
-      debug:
-        msg:
-          - "splunk_forward_servers is not defined: {{ splunk_forward_servers is not defined }}"
-          - "'splunk_indexer' in groups: {{ 'splunk_indexer' in groups }}"
-          - "splunk.role != \"splunk_indexer\": {{ splunk.role != \"splunk_indexer\" }}"
-
-    # if not specified in config *and*
-    # no index clusters, then look for standalone
-    # See: https://docs.splunk.com/Documentation/Splunk/latest/Indexer/forwardersdirecttopeers
-    - name: "Setting forward servers fact from standalone group - check"
-      debug:
-        msg:
-          - "splunk_forward_servers is not defined: {{ splunk_forward_servers is not defined }}"
-          - "'splunk_standalone' in groups: {{ 'splunk_standalone' in groups }} "
-          - "splunk.role != \"splunk_standalone\": {{ splunk.role != \"splunk_standalone\" }}"
-          - "'splunk_search_head' not in groups: {{ 'splunk_search_head' not in groups }}"
-    
-    - name: Debug
-      debug:
-        msg:
-          - "Splunk Role: {{ splunk.role }}"
-          - "Forward Servers: {{ splunk_forward_servers }}"
-    
     # STANDALONE - check for splunk_standalone role
-    #- name: Splunk splunk_standalone tasks
-    #  include_role:
-    #    name: splunk_standalone
-    #  when: inventory_hostname in groups['splunk_standalone']
+    - name: Splunk splunk_standalone tasks
+      include_role:
+        name: splunk_standalone
+      when: inventory_hostname in groups['splunk_standalone']
