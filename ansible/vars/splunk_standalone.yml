@@ -1,0 +1,3 @@
+---
+    splunk:
+        role: splunk_standalone

@@ -1,0 +1,3 @@
+---
+    splunk:
+        set_search_peers: true

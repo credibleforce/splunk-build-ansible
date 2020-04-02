@@ -1,0 +1,10 @@
+---
+  splunk:
+    # s2s
+    s2s:
+        port: 9997
+        enable: true
+        ssl: null
+        cert: null
+        ca: null
+        password: null

@@ -4,7 +4,7 @@
 #######################################################################################################################
 - hosts: local
   vars_files:
-    - ../vars/default-standalone.yml 
+    - ../vars/default.yml 
   pre_tasks:
   tasks:
     - name: Download Splunk
@@ -17,7 +17,7 @@
 
 - hosts: splunk_standalone
   vars_files:
-    - ../vars/default-standalone.yml
+    - ../vars/default.yml
   gather_facts: True
   pre_tasks:
 
@@ -26,12 +26,25 @@
       include_role:
         name: pre_config
   
+    #########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
+    
+    # Include additional variables as required
+    - name: Include Global HEC Variable
+      include_vars: ../vars/splunk_hec.yml
+
+    - name: Include Global DFS Variable
+      include_vars: ../vars/splunk_dfs.yml
+      
+    - name: Include Standalone Variables
+      include_vars: ../vars/splunk_standalone.yml
+
   post_tasks:
     # Set ulimits by service (assumes systemd service deployment)
     - name: Post install config
       import_tasks: ../roles/post_config/tasks/main.yml
   tasks:
-
     # STANDALONE - check for splunk_standalone role
     - name: Splunk splunk_standalone tasks
       include_role:
