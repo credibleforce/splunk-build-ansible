@@ -31,6 +31,12 @@
     ##########################################
     
     # Include additional variables as required
+    - name: Include Global HEC Variable
+      include_vars: ../vars/splunk_hec.yml
+
+    - name: Include Global DFS Variable
+      include_vars: ../vars/splunk_dfs.yml
+      
     - name: Include Standalone Variables
       include_vars: ../vars/splunk_standalone.yml
 
