@@ -45,6 +45,14 @@
     - name: Post install config
       import_tasks: ../roles/post_config/tasks/main.yml
   tasks:
+    - name: Get facts
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/get_facts.yml
+
+    - name: Debug
+      debug:
+        msg:
+          - "Forward Servers: {{ splunk_forward_servers }}"
+          - "Splunk: {{ splunk }}"
 
     # STANDALONE - check for splunk_standalone role
     - name: Splunk splunk_standalone tasks
