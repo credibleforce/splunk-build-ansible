@@ -1,0 +1,27 @@
+all:
+    children:
+      local:
+        hosts:
+          localhost:
+        vars:
+          ansible_connection: local
+          ansible_python_interpreter: "{{ansible_playbook_python}}"
+      splunk:
+        vars:
+          ansible_connection: ssh
+          ansible_system: Linux
+        children:
+          splunk_search_head:
+            vars:
+              splunk:
+                hostname: "{{ inventory_hostname }}"
+                role: "splunk_search_head"
+            hosts: 
+              splksh1.psl.local:
+          splunk_indexer:
+            vars:
+              splunk:
+                hostname: "{{ inventory_hostname }}"
+                role: "splunk_indexer"
+            hosts: 
+              splkidx1.psl.local:
