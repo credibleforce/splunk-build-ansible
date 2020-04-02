@@ -428,7 +428,7 @@
     - name: Splunk splunk_deployment_server inventory copy
       copy: 
         src: "/tmp/{{ item }}"
-        dest: "{{ splunk.opt }}/etc/system/local/{{ item }}"
+        dest: "{{ splunk.home }}/etc/system/local/{{ item }}"
         remote_src: yes
       with_items:
         - "splunk_inventory.csv"
