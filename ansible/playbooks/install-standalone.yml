@@ -51,47 +51,31 @@
 
     # determine if we need to set up forward servers
     # First, if they are manually specified in the config, use them
-    - name: "Setting forward servers fact from config"
+    - name: "Setting forward servers fact from config - check"
       debug:
         msg:
-          - "'forward_servers' in splunk"
-      when:
-        - "'forward_servers' in splunk"
+          - "'forward_servers' in splunk: {{ 'forward_servers' in splunk }}"
 
     # If not in the config, is there an index cluster to use?
     # Configure forwarding to indexers directly
     # See: https://docs.splunk.com/Documentation/Splunk/latest/Indexer/forwardersdirecttopeers
-    - name: "Setting forward servers fact from index cluster group"
+    - name: "Setting forward servers fact from index cluster group - check"
       debug:
         msg:
-          - "splunk_forward_servers is not defined"
-          - "'splunk_indexer' in groups"
-          - "splunk.role != \"splunk_indexer\""
-      when:
-        - "splunk_forward_servers is not defined"
-        - "'splunk_indexer' in groups"
-        # Prevent self-forwarding
-        - splunk.role != "splunk_indexer"
+          - "splunk_forward_servers is not defined: {{ splunk_forward_servers is not defined }}"
+          - "'splunk_indexer' in groups: {{ 'splunk_indexer' in groups }}"
+          - "splunk.role != \"splunk_indexer\": {{ splunk.role != \"splunk_indexer\" }}"
 
     # if not specified in config *and*
     # no index clusters, then look for standalone
     # See: https://docs.splunk.com/Documentation/Splunk/latest/Indexer/forwardersdirecttopeers
-    - name: "Setting forward servers fact from standalone group"
+    - name: "Setting forward servers fact from standalone group - check"
       debug:
         msg:
-          - "splunk_forward_servers is not defined"
-          - "'splunk_standalone' in groups"
-          - "splunk.role != \"splunk_standalone\""
-          - "'splunk_search_head' not in groups"
-      when:
-        - "splunk_forward_servers is not defined"
-        - "'splunk_standalone' in groups"
-        # Prevent self-forwarding
-        - splunk.role != "splunk_standalone"
-        # This part takes a little explaining.  If we have a mixed cluster with no indexers
-        # (Only standalone and search heads) we should not automatically forward the data to
-        # standalone instances UNLESS they are specified by forward-servers
-        - "'splunk_search_head' not in groups"
+          - "splunk_forward_servers is not defined: {{ splunk_forward_servers is not defined }}"
+          - "'splunk_standalone' in groups: {{ 'splunk_standalone' in groups }} "
+          - "splunk.role != \"splunk_standalone\": {{ splunk.role != \"splunk_standalone\" }}"
+          - "'splunk_search_head' not in groups: {{ 'splunk_search_head' not in groups }}"
     
     - name: Debug
       debug:
