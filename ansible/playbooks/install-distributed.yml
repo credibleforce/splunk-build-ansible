@@ -40,6 +40,9 @@
     - name: Include Global DFS Variable
       include_vars: ../vars/splunk_dfs.yml
 
+    - name: Include Distributed Search Peer Variable
+      include_vars: ../vars/splunk_distributed.yml
+
   post_tasks:
     # Set ulimits by service (assumes systemd service deployment)
     - name: Post install config
