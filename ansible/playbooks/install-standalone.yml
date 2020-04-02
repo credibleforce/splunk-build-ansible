@@ -55,7 +55,7 @@
           - "Splunk: {{ splunk }}"
 
     # STANDALONE - check for splunk_standalone role
-    - name: Splunk splunk_standalone tasks
-      include_role:
-        name: splunk_standalone
-      when: inventory_hostname in groups['splunk_standalone']
+    #- name: Splunk splunk_standalone tasks
+    #  include_role:
+    #    name: splunk_standalone
+    #  when: inventory_hostname in groups['splunk_standalone']
