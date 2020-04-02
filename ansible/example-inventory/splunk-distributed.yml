@@ -25,3 +25,17 @@ all:
                 role: "splunk_indexer"
             hosts: 
               splkidx1.psl.local:
+          splunk_deployment_server:
+            vars:
+              splunk:
+                hostname: "{{ inventory_hostname }}"
+                role: "splunk_deployment_server"
+            hosts: 
+              splkdp1.psl.local:
+          splunk_license_master:
+            vars:
+              splunk:
+                hostname: "{{ inventory_hostname }}"
+                role: "splunk_license_master"
+            hosts: 
+              splkdp1.psl.local:

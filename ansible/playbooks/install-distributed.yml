@@ -15,7 +15,7 @@
 # INSTALL INDEXER AND SEARCH HEAD
 #######################################################################################################################
 
-- hosts: splunk_indexer:splunk_search_head
+- hosts: splunk_indexer:splunk_search_head:splunk_deployment_server
   vars_files:
     - ../vars/default.yml
   gather_facts: True
@@ -44,12 +44,30 @@
     - name: Include Distributed Search Peer Variable
       include_vars: ../vars/splunk_distributed.yml
       when: inventory_hostname in groups['splunk_search_head']
+    
+    # setup lisence master url
+    - name: Include License Master Variable
+      include_vars: ../vars/splunk_license_master.yml
+
+    # setup deployment server variables
+    - name: Include Deployment Server Variable
+      include_vars: ../vars/splunk_deployment_server.yml
+    
+    - name: Include Deployment Client Variable
+      include_vars: ../vars/splunk_deployment_client.yml
 
   post_tasks:
     # Set ulimits by service (assumes systemd service deployment)
     - name: Post install config
       import_tasks: ../roles/post_config/tasks/main.yml
   tasks:
+    
+    # LICENSE MASTER - check for splunk_deployment_server role
+    - name: Splunk splunk_license_master tasks
+      include_role:
+        name: splunk_license_master
+      when: inventory_hostname in groups['splunk_license_master']
+
     # INDEXER - check for splunk_indexer role
     - name: Splunk splunk_indexer tasks
       include_role:
@@ -61,3 +79,9 @@
       include_role:
         name: splunk_search_head
       when: inventory_hostname in groups['splunk_search_head']
+
+    # DEPLOYMENTSERVER - check for splunk_deployment_server role
+    - name: Splunk splunk_deployment_server tasks
+      include_role:
+        name: splunk_deployment_server
+      when: inventory_hostname in groups['splunk_deployment_server']
