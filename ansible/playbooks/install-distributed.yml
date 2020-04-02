@@ -62,6 +62,12 @@
       import_tasks: ../roles/post_config/tasks/main.yml
   tasks:
     
+    # DEPLOYMENTSERVER - check for splunk_deployment_server role
+    - name: Splunk splunk_deployment_server tasks
+      include_role:
+        name: splunk_deployment_server
+      when: inventory_hostname in groups['splunk_deployment_server']
+      
     # LICENSE MASTER - check for splunk_deployment_server role
     - name: Splunk splunk_license_master tasks
       include_role:
@@ -79,9 +85,3 @@
       include_role:
         name: splunk_search_head
       when: inventory_hostname in groups['splunk_search_head']
-
-    # DEPLOYMENTSERVER - check for splunk_deployment_server role
-    - name: Splunk splunk_deployment_server tasks
-      include_role:
-        name: splunk_deployment_server
-      when: inventory_hostname in groups['splunk_deployment_server']
