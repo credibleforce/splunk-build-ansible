@@ -18,18 +18,13 @@
     - inventory_hostname in groups['splunk_universal_forwarder']
 
 # copy license files
-- name: Check license source
-  stat:
-    path: "{{ splunk.license_uri }}"
-  register: lic_source
-
 - name: Copy splunk license
   copy:
     src: "{{ splunk.license_uri }}"
     dest: "{{ splunk.license_uri }}"
   when:
-    - lic_source.stat.exists
     - "(not 'splunk_universal_forwarder' in groups) or (not inventory_hostname in groups['splunk_universal_forwarder'])"
+  ignore_errors: true
 
 # copy deployment apps
 - name: Copy deployment apps
