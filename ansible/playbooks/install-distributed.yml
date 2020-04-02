@@ -40,8 +40,10 @@
     - name: Include Global DFS Variable
       include_vars: ../vars/splunk_dfs.yml
 
+    # setup distributed search for splunk_search_heads
     - name: Include Distributed Search Peer Variable
       include_vars: ../vars/splunk_distributed.yml
+      when: inventory_hostname in groups['splunk_search_head']
 
   post_tasks:
     # Set ulimits by service (assumes systemd service deployment)
