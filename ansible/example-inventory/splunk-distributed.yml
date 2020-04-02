@@ -39,3 +39,10 @@ all:
                 role: "splunk_license_master"
             hosts: 
               splkdp1.psl.local:
+          splunk_universal_forwarder:
+            vars:
+              splunk:
+                hostname: "{{ inventory_hostname }}"
+                role: "splunk_universal_forwarder"
+            hosts: 
+              splkuf1.psl.local:
