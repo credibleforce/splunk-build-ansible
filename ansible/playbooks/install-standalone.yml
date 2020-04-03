@@ -21,7 +21,10 @@
   gather_facts: True
   pre_tasks:
 
-    # PRE CONFIG - Add users
+    # PRE CONFIG - Add users, Ulimits, etc
+    - name: Include Pre Config Variable
+      include_vars: ../vars/splunk_pre_config_intermediate.yml
+
     - name: Custom splunk server pre-config (setup user)
       include_role:
         name: pre_config
