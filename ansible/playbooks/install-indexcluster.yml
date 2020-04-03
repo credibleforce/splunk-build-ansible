@@ -57,6 +57,8 @@
       when: 
         - "(not 'splunk_deployment_server' in groups) or (not inventory_hostname in groups['splunk_deployment_server'])"
     
+    
+
     #########################################
     # PRECONFIG TASKS
     ##########################################
@@ -148,6 +150,13 @@
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
         - "(not 'splunk_deployment_server' in groups) or (not inventory_hostname in groups['splunk_deployment_server'])"
+    
+    # setup distributed search for splunk_search_heads
+    - name: Include Distributed Search Peer Variable
+      include_vars: ../vars/splunk_distributed.yml
+      when:
+        - "'splunk_search_head' in groups" 
+        - inventory_hostname in groups['splunk_search_head']
     
     #########################################
     # PRECONFIG TASKS
