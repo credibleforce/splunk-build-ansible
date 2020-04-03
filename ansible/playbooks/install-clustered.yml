@@ -487,6 +487,7 @@
       with_items:
         - "splunk_inventory.csv"
         - "lab_inventory.csv"
+      ignore_errors: true
       when: inventory_hostname in groups['splunk_deployment_server']
 
     - name: Splunk splunk_deployment_server tasks
