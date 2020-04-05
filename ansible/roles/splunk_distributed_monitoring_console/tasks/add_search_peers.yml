@@ -10,9 +10,9 @@
     become: yes
     become_user: "{{ splunk.user }}"
     with_items: 
-      - "{{ groups['splunk_indexer']|default([]) }}"
-      - "{{ groups['splunk_search_head']|default([]) }}"
-      - "{{ groups['splunk_cluster_master']|default([]) }}"
+      - "{{ groups['splunk_indexer']|default([]) | difference(groups['splunk_distributed_monitoring_console'][0]) }}"
+      - "{{ groups['splunk_search_head']|default([]) | difference(groups['splunk_distributed_monitoring_console'][0]) }}"
+      - "{{ groups['splunk_cluster_master']|default([]) | difference(groups['splunk_distributed_monitoring_console'][0]) }}"
     register: set_dmc_peers
     until: set_dmc_peers.rc == 0 or set_dmc_peers.rc == 24
     retries: "{{ retry_num }}"
@@ -20,7 +20,9 @@
     changed_when: set_dmc_peers.rc == 0
     failed_when: set_dmc_peers.rc != 0 and 'already exists' not in set_dmc_peers.stderr
     no_log: "{{ hide_password }}"
-    when: "'splunk_indexer' in groups or 'splunk_search_head' in groups or 'splunk_cluster_master' in groups and not inventory_hostname in groups['splunk_distributed_monitoring_console']"
+    when: 
+      - "'splunk_indexer' in groups or 'splunk_search_head' in groups or 'splunk_cluster_master' in groups"
+      - "not inventory_hostname in groups['splunk_distributed_monitoring_console']"
   
   - name: "Restart the splunkd service - Via CLI"
     command: "{{ splunk.exec }} restart -f --answer-yes --accept-license"
