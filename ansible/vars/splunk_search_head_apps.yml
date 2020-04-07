@@ -93,4 +93,7 @@ splunk:
         # splunk app for windows infrastructure
         - https://splunkbase.splunk.com/app/1680/release/2.0.1/download/
 
+        # splunk supporting add-on for active directory
+        - https://splunkbase.splunk.com/app/1151/release/3.0.1/download/
+
         
