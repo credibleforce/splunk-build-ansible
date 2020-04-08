@@ -110,7 +110,6 @@
       [serverClass:wef_server:app:outputs_indexer_cluster]
 
       [serverClass:domain_controller:app:inputs_win_dns]
-      [serverClass:domain_controller:app:inputs_win_dc]
       [serverClass:domain_controller:app:Splunk_TA_windows]
       [serverClass:domain_controller:app:outputs_indexer_cluster]
 

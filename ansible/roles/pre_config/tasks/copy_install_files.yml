@@ -39,7 +39,7 @@
     - /tmp/indexes.tgz
     - /tmp/inputs_forwarded_events.tgz
     - /tmp/inputs_win_dns.tgz
-    - /tmp/inputs_win_dc.tgz  
+    - /tmp/Splunk_TA_windows.tgz  
     - /tmp/inputs_suricata.tgz 
     - /tmp/splunk_inventory.csv
     - /tmp/lab_inventory.csv
