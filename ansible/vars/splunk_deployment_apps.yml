@@ -6,3 +6,6 @@ splunk:
         - /tmp/inputs_win_dns.tgz
         - /tmp/inputs_win_dc.tgz
         - /tmp/inputs_suricata.tgz
+
+        # windows ta
+        - https://splunkbase.splunk.com/app/742/release/7.0.0/download/
