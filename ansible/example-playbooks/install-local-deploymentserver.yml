@@ -14,9 +14,6 @@
     - name: Create Splunk User
       import_tasks: ../roles/pre_config/tasks/add_splunk_user_accounts.yml
 
-    - name: Disable THP
-      import_tasks: ../roles/pre_config/tasks/disable_thp.yml
-
 #######################################################################################################################
 # INSTALL DEPLOYMENT SERVER
 #######################################################################################################################
