@@ -4,7 +4,7 @@
 #######################################################################################################################
 - hosts: local
   vars_files:
-    - ../vars/default-standalone.yml 
+    - ../vars/default.yml 
   tasks:
     # download splunk enterprise and uf to /tmp/splunk.rpm and /tmp/splunkuf.rpm
     - name: Download Splunk
@@ -17,7 +17,7 @@
 
 - hosts: splunk_deployment_server
   vars_files:
-    - ../vars/default-standalone.yml
+    - ../vars/default.yml
   gather_facts: True
   pre_tasks:
     - name: Include Deployment Server Variable
