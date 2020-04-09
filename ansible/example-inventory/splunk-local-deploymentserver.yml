@@ -1,0 +1,21 @@
+all:
+    children:
+      local:
+        hosts:
+          localhost:
+        vars:
+          ansible_connection: local
+          ansible_python_interpreter: "{{ansible_playbook_python}}"
+      splunk:
+        vars:
+          ansible_connection: ssh
+          ansible_system: Linux
+        children:
+          splunk_deployment_server:
+            vars:
+              ansible_connection: local
+              splunk:
+                hostname: "{{ inventory_hostname }}"
+                role: "splunk_deployment_server"
+            hosts:
+              splkdp1.psl.local:

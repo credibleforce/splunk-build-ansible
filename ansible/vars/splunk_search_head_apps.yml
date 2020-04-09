@@ -87,4 +87,15 @@ splunk:
         # suricata
         - https://splunkbase.splunk.com/app/4242/release/2.3.4/download/
 
+        # splunk app for infrastructure
+        - https://splunkbase.splunk.com/app/3975/release/2.0.3/download/
+
+        # splunk app for windows infrastructure
+        - https://splunkbase.splunk.com/app/1680/release/2.0.1/download/
+
+        # splunk supporting add-on for active directory
+        - https://splunkbase.splunk.com/app/1151/release/3.0.1/download/
+
+        # splunk azure add-on for splunk
+        - https://splunkbase.splunk.com/app/3757/release/2.0.2/download/
         

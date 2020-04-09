@@ -1,0 +1,43 @@
+---
+#######################################################################################################################
+# EXAMPLE DEPLOYMENT SERVER AND UNIVERSAL FORWARDER DEPLOYMENT
+#######################################################################################################################
+- hosts: local
+  vars_files:
+    - ../vars/default.yml 
+  tasks:
+    # download splunk enterprise and uf to /tmp/splunk.rpm and /tmp/splunkuf.rpm
+    - name: Download Splunk
+      include_role:
+        name: download_splunk
+    
+    - name: Create Splunk User
+      import_tasks: ../roles/pre_config/tasks/add_splunk_user_accounts.yml
+
+#######################################################################################################################
+# INSTALL DEPLOYMENT SERVER
+#######################################################################################################################
+
+- hosts: splunk_deployment_server
+  vars_files:
+    - ../vars/default.yml
+  gather_facts: True
+  pre_tasks:
+    - name: Include Deployment Server Variable
+      include_vars: ../vars/splunk_deployment_server.yml
+    
+    - name: Include Deployment Client Variable
+      include_vars: ../vars/splunk_deployment_client.yml
+  
+  post_tasks:
+    
+    # Set ulimits by service (assumes systemd service deployment)
+    - name: Post install config
+      import_tasks: ../roles/post_config/tasks/update_service_ulimit.yml
+      
+  tasks:
+
+    # DEPLOYMENTSERVER - check for splunk_deployment_server role
+    - name: Splunk splunk_deployment_server tasks
+      include_role:
+        name: splunk_deployment_server

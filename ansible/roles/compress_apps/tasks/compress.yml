@@ -9,6 +9,7 @@
     - { path: '../files/apps/indexes', dest: '/tmp/indexes.tgz' }
     - { path: '../files/apps/inputs_forwarded_events', dest: '/tmp/inputs_forwarded_events.tgz' }
     - { path: '../files/apps/inputs_win_dns', dest: '/tmp/inputs_win_dns.tgz' }
+    - { path: '../files/apps/Splunk_TA_windows', dest: '/tmp/Splunk_TA_windows.tgz' }
     - { path: '../files/apps/props_win_dns', dest: '/tmp/props_win_dns.tgz' }
     - { path: '../files/apps/transforms_forwarded_events', dest: '/tmp/transforms_forwarded_events.tgz' }
     - { path: '../files/apps/inputs_suricata', dest: '/tmp/inputs_suricata.tgz' }
