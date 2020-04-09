@@ -96,4 +96,6 @@ splunk:
         # splunk supporting add-on for active directory
         - https://splunkbase.splunk.com/app/1151/release/3.0.1/download/
 
+        # splunk azure add-on for splunk
+        - https://splunkbase.splunk.com/app/3757/release/2.0.2/download/
         
