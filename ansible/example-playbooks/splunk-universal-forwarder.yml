@@ -10,7 +10,7 @@
 
 - hosts: local
   vars_files:
-    - ../vars/default-clustered.yml
+    - ../vars/default.yml
 
   pre_tasks:
     #########################################
@@ -68,7 +68,7 @@
 # STAGE 4 - UNIVERSAL FORWARDER
 - hosts: splunk_universal_forwarder
   vars_files:
-    - ../vars/default-clustered.yml
+    - ../vars/default.yml
   gather_facts: True
   pre_tasks:
     #########################################

@@ -4,7 +4,7 @@
 
 - hosts: local
   vars_files:
-    - ../vars/default-clustered.yml
+    - ../vars/default.yml
   tasks:
 
     # compress local apps
@@ -15,7 +15,7 @@
 # STAGE 3 - AFTER INFRATRUCTURE BUILD PUSH APPS IN DISTRIBUTED ENVIRONMENT
 - hosts: splunk_deployer:splunk_deployment_server:splunk_cluster_master
   vars_files:
-    - ../vars/default-clustered.yml
+    - ../vars/default.yml
   gather_facts: True
 
   pre_tasks:  

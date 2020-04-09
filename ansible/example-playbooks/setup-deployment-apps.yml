@@ -2,7 +2,7 @@
 # STAGE 1 - DEPLOYMENT SERVER CONFIG
 - hosts: splunk_deployment_server
   vars_files:
-    - ../vars/default-clustered.yml
+    - ../vars/default.yml
   gather_facts: True
   
   #environment:
