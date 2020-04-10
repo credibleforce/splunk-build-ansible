@@ -16,7 +16,7 @@
     enable_service: true
     exec: /opt/splunkforwarder/bin/splunk
     home: /opt/splunkforwarder
-    password: helloworld
+    password: "{{ lookup('env','SPLUNK_PASSWORD') | default('3Dj4gk5sJyzbKt94DTH3TF78') }}"
     pid: /opt/splunkforwarder/var/run/splunk/splunkd.pid
     tar_dir: splunkforwarder
     wildcard_license: false
