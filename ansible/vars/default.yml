@@ -52,7 +52,7 @@ splunk:
   license_download_dest: /tmp/splunk.licences
   nfr_license: /tmp/splunk.lic
   opt: /opt
-  password: uOOuUI5D2flIqVXchggUOE+h0DFQV/zo
+  password: "{{ lookup('env','SPLUNK_PASSWORD') | default('uOOuUI5D2flIqVXchggUOE+h0DFQV/zo') }}"
   pid: /opt/splunk/var/run/splunk/splunkd.pid
   root_endpoint: null
   secret: null
