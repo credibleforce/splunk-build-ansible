@@ -1,19 +1,40 @@
 #!/bin/bash
 
+display_help() {
+        echo "Usage: $(basename "$0") [option...]" >&2
+        echo
+        echo "  $(basename "$0") -p <SPLUNK_PASSWORD>     Splunk Web Password"
+        echo "  $(basename "$0") -h                       Display this help message"
+        echo
+        exit 1
+}
 
-################################################################################
-# Example local deployment server setup
-################################################################################
+while getopts p:h opt
+do
+    case "${opt}" in
+        p)
+            SPLUNK_PASSWORD=${OPTARG}
+            ;;
+        h)
+            display_help
+            ;;
+        \?)
+            echo "Invalid Option: -$OPTARG" 1>&2
+            echo
+            display_help
+            ;;
+    esac
+done
 
-################################################################################
-#
-#   Before running this script:
-#   ----------------------------
-#
-#   1) update the example-inventory/splunk-local-deploymentserver.yml replacing splkdp1.psl.local with the hostname of the system being setup
-#   2) update the splunk.password in vars/default.yml with the password you will use to access the splunk web interface
-#
-################################################################################
+if [[ -z "$SPLUNK_PASSWORD" ]]
+then
+        echo "Required Option: -p not set" 1>&2
+    echo
+    display_help
+fi
+
+# export splunk password for ansible usage
+export SPLUNK_PASSWORD=$SPLUNK_PASSWORD
 
 # install pre-requisites
 yum install -y epel-release 
