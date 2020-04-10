@@ -54,7 +54,3 @@ cd ansible
 
 # install
 ansible-playbook -vv -i example-inventory/splunk-local-deploymentserver.yml example-playbooks/install-local-deploymentserver.yml
-
-# remove outpus
-rm -f /opt/splunk/etc/system/local/outputs.conf
-sudo su - splunk /bin/bash -c '/opt/splunk/bin/splunk restart'
