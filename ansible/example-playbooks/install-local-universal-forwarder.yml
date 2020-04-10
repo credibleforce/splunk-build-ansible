@@ -28,9 +28,7 @@
 
     - name: Include Universal Forwarder Variable
       include_vars: ../vars/splunk_universal_forwarder.yml
-      when: 
-        - splunk_enable_universal_forwarder 
-        - inventory_hostname in groups['splunk_universal_forwarder']
+      
   post_tasks:
   tasks:
 
