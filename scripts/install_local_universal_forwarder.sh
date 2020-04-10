@@ -10,7 +10,7 @@ display_help() {
         exit 1
 }
 
-while getopts p:h opt
+while getopts p:d:h opt
 do
     case "${opt}" in
         p)
