@@ -65,4 +65,4 @@ git submodule update --init --recursive
 cd ansible
 
 # install
-ansible-playbook -vv -i example-inventory/splunk-local-universal-forwarder.yml example-playbooks/install-local-universal0-forwarder.yml
+ansible-playbook -vv -i example-inventory/splunk-local-universal-forwarder.yml example-playbooks/install-local-universal-forwarder.yml
