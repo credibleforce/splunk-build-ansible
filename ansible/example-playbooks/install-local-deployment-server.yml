@@ -23,6 +23,16 @@
     - ../vars/default.yml
   gather_facts: True
   pre_tasks:
+    # Include additional variables as required
+    - name: Include Global S2S Variable
+      include_vars: ../vars/splunk_s2s.yml
+
+    - name: Include Global HEC Variable
+      include_vars: ../vars/splunk_hec.yml
+
+    - name: Include Global DFS Variable
+      include_vars: ../vars/splunk_dfs.yml
+      
     - name: Include Deployment Server Variable
       include_vars: ../vars/splunk_deployment_server.yml
     
