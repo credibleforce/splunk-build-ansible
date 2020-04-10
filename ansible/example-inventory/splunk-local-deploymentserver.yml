@@ -18,4 +18,4 @@ all:
                 hostname: "{{ inventory_hostname }}"
                 role: "splunk_deployment_server"
             hosts:
-              splkdp1.psl.local:
+              localhost:
