@@ -4,6 +4,7 @@ display_help() {
         echo "Usage: $(basename "$0") [option...]" >&2
         echo
         echo "  $(basename "$0") -p <SPLUNK PASSWORD>     Splunk Web Password"
+        echo "  $(basename "$0") -d <HOSTNAME FOR SPLUNK DEPLOYMENTSERVER>     Splunk Deployment Server"
         echo "  $(basename "$0") -h                       Display this help message"
         echo
         exit 1
@@ -14,6 +15,9 @@ do
     case "${opt}" in
         p)
             SPLUNK_PASSWORD=${OPTARG}
+            ;;
+        d)
+            SPLUNK_DEPLOYMENT_SERVER=${OPTARG}
             ;;
         h)
             display_help
@@ -33,8 +37,16 @@ then
     display_help
 fi
 
-# export splunk password for ansible usage
+if [[ -z "$SPLUNK_DEPLOYMENT_SERVER" ]]
+then
+        echo "Required Option: -p not set" 1>&2
+    echo
+    display_help
+fi
+
+# export splunk password and deployment server for ansible usage
 export SPLUNK_PASSWORD=$SPLUNK_PASSWORD
+export SPLUNK_DEPLOYMENT_SERVER=$SPLUNK_DEPLOYMENT_SERVER
 
 # install pre-requisites
 yum install -y epel-release 
@@ -53,4 +65,4 @@ git submodule update --init --recursive
 cd ansible
 
 # install
-ansible-playbook -vv -i example-inventory/splunk-local-deployment-server.yml example-playbooks/install-local-deployment-server.yml
+ansible-playbook -vv -i example-inventory/splunk-local-universal-forwarder.yml example-playbooks/install-local-universal0-forwarder.yml

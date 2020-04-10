@@ -1,0 +1,34 @@
+---
+#######################################################################################################################
+# EXAMPLE UNIVERSAL FORWARDER DEPLOYMENT
+#######################################################################################################################
+- hosts: local
+  vars_files:
+    - ../vars/default.yml 
+  tasks:
+    # download splunk enterprise and uf to /tmp/splunk.rpm and /tmp/splunkuf.rpm
+    - name: Download Splunk
+      include_role:
+        name: download_splunk
+    
+    - name: Create Splunk User
+      import_tasks: ../roles/pre_config/tasks/add_splunk_user_accounts.yml
+
+#######################################################################################################################
+# INSTALL UNIVERSAL FORWADER
+#######################################################################################################################
+
+- hosts: splunk_universal_forwarder
+  vars_files:
+    - ../vars/default.yml
+  gather_facts: True
+  pre_tasks:
+    - name: Include Deployment Client Variable
+      include_vars: ../vars/splunk_deployment_client.yml
+  post_tasks:
+  tasks:
+
+    # UNIVERSAL FORWARDER - check for splunk_universal_forwarder role
+    - name: Splunk splunk_universal_forwarder tasks
+      include_role:
+        name: splunk_universal_forwarder
