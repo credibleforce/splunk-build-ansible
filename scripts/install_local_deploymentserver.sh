@@ -52,5 +52,8 @@ cd splunk-engagement-ansible
 git submodule update --init --recursive
 cd ansible
 
+# stage license file
+cp splunk.lic /tmp/splunk.lic >/dev/null 2>&1
+
 # install
 ansible-playbook -vv -i example-inventory/splunk-local-deployment-server.yml example-playbooks/install-local-deployment-server.yml
