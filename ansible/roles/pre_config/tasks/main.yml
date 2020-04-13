@@ -9,6 +9,7 @@
 
 # always copy install files
 - import_tasks: copy_install_files.yml
+  when: ansible_connection != 'local'
 
 # level 1 tasks (basic)
 - import_tasks: add_splunk_user_accounts.yml
