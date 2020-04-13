@@ -32,7 +32,7 @@
     src: "{{ item }}"
     dest: /tmp
   when: 
-    - splunk_install_deployment_apps
+    - splunk_install_deployment_apps is defined and splunk_install_deployment_apps
     - "'splunk_deployment_server' in groups"
     - inventory_hostname in groups['splunk_deployment_server']
   with_items:
