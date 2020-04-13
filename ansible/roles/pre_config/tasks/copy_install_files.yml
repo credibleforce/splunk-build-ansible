@@ -52,7 +52,7 @@
     src: "{{ item }}"
     dest: /tmp
   when: 
-    - splunk_enable_shc and splunk_install_search_head_apps
+    - (splunk_enable_shc is defined and splunk_install_search_head_apps is defined) and (splunk_enable_shc and splunk_install_search_head_apps)
     - "'splunk_deployer' in groups"
     - inventory_hostname in groups['splunk_deployer']
   with_items:
@@ -66,7 +66,7 @@
     src: "{{ item }}"
     dest: /tmp
   when: 
-    - not splunk_enable_shc and splunk_install_search_head_apps
+    - (splunk_enable_shc is defined and splunk_install_search_head_apps is defined) and (not splunk_enable_shc and splunk_install_search_head_apps)
     - "('splunk_search_head' in groups and inventory_hostname in groups['splunk_search_head']) or ('splunk_search_head' in groups and inventory_hostname in groups['splunk_standalone'])"
   with_items:
     - /tmp/indexes.tgz
@@ -79,7 +79,7 @@
     src: "{{ item }}"
     dest: /tmp
   when: 
-    - splunk_enable_idxc and splunk_install_indexer_apps
+    - (splunk_enable_idxc is defined and splunk_install_indexer_apps is defined) and (splunk_enable_idxc and splunk_install_indexer_apps)
     - inventory_hostname in groups['splunk_cluster_master']
   with_items:
     - /tmp/indexes.tgz
@@ -95,7 +95,7 @@
     src: "{{ item }}"
     dest: /tmp
   when: 
-    - not splunk_enable_idxc and splunk_install_indexer_apps 
+    - (splunk_enable_idxc is defined and splunk_install_indexer_apps is defined) and (not splunk_enable_idxc and splunk_install_indexer_apps )
     - "'splunk_indexer' in groups"
     - inventory_hostname in groups['splunk_indexer'] 
   with_items:
