@@ -1,6 +1,6 @@
 ---
 #######################################################################################################################
-# EXAMPLE UNIVERSAL FORWARDER DEPLOYMENT
+# EXAMPLE DEPLOYMENT SERVER AND UNIVERSAL FORWARDER DEPLOYMENT
 #######################################################################################################################
 - hosts: local
   vars_files:
@@ -10,15 +10,12 @@
     - name: Download Splunk
       include_role:
         name: download_splunk
-    
-    - name: Create Splunk User
-      import_tasks: ../roles/pre_config/tasks/add_splunk_user_accounts.yml
 
 #######################################################################################################################
-# INSTALL UNIVERSAL FORWADER
+# INSTALL STANDALONE
 #######################################################################################################################
 
-- hosts: splunk_universal_forwarder
+- hosts: splunk_standalone
   vars_files:
     - ../vars/default.yml
   gather_facts: True
@@ -32,25 +29,24 @@
 
     - name: Include Global DFS Variable
       include_vars: ../vars/splunk_dfs.yml
-
-    - name: Include Deployment Client Variable
-      include_vars: ../vars/splunk_deployment_client.yml
-
-    - name: Include Universal Forwarder Variable
-      include_vars: ../vars/splunk_universal_forwarder.yml
-
-    # PRE CONFIG - Add users
-    - name: Include Basic Pre-config
-      include_vars: ../vars/splunk_pre_config_basic.yml
+  
+    # PRE CONFIG - Add users, disable thp
+    - name: Include Intermediate Pre-config
+      include_vars: ../vars/splunk_pre_config_intermediate.yml
 
     - name: Custom splunk server pre-config (setup user)
       include_role:
         name: pre_config
 
   post_tasks:
+    
+    # Set ulimits by service (assumes systemd service deployment)
+    - name: Post install config
+      import_tasks: ../roles/post_config/tasks/update_service_ulimit.yml
+      
   tasks:
 
-    # UNIVERSAL FORWARDER - check for splunk_universal_forwarder role
-    - name: Splunk splunk_universal_forwarder tasks
+    # STANDALONE - check for splunk_standalone role
+    - name: Splunk splunk_standalone tasks
       include_role:
-        name: splunk_universal_forwarder
+        name: splunk_standalone
