@@ -51,10 +51,10 @@
     
       tasks:
     
-        # DEPLOYMENTSERVER - check for splunk_deployment_server role
-        - name: Splunk splunk_deployment_server tasks
+        # DEPLOYMENTSERVER - check for splunK_standalone role
+        - name: Splunk splunK_standalone tasks
           include_role:
-            name: splunk_deployment_server
+            name: splunK_standalone
     
     
     #######################################################################################################################
