@@ -1,0 +1,158 @@
+---
+    #######################################################################################################################
+    # EXAMPLE DEPLOYMENT SERVER AND UNIVERSAL FORWARDER DEPLOYMENT
+    #######################################################################################################################
+    - hosts: local
+      vars_files:
+        - ../vars/default.yml 
+      tasks:
+        # download splunk enterprise and uf to /tmp/splunk.rpm and /tmp/splunkuf.rpm
+        - name: Download Splunk
+          include_role:
+            name: download_splunk
+    
+    #######################################################################################################################
+    # INSTALL STANDALONE SERVER
+    #######################################################################################################################
+    
+    - hosts: splunk_standalone
+      vars_files:
+        - ../vars/default.yml
+      gather_facts: True
+      pre_tasks:
+        # Include additional variables as required
+        - name: Include Global S2S Variable
+          include_vars: ../vars/splunk_s2s.yml
+    
+        - name: Include Global HEC Variable
+          include_vars: ../vars/splunk_hec.yml
+    
+        - name: Include Global DFS Variable
+          include_vars: ../vars/splunk_dfs.yml
+    
+        - name: Include Deployment Server Variable
+          include_vars: ../vars/splunk_deployment_server.yml
+    
+        - name: Include Deployment Client Variable
+          include_vars: ../vars/splunk_deployment_client.yml
+    
+        # PRE CONFIG - Add users, disable thp
+        - name: Include Intermediate Pre-config
+          include_vars: ../vars/splunk_pre_config_intermediate.yml
+    
+        - name: Custom splunk server pre-config (setup user)
+          include_role:
+            name: pre_config
+    
+      post_tasks:
+        # Set ulimits by service (assumes systemd service deployment)
+        - name: Post install config
+          import_tasks: ../roles/post_config/tasks/main.yml
+    
+      tasks:
+    
+        # DEPLOYMENTSERVER - check for splunK_standalone role
+        - name: Splunk splunK_standalone tasks
+          include_role:
+            name: splunK_standalone
+    
+    
+    #######################################################################################################################
+    # INSTALL DEPLOYMENT SERVER
+    #######################################################################################################################
+    
+    - hosts: splunk_deployment_server
+      vars_files:
+        - ../vars/default.yml
+      gather_facts: True
+      pre_tasks:
+        # Include additional variables as required
+        - name: Include Global S2S Variable
+          include_vars: ../vars/splunk_s2s.yml
+    
+        - name: Include Global HEC Variable
+          include_vars: ../vars/splunk_hec.yml
+    
+        - name: Include Global DFS Variable
+          include_vars: ../vars/splunk_dfs.yml
+    
+        - name: Include Deployment Server Variable
+          include_vars: ../vars/splunk_deployment_server.yml
+        
+        - name: Include Deployment Client Variable
+          include_vars: ../vars/splunk_deployment_client.yml
+    
+        # PRE CONFIG - Add users
+        - name: Include Intermediate Pre-config
+          include_vars: ../vars/splunk_pre_config_basic.yml
+    
+        - name: Custom splunk server pre-config (setup user)
+          include_role:
+            name: pre_config
+      
+      post_tasks:
+        # Set ulimits by service (assumes systemd service deployment)
+        - name: Post install config
+          import_tasks: ../roles/post_config/tasks/main.yml
+          
+      tasks:
+    
+        # DEPLOYMENTSERVER - check for splunk_deployment_server role
+        - name: Splunk splunk_deployment_server tasks
+          include_role:
+            name: splunk_deployment_server
+     
+          
+    #######################################################################################################################
+    # INSTALL UNIVERSAL FORWARDER
+    #######################################################################################################################
+    
+    - hosts: splunk_universal_forwarder
+      vars_files:
+        - ../vars/default.yml
+      gather_facts: True
+      pre_tasks:
+        # Include additional variables as required
+        - name: Include Global S2S Variable
+          include_vars: ../vars/splunk_s2s.yml
+    
+        - name: Include Global HEC Variable
+          include_vars: ../vars/splunk_hec.yml
+    
+        - name: Include Global DFS Variable
+          include_vars: ../vars/splunk_dfs.yml
+      
+        - name: Include Deployment Server Variable
+          include_vars: ../vars/splunk_deployment_server.yml
+        
+        - name: Include Deployment Client Variable
+          include_vars: ../vars/splunk_deployment_client.yml
+    
+        # PRE CONFIG - Add users
+        - name: Include Intermediate Pre-config
+          include_vars: ../vars/splunk_pre_config_basic.yml
+    
+        - name: Custom splunk server pre-config (setup user)
+          include_role:
+            name: pre_config
+    
+        #########################################
+        # VARIABLES DEFINING UNIVERSAL FORWARDER CONFIG
+        ##########################################
+    
+        # Set universal_forwarder
+        - name: Include Universal Forwarder Variable
+          include_vars: ../vars/splunk_universal_forwarder.yml
+    
+      post_tasks:
+        # Set ulimits by service (assumes systemd service deployment)
+        - name: Post install config
+          import_tasks: ../roles/post_config/tasks/main.yml
+            
+      tasks:
+    
+        # UNIVERSAL FORWARDER - check for splunk_universal_forwarder role
+        - name: Splunk splunk_universal_forwarder tasks
+          include_role:
+            name: splunk_universal_forwarder
+    
