@@ -5,11 +5,25 @@
     dest: "/etc/init.d/disable-transparent-hugepages"
     mode: 0755
   become: yes
+  when:
+    - not ansible_service_mgr == "systemd"
 
 - name: Run service disable transparent hugepages
   service:
     name: disable-transparent-hugepages
     state: started
     enabled: yes
-  when: not ansible_check_mode
   become: yes
+  when: 
+    - not ansible_check_mode
+    - not ansible_service_mgr == "systemd"
+
+- name: install disable-transparent-hugepages systemd unit file
+  template: src=disable-transparent-hugepages.j2 dest=/etc/systemd/system/disable-transparent-hugepages.service
+  become: yes
+  when: ansible_service_mgr == "systemd"
+
+- name: start disable-transparent-hugepages
+  systemd: state=started name=disable-transparent-hugepages daemon_reload=yes
+  become: yes
+  when: ansible_service_mgr == "systemd"
