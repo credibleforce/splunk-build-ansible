@@ -16,7 +16,7 @@ all:
             splunk:
               hostname: "{{ inventory_hostname }}"
               role: "splunk_standalone"
-          host:
+          hosts:
             splksh1.psl.local
         splunk_deployment_server:
           vars:
