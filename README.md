@@ -17,7 +17,7 @@ Playbooks use a named account `deployer` for ansible ansible tasks on inventory 
 3. Clone repo `git clone https://github.com/ps-sec-analytics/splunk-engagement-ansible.git`
 4. Change directory to `cd splunk-engagement-ansible`
 5. Pull the splunk-ansible submodule `git submodule update --init --recursive`
-6. Change directory to ansible-deployment folder `cd ansible-deployment`
+6. Change directory to ansible-deployment folder `cd ansible`
 7. Use or update one of the existing inventory files in `inventory` directory
 8. Use or update one of the existing playbooks in the `playbooks`. Examples of standalone, deploymentserver only, and advanced configuration are provided.
 9. Run the playbook and inventory of your choice, for example `ansible-playbook -vv -i example-inventory/splunk-standalone.yml playbooks/install-standalone.yml`
