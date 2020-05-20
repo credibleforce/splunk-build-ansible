@@ -15,7 +15,7 @@
 # INSTALL INDEXER, SEARCH HEAD, DEPLOYMENT SERVER/LICENSE MASTER, UNIVERSAL FORWARDER
 #######################################################################################################################
 
-- hosts: splunk_indexer:splunk_search_head:splunk_deployment_server:splunk_universal_forwarder
+- hosts: splunk_indexer:splunk_search_head:splunk_deployment_server:splunk_license_master:splunk_universal_forwarder
   vars_files:
     - ../vars/default.yml
   gather_facts: True
