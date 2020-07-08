@@ -32,7 +32,7 @@ In scenarios where ansible testing is taking place or where it cannot be install
 
 1. Clone the ansible repo `git clone --single-branch --branch 'stable-2.9' https://github.com/ansible/ansible.git`
 2. Change director to ansible directory `cd ansible`
-3. Install required python modules `pip-3 install -r requirements.txt`
+3. Install required python modules `pip3 install -r requirements.txt`
 4. Setup ansible environment `source ./hacking/env-setup`
 
 ## Example Standalone Deployment Architecture
