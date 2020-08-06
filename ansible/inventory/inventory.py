@@ -61,7 +61,7 @@ class ExampleInventory(object):
                 }
                 
                 for child_group in group.child_groups:
-                    # a yukcy hack for some splunk-ansible splunk_search_head "logic" forcing empty list for standalone
+                    # a yucky hack for some splunk-ansible splunk_search_head "logic" forcing empty list for standalone
                     hosts.extend([] if standalone else [h.name for h in child_group.hosts])
                     out[child_group.name] = { 'hosts': [] } if standalone else {
                         'hosts': [h.name for h in child_group.hosts],
