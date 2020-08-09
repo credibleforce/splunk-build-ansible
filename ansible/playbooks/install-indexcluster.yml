@@ -193,10 +193,103 @@
         - inventory_hostname in groups['splunk_search_head']
 
 #######################################################################################################################
+# DEPLOPY HEAVY FORWARDER PLAY
+#######################################################################################################################
+
+# STAGE 3 - HEAVY FORWARDER
+- hosts: splunk_heavy_forwarder
+  vars_files:
+    - ../vars/default.yml
+  gather_facts: True
+  pre_tasks:
+
+    #########################################
+    # CUSTOM GLOBALS
+    #########################################
+    
+    - name: Include Custom Globals Variable
+      include_vars: ../vars/splunk_custom_global.yml
+
+    #########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
+
+    # Include additional variables as required
+    - name: Include Global S2S Variable
+      include_vars: ../vars/splunk_s2s.yml
+
+    - name: Include Global HEC Variable
+      include_vars: ../vars/splunk_hec.yml
+
+    - name: Include Global DFS Variable
+      include_vars: ../vars/splunk_dfs.yml
+
+    - name: Include SHC Variable
+      include_vars: ../vars/splunk_search_head_cluster.yml
+      when: splunk_enable_shc
+
+    - name: Include IDXC Variable
+      include_vars: ../vars/splunk_index_cluster.yml
+      when: splunk_enable_idxc
+
+    - name: Include Multisite Variable
+      include_vars: ../vars/splunk_multisite.yml
+      when: splunk_enable_multisite
+
+    - name: Include Deployment Server Variable
+      include_vars: ../vars/splunk_deployment_server.yml
+      when: splunk_enable_deployment_server
+
+    - name: Include License Master Variable
+      include_vars: ../vars/splunk_license_master.yml
+      when: 
+        - splunk_enable_license_master
+        - "(not 'splunk_universal_forwarder' in groups) or (not inventory_hostname in groups['splunk_universal_forwarder'])"
+
+    - name: Include Deployment Client Variable
+      include_vars: ../vars/splunk_deployment_client.yml
+      when: 
+        - splunk_enable_deployment_server
+        - not inventory_hostname in groups['splunk_deployment_server']
+  
+    #########################################
+    # VARIABLES DEFINING HEAVY FORWARDER CONFIG
+    ##########################################
+
+    # Set heavy_forwarder
+    - name: Include Heavy Forwarder Variable
+      include_vars: ../vars/splunk_heavy_forwarder.yml
+      when: 
+        - splunk_enable_heavy_forwarder 
+        - inventory_hostname in groups['splunk_heavy_forwarder']
+
+    #########################################
+    # PRECONFIG TASKS
+    ##########################################
+
+    # PRE CONFIG - Add users, Ulimits, etc
+    - name: Include Pre Config Variable
+      include_vars: ../vars/splunk_pre_config_advanced.yml
+
+    - name: Custom splunk server pre-config (setup user)
+      include_role:
+        name: pre_config
+
+  tasks:
+
+    #########################################
+    # TASKS
+    ##########################################
+
+    - name: Splunk splunk_heavy_forwarder tasks
+      include_role:
+        name: splunk_heavy_forwarder
+
+#######################################################################################################################
 # DEPLOPY UNIVERSAL FORWARDER PLAY
 #######################################################################################################################
 
-# STAGE 3 - UNIVERSAL FORWARDER
+# STAGE 4 - UNIVERSAL FORWARDER
 - hosts: splunk_universal_forwarder
   vars_files:
     - ../vars/default.yml
