@@ -7,6 +7,7 @@
   retries: 10
   delay: 6
   register: result
+  mode: 0644
   until: result is succeeded 
 
 - name: Download splunk uf
@@ -16,6 +17,7 @@
   retries: 10
   delay: 5
   register: result
+  mode: 0644
   until: result is succeeded 
   when: 
     - "'splunk_universal_forwarder' in groups"
