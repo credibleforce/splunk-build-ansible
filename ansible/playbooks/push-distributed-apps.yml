@@ -62,6 +62,7 @@
       include_vars: ../splunk-ansible/roles/splunk_common/vars/main.yml
     
     # DEPLOYMENT SERVER Apps Variable
+    # deployment server
     - name: Include Deployment Apps variables
       include_vars: ../vars/splunk_deployment_apps.yml
       when: 
