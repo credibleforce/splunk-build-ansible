@@ -92,12 +92,12 @@
       loop: "{{ splunk.apps_location }}"
       when: inventory_hostname in groups['splunk_deployment_server']
     
-    # - name: Install deployment server apps
-    #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/install_apps.yml
-    #   vars:
-    #     app_url: "{{ item }}"
-    #   loop: "{{ splunk.apps_location }}"
-    #   when: inventory_hostname in groups['splunk_deployment_server']
+    - name: Install deployment server apps
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/install_apps.yml
+      vars:
+        app_url: "{{ item }}"
+      loop: "{{ splunk.apps_location }}"
+      when: inventory_hostname in groups['splunk_deployment_server']
   
     # - name: Find deployment server installed apps
     #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
