@@ -57,6 +57,10 @@
     # VARIABLES DEFINING APP INSTALLATION
     ##########################################
     
+    # SPLUNK COMMON Apps Variable
+    - name: Include Default Apps Vars
+      include_vars: ../splunk-ansible/roles/splunk_common/vars/main.yml
+    
     # DEPLOYMENT SERVER Apps Variable
     - name: Include Deployment Apps variables
       include_vars: ../vars/splunk_deployment_apps.yml
