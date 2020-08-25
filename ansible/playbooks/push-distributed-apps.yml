@@ -83,19 +83,33 @@
     ##########################################
 
     # DEPLOYMENT SERVER - check for splunk_deployment_server role
-    - name: Splunk splunk_deployment_server tasks
-      include_role:
-        name: splunk_deployment_server
+    - name: Install deployment server apps
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/install_apps.yml
+      vars:
+        app_url: "{{ item }}"
+      loop: "{{ splunk.apps_location }}"
+  
+    - name: Find deployment server installed apps
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
+  
+    - name: Copy deployment server install
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
+      vars:
+        apps: "{{ installed_apps }}"
+        dest: "{{ splunk.app_paths.deployment }}"
+  
+    - name: Disable installed apps
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
       when: inventory_hostname in groups['splunk_deployment_server']
     
-    # CLUSTER MASTER - check for splunk_cluster_master role
-    - name: Splunk cluster_master tasks
-      include_role:
-        name: splunk_cluster_master
-      when: inventory_hostname in groups['splunk_cluster_master']
+    # # CLUSTER MASTER - check for splunk_cluster_master role
+    # - name: Splunk cluster_master tasks
+    #   include_role:
+    #     name: splunk_cluster_master
+    #   when: inventory_hostname in groups['splunk_cluster_master']
 
-     # DEPLOYER
-    - name: Splunk splunk_deployer tasks
-      include_role:
-        name: splunk_deployer
-      when: inventory_hostname in groups['splunk_deployer']
+    #  # DEPLOYER
+    # - name: Splunk splunk_deployer tasks
+    #   include_role:
+    #     name: splunk_deployer
+    #   when: inventory_hostname in groups['splunk_deployer']
