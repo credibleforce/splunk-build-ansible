@@ -88,46 +88,67 @@
     ##########################################
 
     # DEPLOYMENT SERVER - check for splunk_deployment_server role
-    - name: Push apps to deployment server
+    # - name: Push apps to deployment server
+    #   vars:
+    #     app_url: "{{ item }}"
+    #   copy:
+    #     src: "{{app_url}}"
+    #     dest: "{{app_url}}"
+    #   loop: "{{ splunk.apps_location }}"
+    #   when: inventory_hostname in groups['splunk_deployment_server']
+    
+    # - name: Install deployment server apps
+    #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/install_apps.yml
+    #   vars:
+    #     app_url: "{{ item }}"
+    #   loop: "{{ splunk.apps_location }}"
+    #   when: inventory_hostname in groups['splunk_deployment_server']
+  
+    # - name: Find deployment server installed apps
+    #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
+    #   when: inventory_hostname in groups['splunk_deployment_server']
+  
+    # - name: Copy deployment server install
+    #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
+    #   vars:
+    #     apps: "{{ installed_apps }}"
+    #     dest: "{{ splunk.app_paths.deployment }}"
+    #   when: inventory_hostname in groups['splunk_deployment_server']
+  
+    # - name: Disable installed apps
+    #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
+    #   when: inventory_hostname in groups['splunk_deployment_server']
+    
+    # CLUSTER MASTER - check for splunk_cluster_master role
+    - name: Push apps to cluster master server
       vars:
         app_url: "{{ item }}"
       copy:
         src: "{{app_url}}"
         dest: "{{app_url}}"
       loop: "{{ splunk.apps_location }}"
-      when: inventory_hostname in groups['splunk_deployment_server']
-    
-    - name: Install deployment server apps
+      when: inventory_hostname in groups['splunk_cluster_master']
+
+    - name: Install cluster master apps
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/install_apps.yml
       vars:
         app_url: "{{ item }}"
       loop: "{{ splunk.apps_location }}"
-      when: inventory_hostname in groups['splunk_deployment_server']
-  
-    - name: Find deployment server installed apps
-      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
-      when: inventory_hostname in groups['splunk_deployment_server']
-  
-    - name: Copy deployment server install
-      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
-      vars:
-        apps: "{{ installed_apps }}"
-        dest: "{{ splunk.app_paths.deployment }}"
-      when: inventory_hostname in groups['splunk_deployment_server']
-  
-    - name: Disable installed apps
-      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
-      when: inventory_hostname in groups['splunk_deployment_server']
-    
-    # CLUSTER MASTER - check for splunk_cluster_master role
+      when: inventory_hostname in groups['splunk_cluster_master']
+
     - name: Find cluster master installed apps
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
       when: inventory_hostname in groups['splunk_cluster_master']
 
-    - include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
+    - name: Copy cluster master installed apps
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
       vars:
         apps: "{{ installed_apps }}"
         dest: "{{ splunk.app_paths.idxc }}"
+      when: inventory_hostname in groups['splunk_cluster_master']
+
+    - name: Apply cluster master cluster bundle
+      include_tasks: ../splunk-ansible/roles/splunk_cluster_master/tasks/apply_cluster_bundle.yml
       when: inventory_hostname in groups['splunk_cluster_master']
 
     # DEPLOYER
