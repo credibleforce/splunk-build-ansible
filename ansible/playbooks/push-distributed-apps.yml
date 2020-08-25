@@ -1,0 +1,101 @@
+###########################################################
+# PUSH APPS TO CLUSTER MASTER, DEPLOYMENT_SERVER, DEPLOYER
+############################################################
+
+- hosts: local
+  vars_files:
+    - ../vars/default.yml
+  tasks:
+
+    # compress local apps
+    - name: Compress Apps
+      include_role:
+        name: compress_apps
+
+# STAGE 3 - AFTER INFRATRUCTURE BUILD PUSH APPS IN DISTRIBUTED ENVIRONMENT
+- hosts: splunk_deployer:splunk_deployment_server:splunk_cluster_master
+  vars_files:
+    - ../vars/default.yml
+  gather_facts: True
+
+  pre_tasks:  
+
+    ##########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
+
+    # Include additional variables as required
+    - name: Include Global S2S Variable
+      include_vars: ../vars/splunk_s2s.yml
+
+    - name: Include Global HEC Variable
+      include_vars: ../vars/splunk_hec.yml
+
+    - name: Include Global DFS Variable
+      include_vars: ../vars/splunk_dfs.yml
+
+    - name: Include SHC Variable
+      include_vars: ../vars/splunk_search_head_cluster.yml
+    
+    - name: Include IDXC Variable
+      include_vars: ../vars/splunk_index_cluster.yml
+
+    - name: Include Deployment Server Variable
+      include_vars: ../vars/splunk_deployment_server.yml
+
+    - name: Include License Master Variable
+      include_vars: ../vars/splunk_license_master.yml
+      when: 
+        - "(not 'splunk_universal_forwarder' in groups) or (not inventory_hostname in groups['splunk_universal_forwarder'])"
+
+    - name: Include Deployment Client Variable
+      include_vars: ../vars/splunk_deployment_client.yml
+      when: 
+        - "(not 'splunk_deployment_server' in groups) or (not inventory_hostname in groups['splunk_deployment_server'])"
+    
+    #########################################
+    # VARIABLES DEFINING APP INSTALLATION
+    ##########################################
+    
+    # DEPLOYMENT SERVER Apps Variable
+    - name: Include Deployment Apps variables
+      include_vars: ../vars/splunk_deployment_apps.yml
+      when: 
+        - inventory_hostname in groups['splunk_deployment_server']
+
+    # INDEXER SERVER Apps Variable
+    # cluster
+    - name: Include Indexer Cluster Apps variables
+      include_vars: ../vars/splunk_indexer_apps.yml
+      when: 
+        - inventory_hostname in groups['splunk_cluster_master']
+
+    # SEARCH HEAD Apps Variable
+    # cluster
+    - name: Include Search Head Cluster Apps variables
+      include_vars: ../vars/splunk_search_head_apps.yml
+      when: 
+        - inventory_hostname in groups['splunk_deployer']
+  tasks:
+
+    #########################################
+    # TASKS
+    ##########################################
+
+    # DEPLOYMENT SERVER - check for splunk_deployment_server role
+    - name: Splunk splunk_deployment_server tasks
+      include_role:
+        name: splunk_deployment_server
+      when: inventory_hostname in groups['splunk_deployment_server']
+    
+    # CLUSTER MASTER - check for splunk_cluster_master role
+    - name: Splunk cluster_master tasks
+      include_role:
+        name: splunk_cluster_master
+      when: inventory_hostname in groups['splunk_cluster_master']
+
+     # DEPLOYER
+    - name: Splunk splunk_deployer tasks
+      include_role:
+        name: splunk_deployer
+      when: inventory_hostname in groups['splunk_deployer']
