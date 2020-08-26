@@ -88,14 +88,16 @@
     ##########################################
 
     # DEPLOYMENT SERVER - check for splunk_deployment_server role
-    # - name: Push apps to deployment server
-    #   vars:
-    #     app_url: "{{ item }}"
-    #   copy:
-    #     src: "{{app_url}}"
-    #     dest: "{{app_url}}"
-    #   loop: "{{ splunk.apps_location }}"
-    #   when: inventory_hostname in groups['splunk_deployment_server']
+    - name: Push apps to deployment server
+      vars:
+        app_url: "{{ item }}"
+      copy:
+        src: "{{app_url}}"
+        dest: "{{app_url}}"
+      loop: "{{ splunk.apps_location }}"
+      when: 
+        - inventory_hostname in groups['splunk_deployment_server']
+        - not app_url is match("^(https?|file)://.*")
     
     # - name: Install deployment server apps
     #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/install_apps.yml
@@ -127,7 +129,9 @@
         src: "{{app_url}}"
         dest: "{{app_url}}"
       loop: "{{ splunk.apps_location }}"
-      when: inventory_hostname in groups['splunk_cluster_master']
+      when: 
+        - inventory_hostname in groups['splunk_cluster_master']
+        - not app_url is match("^(https?|file)://.*")
 
     - name: Install cluster master apps
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/install_apps.yml
