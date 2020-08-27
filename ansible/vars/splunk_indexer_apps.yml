@@ -10,8 +10,14 @@ splunk:
         # suricata parsing
         - /tmp/props_suricata.tgz
 
+        # suricata parsing
+        - /tmp/transforms_forwarded_events.tgz
+
         # windows ta
         - https://splunkbase.splunk.com/app/742/release/7.0.0/download/
         
         # sysmon ta
         - https://splunkbase.splunk.com/app/1914/release/10.6.2/download/
+
+        # security monitoring for splunk
+        - https://splunkbase.splunk.com/app/4131/release/1.3.4/download/
