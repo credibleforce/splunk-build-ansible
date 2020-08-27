@@ -99,30 +99,64 @@
         - inventory_hostname in groups['splunk_deployment_server']
         - not app_url is match("^(https?|file)://.*")
     
-    # - name: Install deployment server apps
+    - name: Install deployment server apps
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/install_apps.yml
+      vars:
+        app_url: "{{ item }}"
+      loop: "{{ splunk.apps_location }}"
+      when: inventory_hostname in groups['splunk_deployment_server']
+  
+    - name: Find deployment server installed apps
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
+      when: inventory_hostname in groups['splunk_deployment_server']
+  
+    - name: Copy deployment server install
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
+      vars:
+        apps: "{{ installed_apps }}"
+        dest: "{{ splunk.app_paths.deployment }}"
+      when: inventory_hostname in groups['splunk_deployment_server']
+  
+    - name: Disable installed apps
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
+      when: inventory_hostname in groups['splunk_deployment_server']
+    
+    # CLUSTER MASTER - check for splunk_cluster_master role
+    # - name: Push apps to cluster master server
+    #   vars:
+    #     app_url: "{{ item }}"
+    #   copy:
+    #     src: "{{app_url}}"
+    #     dest: "{{app_url}}"
+    #   loop: "{{ splunk.apps_location }}"
+    #   when: 
+    #     - inventory_hostname in groups['splunk_cluster_master']
+    #     - not app_url is match("^(https?|file)://.*")
+
+    # - name: Install cluster master apps
     #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/install_apps.yml
     #   vars:
     #     app_url: "{{ item }}"
     #   loop: "{{ splunk.apps_location }}"
-    #   when: inventory_hostname in groups['splunk_deployment_server']
-  
-    # - name: Find deployment server installed apps
+    #   when: inventory_hostname in groups['splunk_cluster_master']
+
+    # - name: Find cluster master installed apps
     #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
-    #   when: inventory_hostname in groups['splunk_deployment_server']
-  
-    # - name: Copy deployment server install
+    #   when: inventory_hostname in groups['splunk_cluster_master']
+
+    # - name: Copy cluster master installed apps
     #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
     #   vars:
     #     apps: "{{ installed_apps }}"
-    #     dest: "{{ splunk.app_paths.deployment }}"
-    #   when: inventory_hostname in groups['splunk_deployment_server']
-  
-    # - name: Disable installed apps
-    #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
-    #   when: inventory_hostname in groups['splunk_deployment_server']
-    
-    # CLUSTER MASTER - check for splunk_cluster_master role
-    - name: Push apps to cluster master server
+    #     dest: "{{ splunk.app_paths.idxc }}"
+    #   when: inventory_hostname in groups['splunk_cluster_master']
+
+    # - name: Apply cluster master cluster bundle
+    #   include_tasks: ../splunk-ansible/roles/splunk_cluster_master/tasks/apply_cluster_bundle.yml
+    #   when: inventory_hostname in groups['splunk_cluster_master']
+
+    # DEPLOYER
+    - name: Push apps to search head deployer server
       vars:
         app_url: "{{ item }}"
       copy:
@@ -132,54 +166,31 @@
       when: 
         - inventory_hostname in groups['splunk_cluster_master']
         - not app_url is match("^(https?|file)://.*")
-
-    - name: Install cluster master apps
-      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/install_apps.yml
-      vars:
-        app_url: "{{ item }}"
-      loop: "{{ splunk.apps_location }}"
-      when: inventory_hostname in groups['splunk_cluster_master']
-
-    - name: Find cluster master installed apps
+    
+    - name: Find installed deployer apps
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
-      when: inventory_hostname in groups['splunk_cluster_master']
+      when: inventory_hostname in groups['splunk_deployer']
 
-    - name: Copy cluster master installed apps
-      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
+    - include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
       vars:
         apps: "{{ installed_apps }}"
-        dest: "{{ splunk.app_paths.idxc }}"
-      when: inventory_hostname in groups['splunk_cluster_master']
+        dest: "{{ splunk.app_paths.shc }}"
+      when: inventory_hostname in groups['splunk_deployer']
 
-    - name: Apply cluster master cluster bundle
-      include_tasks: ../splunk-ansible/roles/splunk_cluster_master/tasks/apply_cluster_bundle.yml
-      when: inventory_hostname in groups['splunk_cluster_master']
+    - name: Apply shcluster bundle
+      command: "{{ splunk.exec }} apply shcluster-bundle -target {{ cert_prefix }}://{{ splunk.search_head_captain_url }}:{{ splunk.svc_port }} -auth {{ splunk.admin_user }}:{{ splunk.password }} --answer-yes"
+      become: yes
+      become_user: "{{ splunk.user }}"
+      no_log: "{{ hide_password }}"
+      register: shcluster_bundle
+      until: shcluster_bundle.rc == 0 or "Found zero deployable apps" in shcluster_bundle.stderr
+      changed_when: shcluster_bundle.rc == 0
+      failed_when: shcluster_bundle.rc != 0 and "Found zero deployable apps" not in shcluster_bundle.stderr
+      retries: "{{ retry_num }}"
+      delay: "{{ retry_delay }}"
+      ignore_errors: true
+      when: inventory_hostname in groups['splunk_deployer']
 
-    # DEPLOYER
-    # - name: Find installed deployer apps
-    #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
-    #   when: inventory_hostname in groups['splunk_deployer']
-
-    # - include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
-    #   vars:
-    #     apps: "{{ installed_apps }}"
-    #     dest: "{{ splunk.app_paths.shc }}"
-    #   when: inventory_hostname in groups['splunk_deployer']
-
-    # - name: Apply shcluster bundle
-    #   command: "{{ splunk.exec }} apply shcluster-bundle -target {{ cert_prefix }}://{{ splunk.search_head_captain_url }}:{{ splunk.svc_port }} -auth {{ splunk.admin_user }}:{{ splunk.password }} --answer-yes"
-    #   become: yes
-    #   become_user: "{{ splunk.user }}"
-    #   no_log: "{{ hide_password }}"
-    #   register: shcluster_bundle
-    #   until: shcluster_bundle.rc == 0 or "Found zero deployable apps" in shcluster_bundle.stderr
-    #   changed_when: shcluster_bundle.rc == 0
-    #   failed_when: shcluster_bundle.rc != 0 and "Found zero deployable apps" not in shcluster_bundle.stderr
-    #   retries: "{{ retry_num }}"
-    #   delay: "{{ retry_delay }}"
-    #   ignore_errors: true
-    #   when: inventory_hostname in groups['splunk_deployer']
-
-    # - debug:
-    #     msg: "WARNING: Applying shcluster bundle failed - proceeding anyways..."
-    #   when: inventory_hostname in groups['splunk_deployer'] and shcluster_bundle.rc != 0
+    - debug:
+        msg: "WARNING: Applying shcluster bundle failed - proceeding anyways..."
+      when: inventory_hostname in groups['splunk_deployer'] and shcluster_bundle.rc != 0
