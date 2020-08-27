@@ -155,6 +155,10 @@
     #   include_tasks: ../splunk-ansible/roles/splunk_cluster_master/tasks/apply_cluster_bundle.yml
     #   when: inventory_hostname in groups['splunk_cluster_master']
 
+    # - name: Disable installed apps
+    #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
+    #   when: inventory_hostname in groups['splunk_cluster_master']
+
     # DEPLOYER
 
     - name: Push apps to search head deployer server
@@ -175,30 +179,34 @@
       loop: "{{ splunk.apps_location }}"
       when: inventory_hostname in groups['splunk_deployer']
     
-    # - name: Find installed deployer apps
-    #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
-    #   when: inventory_hostname in groups['splunk_deployer']
+    - name: Find installed deployer apps
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
+      when: inventory_hostname in groups['splunk_deployer']
 
-    # - include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
-    #   vars:
-    #     apps: "{{ installed_apps }}"
-    #     dest: "{{ splunk.app_paths.shc }}"
-    #   when: inventory_hostname in groups['splunk_deployer']
+    - include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
+      vars:
+        apps: "{{ installed_apps }}"
+        dest: "{{ splunk.app_paths.shc }}"
+      when: inventory_hostname in groups['splunk_deployer']
 
-    # - name: Apply shcluster bundle
-    #   command: "{{ splunk.exec }} apply shcluster-bundle -target {{ cert_prefix }}://{{ splunk.search_head_captain_url }}:{{ splunk.svc_port }} -auth {{ splunk.admin_user }}:{{ splunk.password }} --answer-yes"
-    #   become: yes
-    #   become_user: "{{ splunk.user }}"
-    #   no_log: "{{ hide_password }}"
-    #   register: shcluster_bundle
-    #   until: shcluster_bundle.rc == 0 or "Found zero deployable apps" in shcluster_bundle.stderr
-    #   changed_when: shcluster_bundle.rc == 0
-    #   failed_when: shcluster_bundle.rc != 0 and "Found zero deployable apps" not in shcluster_bundle.stderr
-    #   retries: "{{ retry_num }}"
-    #   delay: "{{ retry_delay }}"
-    #   ignore_errors: true
-    #   when: inventory_hostname in groups['splunk_deployer']
+    - name: Apply shcluster bundle
+      command: "{{ splunk.exec }} apply shcluster-bundle -target {{ cert_prefix }}://{{ splunk.search_head_captain_url }}:{{ splunk.svc_port }} -auth {{ splunk.admin_user }}:{{ splunk.password }} --answer-yes"
+      become: yes
+      become_user: "{{ splunk.user }}"
+      no_log: "{{ hide_password }}"
+      register: shcluster_bundle
+      until: shcluster_bundle.rc == 0 or "Found zero deployable apps" in shcluster_bundle.stderr
+      changed_when: shcluster_bundle.rc == 0
+      failed_when: shcluster_bundle.rc != 0 and "Found zero deployable apps" not in shcluster_bundle.stderr
+      retries: "{{ retry_num }}"
+      delay: "{{ retry_delay }}"
+      ignore_errors: true
+      when: inventory_hostname in groups['splunk_deployer']
 
-    # - debug:
-    #     msg: "WARNING: Applying shcluster bundle failed - proceeding anyways..."
-    #   when: inventory_hostname in groups['splunk_deployer'] and shcluster_bundle.rc != 0
+    - debug:
+        msg: "WARNING: Applying shcluster bundle failed - proceeding anyways..."
+      when: inventory_hostname in groups['splunk_deployer'] and shcluster_bundle.rc != 0
+
+    - name: Disable installed apps
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
+      when: inventory_hostname in groups['splunk_deployer']
