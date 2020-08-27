@@ -21,3 +21,6 @@ splunk:
 
         # security monitoring for splunk
         - https://splunkbase.splunk.com/app/4131/release/1.3.4/download/
+
+        # security essentials
+        - https://splunkbase.splunk.com/app/3435/release/3.0.6/download/
