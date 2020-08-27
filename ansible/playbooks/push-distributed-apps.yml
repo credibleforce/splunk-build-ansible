@@ -164,7 +164,7 @@
         dest: "{{app_url}}"
       loop: "{{ splunk.apps_location }}"
       when: 
-        - inventory_hostname in groups['splunk_cluster_master']
+        - inventory_hostname in groups['splunk_deployer']
         - not app_url is match("^(https?|file)://.*")
     
     - name: Find installed deployer apps
