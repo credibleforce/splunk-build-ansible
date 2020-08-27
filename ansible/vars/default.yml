@@ -53,6 +53,7 @@ splunk:
   nfr_license: /tmp/splunk.lic
   opt: /opt
   password: "{{ lookup('env','SPLUNK_PASSWORD') | default('uOOuUI5D2flIqVXchggUOE+h0DFQV/zo',true) }}"
+  splunkbase_token: "{{ lookup('env','SPLUNKBASE_TOKEN') }}"
   pid: /opt/splunk/var/run/splunk/splunkd.pid
   root_endpoint: null
   secret: null
