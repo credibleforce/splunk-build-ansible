@@ -141,9 +141,9 @@
       no_log: "{{ hide_password }}"
       when: inventory_hostname in groups['splunk_deployment_server']
 
-    - name: Check for deployment server restarts
-      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/check_for_required_restarts.yml
-      when: inventory_hostname in groups['splunk_deployment_server']
+    # - name: Check for deployment server restarts
+    #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/check_for_required_restarts.yml
+    #   when: inventory_hostname in groups['splunk_deployment_server']
     
     # CLUSTER MASTER - check for splunk_cluster_master role
     - name: Push apps to cluster master server
@@ -190,9 +190,9 @@
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
       when: inventory_hostname in groups['splunk_cluster_master']
 
-    - name: Check for cluster master cluster restarts
-      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/check_for_required_restarts.yml
-      when: inventory_hostname in groups['splunk_cluster_master']
+    # - name: Check for cluster master cluster restarts
+    #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/check_for_required_restarts.yml
+    #   when: inventory_hostname in groups['splunk_cluster_master']
 
     # DEPLOYER
     - name: Push apps to search head deployer server
@@ -252,6 +252,6 @@
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
       when: inventory_hostname in groups['splunk_deployer']
 
-    - name: Check for deployer restarts
-      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/check_for_required_restarts.yml
-      when: inventory_hostname in groups['splunk_deployer']
+    # - name: Check for deployer restarts
+    #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/check_for_required_restarts.yml
+    #   when: inventory_hostname in groups['splunk_deployer']
