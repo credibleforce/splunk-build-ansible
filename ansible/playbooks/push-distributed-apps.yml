@@ -110,6 +110,13 @@
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
       when: inventory_hostname in groups['splunk_deployment_server']
   
+    - name: Enable installed apps
+      command: "{{ splunk.exec }} enable app {{ item }} -auth {{ splunk.admin_user }}:{{ splunk.password }}"
+      become: yes
+      become_user: "{{ splunk.user }}"
+      with_items: "{{ installed_apps }}"
+      when: inventory_hostname in groups['splunk_deployment_server'] and installed_apps is defined and installed_apps | length > 0
+
     - name: Copy deployment server install
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
       vars:
@@ -161,6 +168,13 @@
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
       when: inventory_hostname in groups['splunk_cluster_master']
 
+    - name: Enable installed apps
+      command: "{{ splunk.exec }} enable app {{ item }} -auth {{ splunk.admin_user }}:{{ splunk.password }}"
+      become: yes
+      become_user: "{{ splunk.user }}"
+      with_items: "{{ installed_apps }}"
+      when: inventory_hostname in groups['splunk_cluster_master'] and installed_apps is defined and installed_apps | length > 0
+
     - name: Copy cluster master installed apps
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
       vars:
@@ -198,11 +212,18 @@
         app_url: "{{ item }}"
       loop: "{{ splunk.apps_location }}"
       when: inventory_hostname in groups['splunk_deployer']
-    
+
     - name: Find installed deployer apps
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
       when: inventory_hostname in groups['splunk_deployer']
 
+    - name: Enable installed apps
+      command: "{{ splunk.exec }} enable app {{ item }} -auth {{ splunk.admin_user }}:{{ splunk.password }}"
+      become: yes
+      become_user: "{{ splunk.user }}"
+      with_items: "{{ installed_apps }}"
+      when: inventory_hostname in groups['splunk_deployer'] and installed_apps is defined and installed_apps | length > 0
+    
     - include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
       vars:
         apps: "{{ installed_apps }}"
