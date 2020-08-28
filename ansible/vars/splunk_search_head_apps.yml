@@ -101,4 +101,25 @@ splunk:
 
         # security monitoring for splunk
         - https://splunkbase.splunk.com/app/4131/release/1.3.4/download/
+
+        # alert manager
+        - https://splunkbase.splunk.com/app/2665/release/3.0.4/download/
+
+        # alert manager add-on
+        - https://splunkbase.splunk.com/app/3365/release/2.3.1/download/
+
+        # parrallel coordinates
+        - https://splunkbase.splunk.com/app/3137/release/1.4.0/download/
+
+        # urlparser
+        - https://splunkbase.splunk.com/app/3396/release/1.0.0/download/
+
+        # horizon chart
+        - https://splunkbase.splunk.com/app/3117/release/1.4.0/download/
+
+        # event timeline visualization
+        - https://splunkbase.splunk.com/app/4370/release/1.5.0/download/
+
+
+
         
