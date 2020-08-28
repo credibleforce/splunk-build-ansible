@@ -49,7 +49,7 @@ splunk:
         - https://splunkbase.splunk.com/app/3749/release/2.2.2/download/
         
         # windows ta
-        - https://splunkbase.splunk.com/app/742/release/7.0.0/download/
+        - https://splunkbase.splunk.com/app/742/release/8.0.0/download/
         
         # sysmon ta
         - https://splunkbase.splunk.com/app/1914/release/10.6.2/download/
@@ -119,7 +119,6 @@ splunk:
 
         # event timeline visualization
         - https://splunkbase.splunk.com/app/4370/release/1.5.0/download/
-
 
 
         
