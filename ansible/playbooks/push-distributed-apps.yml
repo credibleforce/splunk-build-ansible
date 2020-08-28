@@ -117,9 +117,9 @@
         dest: "{{ splunk.app_paths.deployment }}"
       when: inventory_hostname in groups['splunk_deployment_server']
   
-    - name: Disable installed apps
-      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
-      when: inventory_hostname in groups['splunk_deployment_server']
+    # - name: Disable installed apps
+    #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
+    #   when: inventory_hostname in groups['splunk_deployment_server']
     
     # CLUSTER MASTER - check for splunk_cluster_master role
     - name: Push apps to cluster master server
@@ -155,9 +155,9 @@
       include_tasks: ../splunk-ansible/roles/splunk_cluster_master/tasks/apply_cluster_bundle.yml
       when: inventory_hostname in groups['splunk_cluster_master']
 
-    - name: Disable installed apps
-      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
-      when: inventory_hostname in groups['splunk_cluster_master']
+    # - name: Disable installed apps
+    #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
+    #   when: inventory_hostname in groups['splunk_cluster_master']
 
     # DEPLOYER
     - name: Push apps to search head deployer server
@@ -206,6 +206,6 @@
         msg: "WARNING: Applying shcluster bundle failed - proceeding anyways..."
       when: inventory_hostname in groups['splunk_deployer'] and shcluster_bundle.rc != 0
 
-    - name: Disable installed apps
-      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
-      when: inventory_hostname in groups['splunk_deployer']
+    # - name: Disable installed apps
+    #   include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
+    #   when: inventory_hostname in groups['splunk_deployer']
