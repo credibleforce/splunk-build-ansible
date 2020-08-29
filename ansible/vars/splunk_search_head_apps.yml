@@ -2,6 +2,7 @@
 splunk:
     apps_location: 
         - /tmp/indexes.tgz
+        - /tmp/props_win_dns.tgz
         
         # getwatchlist
         - https://splunkbase.splunk.com/app/635/release/1.0/download/
@@ -121,7 +122,7 @@ splunk:
         - https://splunkbase.splunk.com/app/4370/release/1.5.0/download/
 
         # microsoft dns debug log
-        - https://splunkbase.splunk.com/app/3377/release/1.0.0/download/
+        #- https://splunkbase.splunk.com/app/3377/release/1.0.0/download/
 
 
         
