@@ -120,5 +120,8 @@ splunk:
         # event timeline visualization
         - https://splunkbase.splunk.com/app/4370/release/1.5.0/download/
 
+        # microsoft dns debug log
+        - https://splunkbase.splunk.com/app/3377/release/1.0.0/download/
+
 
         
