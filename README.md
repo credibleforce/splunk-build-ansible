@@ -7,7 +7,7 @@ Playbooks use a named account `deployer` for ansible ansible tasks on inventory 
 ## Pre-requisites
 
 1. These examples assume CentOS images exist
-2. The example infrastructure assumes the the local domain `psl.local` (e.g. splksh1.psl.local)
+2. The example infrastructure assumes the the local domain `psl.local` (e.g. splk-sh1.psl.local)
 3. The `splunk-ansible` build and maintained by Splunk assumes that hostname in inventory and the result of `hostname` on the Linux host are identical. Some plays and tasks will not execute if those mismatch.
 
 ## Usage
@@ -38,8 +38,8 @@ In scenarios where ansible testing is taking place or where it cannot be install
 ## Example Standalone Deployment Architecture
 
 **Hosts**
-* splkutil1.psl.local (ansible host)
-* splksh1.psl.local (host to be used for Splunk Standalone instance)
+* splk-util1.psl.local (ansible host)
+* splk-sh1.psl.local (host to be used for Splunk Standalone instance)
 
 ## Other Examples
 
@@ -48,10 +48,10 @@ The following scenarios have example inventory and playbooks associated with the
 ### Distrbuted:
 
 **Hosts** 
-* splkutil1.psl.local (ansible host)
-* splksh1.psl.local (Splunk Search Head)
-* splkidx1.psl.local (Splunk Indexer)
-* splkdp1.psl.local (Splunk Deployment Server & Splunk License Master)
+* splk-util1.psl.local (ansible host)
+* splk-sh1.psl.local (Splunk Search Head)
+* splk-idx1.psl.local (Splunk Indexer)
+* splk-dp1.psl.local (Splunk Deployment Server & Splunk License Master)
 * splunkuf1.psl.local (Splunk Universal Forwarder)
 
 **Ansible Install Command**
@@ -61,12 +61,12 @@ The following scenarios have example inventory and playbooks associated with the
 ### Indexer Cluster:
 
 **Hosts** 
-* splkutil1.psl.local (ansible host)
-* splksh1.psl.local (Splunk Search Head)
-* splkcm1.psl.local (Splunk Indexer Cluster Master)
-* splkidx1.psl.local (Splunk Indexer Cluster Node)
-* splkidx2.psl.local (Splunk Indexer Cluster Node)
-* splkdp1.psl.local (Splunk Deployment Server & Splunk License Master)
+* splk-util1.psl.local (ansible host)
+* splk-sh1.psl.local (Splunk Search Head)
+* splk-cm1.psl.local (Splunk Indexer Cluster Master)
+* splk-idx1.psl.local (Splunk Indexer Cluster Node)
+* splk-idx2.psl.local (Splunk Indexer Cluster Node)
+* splk-dp1.psl.local (Splunk Deployment Server & Splunk License Master)
 * splunkuf1.psl.local (Splunk Universal Forwarder)
 
 **Ansible Install Command**
@@ -76,14 +76,14 @@ The following scenarios have example inventory and playbooks associated with the
 ### Indexer Cluster and Search Cluster:
 
 **Hosts** 
-* splkutil1.psl.local (ansible host)
-* splksh1.psl.local (Splunk Search Head Cluster Node)
-* splksh2.psl.local (Splunk Search Head Cluster Node)
-* splksh3.psl.local (Splunk Search Head Cluster Node)
-* splkcm1.psl.local (Splunk Indexer Cluster Master)
-* splkidx1.psl.local (Splunk Indexer Cluster Node)
-* splkidx2.psl.local (Splunk Indexer Cluster Node)
-* splkdp1.psl.local (Splunk Deployment Server & Splunk License Master)
+* splk-util1.psl.local (ansible host)
+* splk-sh1.psl.local (Splunk Search Head Cluster Node)
+* splk-sh2.psl.local (Splunk Search Head Cluster Node)
+* splk-sh3.psl.local (Splunk Search Head Cluster Node)
+* splk-cm1.psl.local (Splunk Indexer Cluster Master)
+* splk-idx1.psl.local (Splunk Indexer Cluster Node)
+* splk-idx2.psl.local (Splunk Indexer Cluster Node)
+* splk-dp1.psl.local (Splunk Deployment Server & Splunk License Master)
 * splunkuf1.psl.local (Splunk Universal Forwarder)
 
 **Ansible Install Command**
