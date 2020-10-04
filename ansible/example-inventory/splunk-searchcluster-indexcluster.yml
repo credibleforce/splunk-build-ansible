@@ -17,56 +17,56 @@ all:
                 hostname: "{{ inventory_hostname }}"
                 role: "splunk_deployer"
             hosts: 
-              splk-shd1.psl.local:
+              splk-shd1.lab.local:
           splunk_search_head_captain:
             vars:
               splunk:
                 hostname: "{{ inventory_hostname }}"
                 role: "splunk_search_head_captain"
             hosts: 
-              splk-sh1.psl.local:
+              splk-sh1.lab.local:
           splunk_search_head:
             vars:
               splunk:
                 hostname: "{{ inventory_hostname }}"
                 role: "splunk_search_head"
             hosts: 
-              splk-sh1.psl.local:
-              splk-sh2.psl.local:
-              splk-sh3.psl.local:
+              splk-sh1.lab.local:
+              splk-sh2.lab.local:
+              splk-sh3.lab.local:
           splunk_cluster_master:
             vars:
               splunk:
                 hostname: "{{ inventory_hostname }}"
                 role: "splunk_cluster_master"
             hosts: 
-              splk-cm1.psl.local:
+              splk-cm1.lab.local:
           splunk_indexer:
             vars:
               splunk:
                 hostname: "{{ inventory_hostname }}"
                 role: "splunk_indexer"
             hosts: 
-              splk-idx1.psl.local:
-              splk-idx2.psl.local:
+              splk-idx1.lab.local:
+              splk-idx2.lab.local:
           splunk_deployment_server:
             vars:
               splunk:
                 hostname: "{{ inventory_hostname }}"
                 role: "splunk_deployment_server"
             hosts: 
-              splk-dp1.psl.local:
+              splk-dp1.lab.local:
           splunk_license_master:
             vars:
               splunk:
                 hostname: "{{ inventory_hostname }}"
                 role: "splunk_license_master"
             hosts: 
-              splk-dp1.psl.local:
+              splk-dp1.lab.local:
           splunk_universal_forwarder:
             vars:
               splunk:
                 hostname: "{{ inventory_hostname }}"
                 role: "splunk_universal_forwarder"
             hosts: 
-              splk-uf1.psl.local:
+              splk-uf1.lab.local:

@@ -6,4 +6,4 @@
       replace:
         path: /etc/resolv.conf
         regexp: '^search .*$'
-        replace: 'search localdomain psl.local'
+        replace: 'search localdomain lab.local'

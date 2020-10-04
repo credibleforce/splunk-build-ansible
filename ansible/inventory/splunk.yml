@@ -17,7 +17,7 @@ all:
               hostname: "{{ inventory_hostname }}"
               role: "splunk_standalone"
           hosts: 
-              splk-sh1.psl.local:
+              splk-sh1.lab.local:
                 site_number: 1
           # leave this here to stop triggering event forwarding :(=====
           children:
@@ -31,7 +31,7 @@ all:
               role: 
                 "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
           hosts: 
-            splk-sh1.psl.local:
+            splk-sh1.lab.local:
               site_number: 1
         splunk_search_head:
           vars:
@@ -41,11 +41,11 @@ all:
               role: 
                 "{{ 'splunk_search_head_captain' if is_captain else 'splunk_search_head' }}"
           hosts: 
-            splk-sh1.psl.local:
+            splk-sh1.lab.local:
               site_number: 1
-            splk-sh2.psl.local:
+            splk-sh2.lab.local:
               site_number: 1
-            splk-sh3.psl.local:              
+            splk-sh3.lab.local:              
               site_number: 1
         splunk_cluster_master:
           vars:
@@ -53,7 +53,7 @@ all:
               hostname: "{{ inventory_hostname }}"
               role: "splunk_cluster_master"
           hosts: 
-            splk-cm1.psl.local:
+            splk-cm1.lab.local:
               site_number: 1
         splunk_indexer:
           vars:
@@ -61,13 +61,13 @@ all:
               hostname: "{{ inventory_hostname }}"
               role: "splunk_indexer"
           hosts: 
-            splk-idx1.psl.local:
+            splk-idx1.lab.local:
               site_number: 1
-            splk-idx2.psl.local:
+            splk-idx2.lab.local:
               site_number: 1
-            splk-idx3.psl.local:
+            splk-idx3.lab.local:
               site_number: 2
-            splk-idx4.psl.local:
+            splk-idx4.lab.local:
               site_number: 2
         splunk_deployment_server:
           vars:
@@ -75,7 +75,7 @@ all:
               hostname: "{{ inventory_hostname }}"
               role: "splunk_license_master"
           hosts: 
-            splk-dp1.psl.local:
+            splk-dp1.lab.local:
               site_number: 1
         splunk_license_master:
           vars:
@@ -83,7 +83,7 @@ all:
               hostname: "{{ inventory_hostname }}"
               role: "splunk_license_master"
           hosts: 
-            splk-dp1.psl.local:
+            splk-dp1.lab.local:
               site_number: 1
         splunk_deployer:
           vars:
@@ -91,7 +91,7 @@ all:
               hostname: "{{ inventory_hostname }}"
               role: "splunk_deployer"
           hosts: 
-            splk-shd1.psl.local:
+            splk-shd1.lab.local:
               site_number: 1
         splunk_heavy_forwarder:
           vars:
@@ -99,7 +99,7 @@ all:
               hostname: "{{ inventory_hostname }}"
               role: "splunk_heavy_forwarder"
           hosts: 
-            splk-hec1.psl.local:
+            splk-hec1.lab.local:
               site_number: 1
         splunk_universal_forwarder:
           vars:
@@ -107,7 +107,7 @@ all:
               hostname: "{{ inventory_hostname }}"
               role: "splunk_universal_forwarder"
           hosts: 
-            splk-ids1.psl.local:
+            splk-ids1.lab.local:
               site_number: 1
         splunk_distributed_monitoring_console:
           vars:
@@ -115,5 +115,5 @@ all:
               hostname: "{{ inventory_hostname }}"
               role: "splunk_distributed_monitoring_console"
           hosts:
-            splk-dp1.psl.local:
+            splk-dp1.lab.local:
               site_number: 1

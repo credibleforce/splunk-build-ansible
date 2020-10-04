@@ -17,4 +17,4 @@ all:
                 hostname: "{{ inventory_hostname }}"
                 role: "splunk_standalone"
             hosts: 
-              splk-sh1.psl.local:
+              splk-sh1.lab.local:
