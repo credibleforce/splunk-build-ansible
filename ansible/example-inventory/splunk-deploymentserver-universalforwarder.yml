@@ -17,18 +17,18 @@ all:
               hostname: "{{ inventory_hostname }}"
               role: "splunk_deployment_server"
           hosts: 
-            splk-dp1.psl.local:
+            splk-dp1.lab.local:
         splunk_heavy_forwarder:
           vars:
             splunk:
               hostname: "{{ inventory_hostname }}"
               role: "splunk_heavy_forwarder"
           hosts: 
-            splk-hf1.psl.local:  
+            splk-hf1.lab.local:  
         splunk_universal_forwarder:
           vars:
             splunk:
               hostname: "{{ inventory_hostname }}"
               role: "splunk_universal_forwarder"
           hosts: 
-            splk-uf1.psl.local:
+            splk-uf1.lab.local:
