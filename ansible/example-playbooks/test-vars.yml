@@ -1,7 +1,7 @@
 ---
 - hosts: all
   vars:
-    test: "{{ inventory_hostname == search_head_cluster_host|default(omit) and splunk.search_head_cluster }}"
+    test: "{{ inventory_hostname == search_head_cluster_host|default(omit,true) and splunk.search_head_cluster }}"
   pre_tasks:
     # Include additional variables as required
     - name: Include SHC Variable

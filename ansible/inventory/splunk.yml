@@ -25,7 +25,7 @@ all:
               hosts:
         splunk_search_head_captain:
           vars:
-            is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
+            is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit,true) }}"
             splunk:
               hostname: "{{ inventory_hostname }}"
               role: 
@@ -35,7 +35,7 @@ all:
               site_number: 1
         splunk_search_head:
           vars:
-            is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit) }}"
+            is_captain: "{{ inventory_hostname == search_head_cluster_host|default(omit,true) }}"
             splunk:
               hostname: "{{ inventory_hostname }}"
               role: 

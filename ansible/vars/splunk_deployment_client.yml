@@ -1,4 +1,4 @@
 ---
-splunk_deployment_server: "{{ lookup('env','SPLUNK_DEPLOYMENT_SERVER') | default(groups['splunk_deployment_server'][0]) }}"
+splunk_deployment_server: "{{ lookup('env','SPLUNK_DEPLOYMENT_SERVER') | default(groups['splunk_deployment_server'][0],true) }}"
 splunk:
     deployment_server: "{{ splunk_deployment_server }}"
