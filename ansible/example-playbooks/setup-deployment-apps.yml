@@ -6,7 +6,7 @@
   gather_facts: True
   
   #environment:
-  #  SPLUNK_SEARCH_HEAD_CAPTAIN_URL: "{{ groups['splunk_search_head_captain'][0]|default(omit) }}"
+  #  SPLUNK_SEARCH_HEAD_CAPTAIN_URL: "{{ groups['splunk_search_head_captain'][0]|default(omit,true) }}"
   
   pre_tasks:
     # Include additional variables as required
