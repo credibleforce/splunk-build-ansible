@@ -18,13 +18,6 @@ all:
               role: "splunk_standalone"
           hosts:
             splk-sh1.lab.local:
-        splunk_deployment_server:
-          vars:
-            splunk:
-              hostname: "{{ inventory_hostname }}"
-              role: "splunk_deployment_server"
-          hosts: 
-            splk-sh1.lab.local:
         splunk_universal_forwarder:
           vars:
             splunk:
