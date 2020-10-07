@@ -33,7 +33,9 @@
     # Set deployment_server
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
-      when: splunk_enable_deployment_server is defined and splunk_enable_deployment_server and not inventory_hostname in groups['splunk_deployment_server']
+      when: 
+        - "'splunk_deployment_server' in group_names"
+        - "inventory_hostname not in groups['splunk_deployment_server']"
 
     # APPS INSTALL VARIABLES
     # DEPLOYMENT SERVER Apps Variable

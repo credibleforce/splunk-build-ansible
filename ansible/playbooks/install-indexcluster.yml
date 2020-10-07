@@ -55,7 +55,8 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - "(not 'splunk_deployment_server' in groups) or (not inventory_hostname in groups['splunk_deployment_server'])"
+        - "'splunk_deployment_server' in group_names"
+        - "inventory_hostname not in groups['splunk_deployment_server']"
     
     
 
@@ -149,7 +150,8 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - "(not 'splunk_deployment_server' in groups) or (not inventory_hostname in groups['splunk_deployment_server'])"
+        - "'splunk_deployment_server' in group_names"
+        - "inventory_hostname not in groups['splunk_deployment_server']"
     
     # setup distributed search for splunk_search_heads
     - name: Include Distributed Search Peer Variable
@@ -249,8 +251,8 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - splunk_enable_deployment_server
-        - not inventory_hostname in groups['splunk_deployment_server']
+        - "'splunk_deployment_server' in group_names"
+        - "inventory_hostname not in groups['splunk_deployment_server']"
   
     #########################################
     # VARIABLES DEFINING HEAVY FORWARDER CONFIG
@@ -324,7 +326,8 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - "(not 'splunk_deployment_server' in groups) or (not inventory_hostname in groups['splunk_deployment_server'])"
+        - "'splunk_deployment_server' in group_names"
+        - "inventory_hostname not in groups['splunk_deployment_server']"
   
     #########################################
     # VARIABLES DEFINING UNIVERSAL FORWARDER CONFIG
