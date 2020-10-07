@@ -60,8 +60,8 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - splunk_enable_deployment_server
-        - not inventory_hostname in groups['splunk_deployment_server']
+        - "'splunk_deployment_server' in group_names"
+        - "inventory_hostname not in groups['splunk_deployment_server']"
 
   tasks:
     # Force an ntp update as service check requires time sync to work (should not be required in production)
@@ -145,8 +145,8 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - splunk_enable_deployment_server
-        - not inventory_hostname in groups['splunk_deployment_server']
+        - "'splunk_deployment_server' in group_names"
+        - "inventory_hostname not in groups['splunk_deployment_server']"
     
     ######################################################
     # VARIABLES DEFINING APP INSTALLATION (NON-DISTRIBUTED)
@@ -298,8 +298,8 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - splunk_enable_deployment_server
-        - not inventory_hostname in groups['splunk_deployment_server']
+        - "'splunk_deployment_server' in group_names"
+        - "inventory_hostname not in groups['splunk_deployment_server']"
     
     ######################################################
     # VARIABLES DEFINING APP INSTALLATION (NON-DISTRIBUTED)
@@ -422,8 +422,8 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - splunk_enable_deployment_server
-        - not inventory_hostname in groups['splunk_deployment_server']
+        - "'splunk_deployment_server' in group_names"
+        - "inventory_hostname not in groups['splunk_deployment_server']"
 
     #########################################
     # VARIABLES DEFINING APP INSTALLATION
@@ -564,8 +564,8 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - splunk_enable_deployment_server
-        - not inventory_hostname in groups['splunk_deployment_server']
+        - "'splunk_deployment_server' in group_names"
+        - "inventory_hostname not in groups['splunk_deployment_server']"
   
     #########################################
     # VARIABLES DEFINING HEAVY FORWARDER CONFIG
@@ -652,8 +652,8 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - splunk_enable_deployment_server
-        - not inventory_hostname in groups['splunk_deployment_server']
+        - "'splunk_deployment_server' in group_names"
+        - "inventory_hostname not in groups['splunk_deployment_server']"
   
     #########################################
     # VARIABLES DEFINING UNIVERSAL FORWARDER CONFIG
@@ -797,8 +797,8 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - splunk_enable_deployment_server
-        - not inventory_hostname in groups['splunk_deployment_server']
+        - "'splunk_deployment_server' in group_names"
+        - "inventory_hostname not in groups['splunk_deployment_server']"
 
   tasks:
 
