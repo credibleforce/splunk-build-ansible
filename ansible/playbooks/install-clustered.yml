@@ -60,8 +60,7 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - "'splunk_deployment_server' in group_names"
-        - "inventory_hostname not in groups['splunk_deployment_server']"
+        - "('splunk_deployment_server' in groups and inventory_hostname not in groups['splunk_deployment_server']) or ('splunk_deployment_server' not in groups and 'splunk_standalone' in groups and inventory_hostname not in groups['splunk_standalone'])"
 
   tasks:
     # Force an ntp update as service check requires time sync to work (should not be required in production)
@@ -145,8 +144,7 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - "'splunk_deployment_server' in group_names"
-        - "inventory_hostname not in groups['splunk_deployment_server']"
+        - "('splunk_deployment_server' in groups and inventory_hostname not in groups['splunk_deployment_server']) or ('splunk_deployment_server' not in groups and 'splunk_standalone' in groups and inventory_hostname not in groups['splunk_standalone'])"
     
     ######################################################
     # VARIABLES DEFINING APP INSTALLATION (NON-DISTRIBUTED)
@@ -298,8 +296,7 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - "'splunk_deployment_server' in group_names"
-        - "inventory_hostname not in groups['splunk_deployment_server']"
+        - "('splunk_deployment_server' in groups and inventory_hostname not in groups['splunk_deployment_server']) or ('splunk_deployment_server' not in groups and 'splunk_standalone' in groups and inventory_hostname not in groups['splunk_standalone'])"
     
     ######################################################
     # VARIABLES DEFINING APP INSTALLATION (NON-DISTRIBUTED)
@@ -422,8 +419,7 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - "'splunk_deployment_server' in group_names"
-        - "inventory_hostname not in groups['splunk_deployment_server']"
+        - "('splunk_deployment_server' in groups and inventory_hostname not in groups['splunk_deployment_server']) or ('splunk_deployment_server' not in groups and 'splunk_standalone' in groups and inventory_hostname not in groups['splunk_standalone'])"
 
     #########################################
     # VARIABLES DEFINING APP INSTALLATION
@@ -564,8 +560,7 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - "'splunk_deployment_server' in group_names"
-        - "inventory_hostname not in groups['splunk_deployment_server']"
+        - "('splunk_deployment_server' in groups and inventory_hostname not in groups['splunk_deployment_server']) or ('splunk_deployment_server' not in groups and 'splunk_standalone' in groups and inventory_hostname not in groups['splunk_standalone'])"
   
     #########################################
     # VARIABLES DEFINING HEAVY FORWARDER CONFIG
@@ -652,8 +647,7 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - "'splunk_deployment_server' in group_names"
-        - "inventory_hostname not in groups['splunk_deployment_server']"
+        - "('splunk_deployment_server' in groups and inventory_hostname not in groups['splunk_deployment_server']) or ('splunk_deployment_server' not in groups and 'splunk_standalone' in groups and inventory_hostname not in groups['splunk_standalone'])"
   
     #########################################
     # VARIABLES DEFINING UNIVERSAL FORWARDER CONFIG
@@ -797,8 +791,7 @@
     - name: Include Deployment Client Variable
       include_vars: ../vars/splunk_deployment_client.yml
       when: 
-        - "'splunk_deployment_server' in group_names"
-        - "inventory_hostname not in groups['splunk_deployment_server']"
+        - "('splunk_deployment_server' in groups and inventory_hostname not in groups['splunk_deployment_server']) or ('splunk_deployment_server' not in groups and 'splunk_standalone' in groups and inventory_hostname not in groups['splunk_standalone'])"
 
   tasks:
 
