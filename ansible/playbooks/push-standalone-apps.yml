@@ -128,11 +128,11 @@
 
 
     # STANDALONE SERVER - check for splunk_standalone role
-    - name: Include Deployment Apps variables
+    - name: Include Standalone Apps variables
       include_vars: ../vars/splunk_standalone_apps.yml
       when: 
         - inventory_hostname in groups['splunk_standalone']
-        
+
     - name: Push apps to standalone server
       vars:
         app_url: "{{ item }}"
