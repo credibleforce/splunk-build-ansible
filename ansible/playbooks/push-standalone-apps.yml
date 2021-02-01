@@ -73,7 +73,5 @@
       loop: "{{ splunk.apps_location }}"
       when: inventory_hostname in groups['splunk_standalone']
 
-    - name: Flush restart handlers
-      meta: flush_handlers
-
-    #- include_tasks: ../splunk-ansible/roles/splunk_common/tasks/trigger_restart.yml
+    - include_tasks: ../splunk-ansible/roles/splunk_common/tasks/check_for_required_restarts.yml
+      when: inventory_hostname in groups['splunk_standalone']
