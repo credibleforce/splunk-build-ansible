@@ -61,6 +61,11 @@
     # TASKS
     ##########################################
 
+    # SPLUNK COMMON - set common splunk-ansible facts
+    - name: Splunk environment setup
+      include_tasks: get_facts.yml
+      when: inventory_hostname in groups['splunk_standalone']
+
     # STANDALONE SERVER - check for splunk_standalone role
     - name: Push apps to standalone server
       vars:
@@ -80,5 +85,6 @@
       loop: "{{ splunk.apps_location }}"
       when: inventory_hostname in groups['splunk_standalone']
 
-    - include_tasks: ../splunk-ansible/roles/splunk_common/tasks/check_for_required_restarts.yml
+    - name: Check for required restarts
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/check_for_required_restarts.yml
       when: inventory_hostname in groups['splunk_standalone']
