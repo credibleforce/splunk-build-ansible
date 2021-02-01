@@ -38,6 +38,10 @@
     # VARIABLES DEFINING APP INSTALLATION
     ##########################################
     
+    # SPLUNK COMMON Apps Variable
+    - name: Include Default Apps Vars
+      include_vars: ../splunk-ansible/roles/splunk_common/vars/main.yml
+
     # STANDALONE SERVER Apps Variable
     - name: Include Deployment Apps variables
       include_vars: ../vars/splunk_standalone_apps.yml
@@ -50,8 +54,21 @@
     # TASKS
     ##########################################
 
-    # STANDALONE SERVER
-    - name: Splunk splunk_standalone tasks
-      include_role:
-        name: splunk_standalone
+    # STANDALONE SERVER - check for splunk_standalone role
+    - name: Push apps to standalone server
+      vars:
+        app_url: "{{ item }}"
+      copy:
+        src: "{{app_url}}"
+        dest: "{{app_url}}"
+      loop: "{{ splunk.apps_location }}"
+      when: 
+        - inventory_hostname in groups['splunk_standalone']
+        - not app_url is match("^(https?|file)://.*")
+    
+    - name: Install standalone server apps
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/install_apps.yml
+      vars:
+        app_url: "{{ item }}"
+      loop: "{{ splunk.apps_location }}"
       when: inventory_hostname in groups['splunk_standalone']
