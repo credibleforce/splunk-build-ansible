@@ -1,0 +1,75 @@
+###########################################################
+# PUSH APPS TO CLUSTER MASTER, DEPLOYMENT_SERVER, DEPLOYER
+############################################################
+
+- hosts: local
+  vars_files:
+    - ../vars/default.yml
+  tasks:
+
+    # compress local apps
+    - name: Compress Apps
+      include_role:
+        name: compress_apps
+
+# STAGE 3 - AFTER INFRATRUCTURE BUILD PUSH APPS IN DISTRIBUTED ENVIRONMENT
+- hosts: splunk_standalone
+  vars_files:
+    - ../vars/default.yml
+  gather_facts: True
+
+  pre_tasks:  
+  
+    #########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
+    
+    # Include additional variables as required
+    - name: Include Global HEC Variable
+      include_vars: ../vars/splunk_hec.yml
+
+    - name: Include Global DFS Variable
+      include_vars: ../vars/splunk_dfs.yml
+      
+    - name: Include Standalone Variables
+      include_vars: ../vars/splunk_standalone.yml
+
+    ##########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
+
+    # Include additional variables as required
+    - name: Include Deployment Server Variable
+      include_vars: ../vars/splunk_deployment_server.yml
+      when: splunk_enable_deployment_server
+
+    - name: Include License Master Variable
+      include_vars: ../vars/splunk_license_master.yml
+      when: splunk_enable_license_master
+
+    - name: Include Deployment Client Variable
+      include_vars: ../vars/splunk_deployment_client.yml
+      when: 
+        - "('splunk_deployment_server' in groups and inventory_hostname not in groups['splunk_deployment_server']) or ('splunk_deployment_server' not in groups and 'splunk_standalone' in groups and inventory_hostname not in groups['splunk_standalone'])"
+    
+    #########################################
+    # VARIABLES DEFINING APP INSTALLATION
+    ##########################################
+    
+    # STANDALONE SERVER Apps Variable
+    - name: Include Deployment Apps variables
+      include_vars: ../vars/splunk_standalone_apps.yml
+      when: 
+        - inventory_hostname in groups['splunk_standalone']
+
+  tasks:
+
+    #########################################
+    # TASKS
+    ##########################################
+
+    # STANDALONE SERVER
+    - name: Splunk splunk_standalone tasks
+      include_role:
+        name: splunk_standalone
+      when: inventory_hostname in groups['splunk_standalone']

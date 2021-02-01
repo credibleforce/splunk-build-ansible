@@ -1,0 +1,11 @@
+---
+splunk:
+    apps_location: 
+        - /tmp/indexes.tgz
+        - /tmp/props_win_dns.tgz
+        - /tmp/inputs_win_dns.tgz
+        - /tmp/Splunk_TA_windows.tgz
+        - /tmp/transforms_forwarded_events.tgz
+
+
+        
