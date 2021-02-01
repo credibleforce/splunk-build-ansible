@@ -63,7 +63,7 @@
 
     # SPLUNK COMMON - set common splunk-ansible facts
     - name: Splunk environment setup
-      include_tasks: get_facts.yml
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/get_facts.yml
       when: inventory_hostname in groups['splunk_standalone']
 
     # STANDALONE SERVER - check for splunk_standalone role
