@@ -156,7 +156,7 @@
     # get the search head apps, when deployment server dual role we need to figure out which to enable...see above logic for concerns
     - name: Build installed apps to ensure dual role enabling works
       delegate_to: localhost
-      command: |
+      shell: |
             for i in $(echo "{{ splunk.apps_location | join(',') }}"| tr ',' '\n'); do tar -tf $i | head -1 | awk -F '/' '{ print $1 }'; done
       register: installed_standalone_apps
       when: inventory_hostname in groups['splunk_standalone']
