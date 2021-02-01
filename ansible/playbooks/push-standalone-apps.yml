@@ -16,6 +16,7 @@
 - hosts: splunk_standalone,splunk_deployment_server
   vars_files:
     - ../vars/default.yml
+
   gather_facts: True
 
   pre_tasks:  
@@ -54,9 +55,9 @@
       when: 
         - inventory_hostname in groups['splunk_standalone']
 
-    #########################################
-    # SETUP ADDITIONAL HANDLERS
-    ##########################################
+  #########################################
+  # SETUP ADDITIONAL HANDLERS
+  ##########################################
     
   handlers:
     - include: ../splunk-ansible/roles/splunk_common/handlers/main.yml
@@ -151,6 +152,23 @@
         app_url: "{{ item }}"
       loop: "{{ splunk.apps_location }}"
       when: inventory_hostname in groups['splunk_standalone']
+
+    # get the search head apps, when deployment server dual role we need to figure out which to enable...see above logic for concerns
+    - name: Build installed apps to ensure dual role enabling works
+      delgate_to: localhost
+      run_once: yes
+      shell: |
+            for i in $(echo "{{ splunk.apps_location | join(',') }}"| tr ',' '\n'); do tar -tf $i | head -1 | awk -F '/' '{ print $1 }'; done
+      register: installed_standalone_apps
+      when: inventory_hostname in groups['splunk_standalone']
+
+    - name: Enable installed apps
+      command: "{{ splunk.exec }} enable app {{ item }} -auth {{ splunk.admin_user }}:{{ splunk.password }}"
+      become: yes
+      become_user: "{{ splunk.user }}"
+      with_items: "{{ installed_standalone_apps }}"
+      when: 
+        - inventory_hostname in groups['splunk_standalone'] and installed_standalone_apps is defined and installed_standalone_apps | length > 0
 
     - name: Check for required restarts
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/check_for_required_restarts.yml
