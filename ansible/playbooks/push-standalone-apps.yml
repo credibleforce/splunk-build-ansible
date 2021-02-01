@@ -43,18 +43,6 @@
     - name: Include Default Apps Vars
       include_vars: ../splunk-ansible/roles/splunk_common/vars/main.yml
 
-    # DEPLOYMENT SERVER Apps Variable    
-    - name: Include Deployment Apps variables
-      include_vars: ../vars/splunk_deployment_apps.yml
-      when: 
-        - inventory_hostname in groups['splunk_standalone']
-
-    # STANDALONE SERVER Apps Variable
-    - name: Include Deployment Apps variables
-      include_vars: ../vars/splunk_standalone_apps.yml
-      when: 
-        - inventory_hostname in groups['splunk_standalone']
-
   #########################################
   # SETUP ADDITIONAL HANDLERS
   ##########################################
@@ -73,7 +61,12 @@
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/get_facts.yml
       when: inventory_hostname in groups['splunk_standalone']
 
-    # DEPLOYMENT SERVER - check for splunk_deployment_server role
+    # DEPLOYMENT SERVER - check for splunk_deployment_server role  
+    - name: Include Deployment Apps variables
+      include_vars: ../vars/splunk_deployment_apps.yml
+      when: 
+        - inventory_hostname in groups['splunk_standalone']
+    
     - name: Push apps to deployment server
       vars:
         app_url: "{{ item }}"
@@ -135,6 +128,11 @@
 
 
     # STANDALONE SERVER - check for splunk_standalone role
+    - name: Include Deployment Apps variables
+      include_vars: ../vars/splunk_standalone_apps.yml
+      when: 
+        - inventory_hostname in groups['splunk_standalone']
+        
     - name: Push apps to standalone server
       vars:
         app_url: "{{ item }}"
