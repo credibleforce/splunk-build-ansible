@@ -46,7 +46,7 @@
     - name: Include Deployment Apps variables
       include_vars: ../vars/splunk_deployment_apps.yml
       when: 
-        - inventory_hostname in groups['splunk_deployment_server']
+        - "('splunk_deployment_server' in groups and inventory_hostname not in groups['splunk_deployment_server']) or ('splunk_deployment_server' not in groups and 'splunk_standalone' in groups and inventory_hostname not in groups['splunk_standalone'])"
 
     # STANDALONE SERVER Apps Variable
     - name: Include Deployment Apps variables
@@ -81,7 +81,7 @@
         dest: "{{app_url}}"
       loop: "{{ splunk.apps_location }}"
       when: 
-        - inventory_hostname in groups['splunk_deployment_server']
+        - "('splunk_deployment_server' in groups and inventory_hostname not in groups['splunk_deployment_server']) or ('splunk_deployment_server' not in groups and 'splunk_standalone' in groups and inventory_hostname not in groups['splunk_standalone'])"
         - not app_url is match("^(https?|file)://.*")
     
     - name: Install deployment server apps
@@ -89,29 +89,35 @@
       vars:
         app_url: "{{ item }}"
       loop: "{{ splunk.apps_location }}"
-      when: inventory_hostname in groups['splunk_deployment_server']
+      when: 
+        - "('splunk_deployment_server' in groups and inventory_hostname not in groups['splunk_deployment_server']) or ('splunk_deployment_server' not in groups and 'splunk_standalone' in groups and inventory_hostname not in groups['splunk_standalone'])"
   
     - name: Find deployment server installed apps
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
-      when: inventory_hostname in groups['splunk_deployment_server']
+      when: 
+        - "('splunk_deployment_server' in groups and inventory_hostname not in groups['splunk_deployment_server']) or ('splunk_deployment_server' not in groups and 'splunk_standalone' in groups and inventory_hostname not in groups['splunk_standalone'])"
   
     - name: Enable installed apps
       command: "{{ splunk.exec }} enable app {{ item }} -auth {{ splunk.admin_user }}:{{ splunk.password }}"
       become: yes
       become_user: "{{ splunk.user }}"
       with_items: "{{ installed_apps }}"
-      when: inventory_hostname in groups['splunk_deployment_server'] and installed_apps is defined and installed_apps | length > 0
+      when: 
+        - "('splunk_deployment_server' in groups and inventory_hostname not in groups['splunk_deployment_server']) or ('splunk_deployment_server' not in groups and 'splunk_standalone' in groups and inventory_hostname not in groups['splunk_standalone'])"
+        - installed_apps is defined and installed_apps | length > 0
 
     - name: Copy deployment server install
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
       vars:
         apps: "{{ installed_apps }}"
         dest: "{{ splunk.app_paths.deployment }}"
-      when: inventory_hostname in groups['splunk_deployment_server']
+      when: 
+        - "('splunk_deployment_server' in groups and inventory_hostname not in groups['splunk_deployment_server']) or ('splunk_deployment_server' not in groups and 'splunk_standalone' in groups and inventory_hostname not in groups['splunk_standalone'])"
 
     - name: Disable installed apps
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
-      when: inventory_hostname in groups['splunk_deployment_server']
+      when: 
+        - "('splunk_deployment_server' in groups and inventory_hostname not in groups['splunk_deployment_server']) or ('splunk_deployment_server' not in groups and 'splunk_standalone' in groups and inventory_hostname not in groups['splunk_standalone'])"
 
     - name: Reload deployment server
       command: "{{ splunk.exec }} reload deploy-server -auth {{ splunk.admin_user }}:{{ splunk.password }} -timeout {{ retry_delay * retry_num }}"
@@ -124,7 +130,8 @@
       delay: "{{ retry_delay }}"
       ignore_errors: yes
       no_log: "{{ hide_password }}"
-      when: inventory_hostname in groups['splunk_deployment_server']
+      when: 
+        - "('splunk_deployment_server' in groups and inventory_hostname not in groups['splunk_deployment_server']) or ('splunk_deployment_server' not in groups and 'splunk_standalone' in groups and inventory_hostname not in groups['splunk_standalone'])"
 
 
     # STANDALONE SERVER - check for splunk_standalone role
