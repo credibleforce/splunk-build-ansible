@@ -13,7 +13,7 @@
         name: compress_apps
 
 # STAGE 3 - AFTER INFRATRUCTURE BUILD PUSH APPS IN DISTRIBUTED ENVIRONMENT
-- hosts: splunk_standalone
+- hosts: splunk_standalone,splunk_deployment_server
   vars_files:
     - ../vars/default.yml
   gather_facts: True
@@ -42,6 +42,12 @@
     - name: Include Default Apps Vars
       include_vars: ../splunk-ansible/roles/splunk_common/vars/main.yml
 
+    # DEPLOYMENT SERVER Apps Variable    
+    - name: Include Deployment Apps variables
+      include_vars: ../vars/splunk_deployment_apps.yml
+      when: 
+        - inventory_hostname in groups['splunk_deployment_server']
+
     # STANDALONE SERVER Apps Variable
     - name: Include Deployment Apps variables
       include_vars: ../vars/splunk_standalone_apps.yml
@@ -65,6 +71,61 @@
     - name: Splunk environment setup
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/get_facts.yml
       when: inventory_hostname in groups['splunk_standalone']
+
+    # DEPLOYMENT SERVER - check for splunk_deployment_server role
+    - name: Push apps to deployment server
+      vars:
+        app_url: "{{ item }}"
+      copy:
+        src: "{{app_url}}"
+        dest: "{{app_url}}"
+      loop: "{{ splunk.apps_location }}"
+      when: 
+        - inventory_hostname in groups['splunk_deployment_server']
+        - not app_url is match("^(https?|file)://.*")
+    
+    - name: Install deployment server apps
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/install_apps.yml
+      vars:
+        app_url: "{{ item }}"
+      loop: "{{ splunk.apps_location }}"
+      when: inventory_hostname in groups['splunk_deployment_server']
+  
+    - name: Find deployment server installed apps
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
+      when: inventory_hostname in groups['splunk_deployment_server']
+  
+    - name: Enable installed apps
+      command: "{{ splunk.exec }} enable app {{ item }} -auth {{ splunk.admin_user }}:{{ splunk.password }}"
+      become: yes
+      become_user: "{{ splunk.user }}"
+      with_items: "{{ installed_apps }}"
+      when: inventory_hostname in groups['splunk_deployment_server'] and installed_apps is defined and installed_apps | length > 0
+
+    - name: Copy deployment server install
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/copy_installed_apps.yml
+      vars:
+        apps: "{{ installed_apps }}"
+        dest: "{{ splunk.app_paths.deployment }}"
+      when: inventory_hostname in groups['splunk_deployment_server']
+
+    - name: Disable installed apps
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
+      when: inventory_hostname in groups['splunk_deployment_server']
+
+    - name: Reload deployment server
+      command: "{{ splunk.exec }} reload deploy-server -auth {{ splunk.admin_user }}:{{ splunk.password }} -timeout {{ retry_delay * retry_num }}"
+      become: yes
+      become_user: "{{ splunk.user }}"
+      register: reload_depserver
+      until: reload_depserver.rc == 0
+      changed_when: reload_depserver.rc == 0
+      retries: "{{ retry_num }}"
+      delay: "{{ retry_delay }}"
+      ignore_errors: yes
+      no_log: "{{ hide_password }}"
+      when: inventory_hostname in groups['splunk_deployment_server']
+
 
     # STANDALONE SERVER - check for splunk_standalone role
     - name: Push apps to standalone server
