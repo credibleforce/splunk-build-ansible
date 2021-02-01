@@ -48,6 +48,13 @@
       when: 
         - inventory_hostname in groups['splunk_standalone']
 
+    #########################################
+    # SETUP ADDITIONAL HANDLERS
+    ##########################################
+    
+  handlers:
+    - include: ../splunk-ansible/roles/splunk_common/handlers/main.yml
+
   tasks:
 
     #########################################
