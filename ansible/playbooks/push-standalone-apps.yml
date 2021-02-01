@@ -72,3 +72,8 @@
         app_url: "{{ item }}"
       loop: "{{ splunk.apps_location }}"
       when: inventory_hostname in groups['splunk_standalone']
+
+    - name: Flush restart handlers
+      meta: flush_handlers
+
+    #- include_tasks: ../splunk-ansible/roles/splunk_common/tasks/trigger_restart.yml
