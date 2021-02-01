@@ -164,7 +164,7 @@
       command: "{{ splunk.exec }} enable app {{ item }} -auth {{ splunk.admin_user }}:{{ splunk.password }}"
       become: yes
       become_user: "{{ splunk.user }}"
-      with_items: "{{ installed_standalone_apps }}"
+      with_items: "{{ installed_standalone_apps.stdout_lines }}"
       when: 
         - inventory_hostname in groups['splunk_standalone'] and installed_standalone_apps is defined and installed_standalone_apps | length > 0
 
