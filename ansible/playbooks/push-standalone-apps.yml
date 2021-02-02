@@ -6,11 +6,25 @@
   vars_files:
     - ../vars/default.yml
   tasks:
+    
+    - name: Set indexers fact
+      set_fact:
+        - indexers: "{{ groups['splunk_standalone'][0] }}:9997"
 
+    - name: Update forwarder outputs app
+      template:
+        src: ../templates/outputs.conf.j2
+        dest: ../files/apps/outputs_forwarder/default/outputs.conf
+        
     # compress local apps
     - name: Compress Apps
       include_role:
         name: compress_apps
+
+    - name: Clean outputs.conf path
+      file:
+        state: absent
+        path: ../files/apps/outputs_forwarder/default/outputs.conf
 
 # STAGE 3 - AFTER INFRATRUCTURE BUILD PUSH APPS IN DISTRIBUTED ENVIRONMENT
 - hosts: splunk_standalone,splunk_deployment_server
@@ -132,7 +146,7 @@
       include_vars: ../vars/splunk_standalone_apps.yml
       when: 
         - inventory_hostname in groups['splunk_standalone']
-
+    
     - name: Push apps to standalone server
       vars:
         app_url: "{{ item }}"
