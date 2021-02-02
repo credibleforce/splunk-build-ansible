@@ -1,34 +1,22 @@
-# BASE SETTINGS
+[indexAndForward]
+index = false
 
 [tcpout]
 defaultGroup = primary_indexers
 
-# When indexing a large continuous file that grows very large, a universal
-# or light forwarder may become "stuck" on one indexer, trying to reach
-# EOF before being able to switch to another indexer. The symptoms of this
-# are congestion on *one* indexer in the pool while others seem idle, and
-# possibly uneven loading of the disk usage for the target index.
-# In this instance, forceTimebasedAutoLB can help!
-# ** Do not enable if you have events > 64kB **
 forceTimebasedAutoLB = true
-
-# Correct an issue with the default outputs.conf for the Universal Forwarder
-# or the SplunkLightForwarder app; these don't forward _internal events.
 forwardedindex.2.whitelist = (_audit|_introspection|_internal)
 
 [tcpout:primary_indexers]
 server = {{ indexers | join(', ') }}
+compressed = true
 
 {% if indexers | length == 1 %}
 
-# If you do not have two (or more) indexers, you must use the single stanza
-# configuration, which looks like this:
 [tcpout-server://{{ indexers | first }}]
+compressed = true
 
 {% endif %}}
-
-# If setting compressed=true, this must also be set on the indexer.
-# compressed = true
 
 # INDEXER DISCOVERY (ASK THE CLUSTER MASTER WHERE THE INDEXERS ARE)
 
