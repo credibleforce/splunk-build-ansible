@@ -9,7 +9,8 @@
     
     - name: Set indexers fact
       set_fact:
-        indexers: "{{ groups['splunk_standalone'][0] }}:9997"
+        indexers: 
+          - "{{ groups['splunk_standalone'][0] }}:9997"
 
     - name: Update forwarder outputs app
       template:

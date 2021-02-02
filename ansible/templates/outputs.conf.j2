@@ -17,14 +17,15 @@ forceTimebasedAutoLB = true
 forwardedindex.2.whitelist = (_audit|_introspection|_internal)
 
 [tcpout:primary_indexers]
-server = {{ indexers }}
+server = {{ indexers | join(', ') }}
+
+{% if indexers | length == 1 %}
 
 # If you do not have two (or more) indexers, you must use the single stanza
 # configuration, which looks like this:
-#[tcpout-server://<ipaddress_or_servername>:<port>]
-# <attribute1> = <val1>
+[tcpout-server://{{ indexers | first }}]
 
-
+{% endif %}}
 
 # If setting compressed=true, this must also be set on the indexer.
 # compressed = true
