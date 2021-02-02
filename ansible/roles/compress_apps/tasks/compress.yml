@@ -14,4 +14,5 @@
     - { path: '../files/apps/transforms_forwarded_events', dest: '/tmp/transforms_forwarded_events.tgz' }
     - { path: '../files/apps/inputs_suricata', dest: '/tmp/inputs_suricata.tgz' }
     - { path: '../files/apps/props_suricata', dest: '/tmp/props_suricata.tgz' }
+    - { path: '../files/apps/outputs_forwarder', dest: '/tmp/outputs_forwarder.tgz' }
 
