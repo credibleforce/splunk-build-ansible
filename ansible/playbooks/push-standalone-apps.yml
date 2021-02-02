@@ -9,13 +9,13 @@
     
     - name: Set indexers fact
       set_fact:
-        - indexers: "{{ groups['splunk_standalone'][0] }}:9997"
+        indexers: "{{ groups['splunk_standalone'][0] }}:9997"
 
     - name: Update forwarder outputs app
       template:
         src: ../templates/outputs.conf.j2
         dest: ../files/apps/outputs_forwarder/default/outputs.conf
-        
+
     # compress local apps
     - name: Compress Apps
       include_role:
