@@ -1,3 +1,6 @@
 ---
     splunk:
         role: splunk_standalone
+    splunk:
+        hec:
+            enable: True
