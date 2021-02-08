@@ -6,3 +6,4 @@ splunk:
         - /tmp/inputs_win_dns.tgz
         - /tmp/Splunk_TA_windows.tgz
         - /tmp/inputs_suricata.tgz
+        - /tmp/outputs_forwarder.tgz

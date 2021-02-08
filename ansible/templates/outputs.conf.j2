@@ -1,0 +1,54 @@
+[indexAndForward]
+index = false
+
+[tcpout]
+defaultGroup = primary_indexers
+
+forceTimebasedAutoLB = true
+forwardedindex.2.whitelist = (_audit|_introspection|_internal)
+
+[tcpout:primary_indexers]
+server = {{ indexers | join(', ') }}
+compressed = true
+
+{% if indexers | length == 1 %}
+
+[tcpout-server://{{ indexers | first }}]
+compressed = true
+
+{% endif %}
+
+# INDEXER DISCOVERY (ASK THE CLUSTER MASTER WHERE THE INDEXERS ARE)
+
+# This particular setting identifies the tag to use for talking to the
+# specific cluster master, like the "primary_indexers" group tag here.
+# indexerDiscovery = clustered_indexers
+
+# It's OK to have a tcpout group like the one above *with* a server list;
+# these will act as a seed until communication with the master can be
+# established, so it's a good idea to have at least a couple of indexers
+# listed in the tcpout group above.
+
+# [indexer_discovery:clustered_indexers]
+# pass4SymmKey = <MUST_MATCH_MASTER>
+# This must include protocol and port like the example below.
+# master_uri = https://master.example.com:8089
+
+# SSL SETTINGS
+
+# sslCertPath = $SPLUNK_HOME/etc/auth/server.pem
+# sslRootCAPath = $SPLUNK_HOME/etc/auth/ca.pem
+# sslPassword = password
+# sslVerifyServerCert = true
+
+# COMMON NAME CHECKING - NEED ONE STANZA PER INDEXER
+# The same certificate can be used across all of them, but the configuration
+# here requires these settings to be per-indexer, so the same block of
+# configuration would have to be repeated for each.
+# [tcpout-server://10.1.12.112:9997]
+# sslCertPath = $SPLUNK_HOME/etc/certs/myServerCertificate.pem
+# sslRootCAPath = $SPLUNK_HOME/etc/certs/myCAPublicCertificate.pem
+# sslPassword = server_privkey_password
+# sslVerifyServerCert = true
+# sslCommonNameToCheck = servername
+# sslAltNameToCheck = servername

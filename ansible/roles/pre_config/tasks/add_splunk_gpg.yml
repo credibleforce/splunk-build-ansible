@@ -3,3 +3,4 @@
       rpm_key:
         state: present
         key: https://docs.splunk.com/images/6/6b/SplunkPGPKey.pub
+      become: true
