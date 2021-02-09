@@ -57,7 +57,10 @@
       import_tasks: ../roles/post_config/tasks/main.yml
         
   tasks:
-
+    - debug:
+        msg:
+          - "Splunk: {{splunk}}"
+          
     # UNIVERSAL FORWARDER - check for splunk_universal_forwarder role
     - name: Splunk splunk_universal_forwarder tasks
       include_role:
