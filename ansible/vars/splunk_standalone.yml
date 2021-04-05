@@ -1,8 +1,9 @@
 ---
     splunk:
         role: splunk_standalone
+    splunk:
         hec:
-            enable: True
+            enable: true
         # s2s
         s2s:
             port: 9997
