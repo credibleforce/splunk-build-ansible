@@ -8,7 +8,7 @@ wait_for_splunk_retry_num: 60
 shc_sync_retry_num: 60
 splunk_home_ownership_enforcement: true
 cert_prefix: https
-splunkbase_token: "{{ lookup('env','SPLUNKBASE_TOKEN') }}"
+splunkbase_token: "{{ lab.settings.splunk.splunkbase_token }}"
 
 config:
   baked: default.yml
@@ -53,7 +53,7 @@ splunk:
   license_download_dest: /tmp/splunk.licences
   nfr_license: /tmp/splunk.lic
   opt: /opt
-  password: "{{ lab.settings.splunk_password | default('uOOuUI5D2flIqVXchggUOE+h0DFQV/zo',true) }}"
+  password: "{{ lab.settings.splunk.admin_password }}"
   pid: /opt/splunk/var/run/splunk/splunkd.pid
   root_endpoint: null
   secret: null
