@@ -3,3 +3,4 @@ dist/
 **/**/output/*
 **.code-workspace*
 ansible/files/*.tgz
+ansible/files/system/local/*
