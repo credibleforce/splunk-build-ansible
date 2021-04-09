@@ -5,7 +5,7 @@ splunk:
         - /tmp/props_win_dns.tgz
         - /tmp/Splunk_TA_windows.tgz
         - /tmp/transforms_forwarded_events.tgz
-        
+
         #################################################
         # MITRE ATT&CK APPS
         #################################################
@@ -76,7 +76,7 @@ splunk:
         # ansible monitoring app
         - https://splunkbase.splunk.com/app/4023/release/1.2.2/download/
 
-        # base64 
+        # base64
         - https://splunkbase.splunk.com/app/1922/release/1.1/download/
 
         # custom radar chart viz
