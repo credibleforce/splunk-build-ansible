@@ -88,7 +88,7 @@
 
     - name: Update ansible credentials
       uri:
-        url: "https://{{ inventory_hostname }}:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account"
+        url: "https://127.0.0.1:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account"
         user: "{{ splunk.admin_user }}"
         password: "{{ splunk.password }}"
         method: POST
@@ -103,7 +103,7 @@
 
     - name: Update hec credentials
       uri:
-        url: "https://{{ inventory_hostname }}:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account"
+        url: "https://127.0.0.1:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account"
         user: "{{ splunk.admin_user }}"
         password: "{{ splunk.password }}"
         method: POST
