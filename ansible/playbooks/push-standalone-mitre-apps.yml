@@ -99,6 +99,7 @@
           password: "{{ lab.settings.ansible.admin_password }}"
         body_format: form-urlencoded
         validate_certs: false
+        status_code: 200,201
       no_log: "{{ hide_password }}"
 
     - name: Update hec credentials
@@ -114,6 +115,7 @@
           password: "{{ splunk.hec.token }}"
         body_format: form-urlencoded
         validate_certs: false
+        status_code: 200,201
       no_log: "{{ hide_password }}"
 
     # - name: Update ansible credentials
