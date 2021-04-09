@@ -1,0 +1,60 @@
+---
+###########################################################
+# PUSH MITRE LAB APPS
+############################################################
+
+- hosts: splunk_standalone,splunk_deployment_server
+  vars_files:
+    - ../vars/default.yml
+  gather_facts: true
+  pre_tasks:
+    #########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
+
+    # Include additional variables as required
+    - name: Include Global HEC Variable
+      include_vars: ../vars/splunk_hec.yml
+
+    - name: Include Global DFS Variable
+      include_vars: ../vars/splunk_dfs.yml
+
+    - name: Include Standalone Variables
+      include_vars: ../vars/splunk_standalone.yml
+
+    #########################################
+    # VARIABLES DEFINING APP INSTALLATION
+    ##########################################
+
+    # SPLUNK COMMON Apps Variable
+    - name: Include Default Apps Vars
+      include_vars: ../splunk-ansible/roles/splunk_common/vars/main.yml
+
+  #########################################
+  # SETUP ADDITIONAL HANDLERS
+  ##########################################
+
+  handlers:
+    - include: ../splunk-ansible/roles/splunk_common/handlers/main.yml
+
+  tasks:
+    #########################################
+    # TASKS
+    ##########################################
+
+    - name: Extract custom mitre_lab apps into splunk apps directory
+      unarchive:
+        src: "{{ item }}"
+        dest: "{{ splunk.app_paths.default }}"
+      with_items:
+        - ../files/mitre_apps/SA-attck_nav.tgz
+        - ../files/mitre_apps/SA-cim_vladiator.tgz
+        - ../files/mitre_apps/TA-ansible-invoke.tgz
+        - ../files/mitre_apps/ThreatHunting.tgz
+
+    - name: Update splunk apps permissions
+      file:
+        dest: "{{ splunk.app_paths.default }}"
+        owner: "{{ splunk.user }}"
+        group: "{{ splunk.group }}"
+        recurse: true

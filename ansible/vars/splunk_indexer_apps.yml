@@ -1,9 +1,9 @@
 ---
 splunk:
-    apps_location: 
+    apps_location:
         # global indexes
         - /tmp/indexes.tgz
-        
+
         # win dns query parsing
         - /tmp/props_win_dns.tgz
 
@@ -15,7 +15,7 @@ splunk:
 
         # windows ta
         - https://splunkbase.splunk.com/app/742/release/7.0.0/download/
-        
+
         # sysmon ta
         - https://splunkbase.splunk.com/app/1914/release/10.6.2/download/
 
