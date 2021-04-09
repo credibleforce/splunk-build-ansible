@@ -64,9 +64,8 @@
         group: "{{ splunk.group }}"
         recurse: true
 
-    - name: Check for required restarts
-      debug:
-        msg:
-          - "Restart Splunk Service"
-      notify:
-        - Restart the splunkd service
+    - name: Restart Splunkd
+      systemd:
+        state: restarted
+        daemon_reload: true
+        name: Splunkd
