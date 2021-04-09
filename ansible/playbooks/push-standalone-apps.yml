@@ -184,7 +184,7 @@
     - name: Deploy serverclass to splunk system
       template:
         src: ../templates/serverclass.conf.j2
-        dest: /opt/splunk/etc/system/local/serverclass.conf
+        dest: "{{ splunk.app_paths.default }}/../system/local/serverclass.conf"
       when: inventory_hostname in groups['splunk_standalone']
 
     - name: Reload deployment server

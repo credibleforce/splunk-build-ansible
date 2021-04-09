@@ -42,6 +42,11 @@
     # TASKS
     ##########################################
 
+    # SPLUNK COMMON - set common splunk-ansible facts
+    - name: Splunk environment setup
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/get_facts.yml
+      when: inventory_hostname in groups['splunk_standalone']
+
     - name: Extract custom mitre_lab apps into splunk apps directory
       unarchive:
         src: "{{ item }}"
@@ -58,3 +63,10 @@
         owner: "{{ splunk.user }}"
         group: "{{ splunk.group }}"
         recurse: true
+
+    - name: Check for required restarts
+      debug:
+        msg:
+          - "Restart Splunk Service"
+      notify:
+        - Restart the splunkd service
