@@ -70,40 +70,40 @@
         daemon_reload: true
         name: Splunkd
 
-    - name: Update ansible credentials
-      uri:
-        url: "https://localhost:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account"
-        user: "{{ splunk.user }}"
-        password: "{{ splunk.password }}"
-        method: POST
-        body: 
-          output_mode: "json"
-          name: "admin"
-          username: "admin"
-          password: "{{ lab.settings.ansible.admin_password }}"
-        body_format: form-urlencoded
-
-    - name: Update hec credentials
-      uri:
-        url: "https://localhost:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account"
-        user: "{{ splunk.user }}"
-        password: "{{ splunk.password }}"
-        method: POST
-        body: 
-          output_mode: "json"
-          name: "hec"
-          username: "hec"
-          password: "{{ splunk.hec.token }}"
-        body_format: form-urlencoded
-
     # - name: Update ansible credentials
-    #   command: |
-    #     curl -k -u '{{ splunk.user }}:{{ splunk.password }}' \
-    #       https://localhost:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account \
-    #       -d 'output_mode=json&name=admin&username=admin&password={{ lab.settings.ansible.admin_password |urlencode }}'
+    #   uri:
+    #     url: "https://{{ inventory_hostname }}:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account"
+    #     user: "{{ splunk.user }}"
+    #     password: "{{ splunk.password }}"
+    #     method: POST
+    #     body:
+    #       output_mode: "json"
+    #       name: "admin"
+    #       username: "admin"
+    #       password: "{{ lab.settings.ansible.admin_password }}"
+    #     body_format: form-urlencoded
 
     # - name: Update hec credentials
-    #   command: |
-    #     curl -k -u '{{ splunk.user }}:{{ splunk.password }}' \
-    #       https://localhost:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account \
-    #       -d 'output_mode=json&name=hec&username=hec&password={{ splunk.hec.token }}'
+    #   uri:
+    #     url: "https://{{ inventory_hostname }}:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account"
+    #     user: "{{ splunk.user }}"
+    #     password: "{{ splunk.password }}"
+    #     method: POST
+    #     body: 
+    #       output_mode: "json"
+    #       name: "hec"
+    #       username: "hec"
+    #       password: "{{ splunk.hec.token }}"
+    #     body_format: form-urlencoded
+
+    - name: Update ansible credentials
+      command: |
+        curl -k -u '{{ splunk.user }}:{{ splunk.password }}' \
+          https://localhost:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account \
+          -d 'output_mode=json&name=admin&username=admin&password={{ lab.settings.ansible.admin_password |urlencode }}'
+
+    - name: Update hec credentials
+      command: |
+        curl -k -u '{{ splunk.user }}:{{ splunk.password }}' \
+          https://localhost:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account \
+          -d 'output_mode=json&name=hec&username=hec&password={{ splunk.hec.token }}'
