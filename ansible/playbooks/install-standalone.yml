@@ -28,18 +28,32 @@
     - name: Custom splunk server pre-config (setup user)
       include_role:
         name: pre_config
-  
+
+    # CUSTOM SSL CERT - Check for staged custom ssl certificate
+    - name: Check if mycerts ssl override exists
+      stat:
+        path: "{{ splunk.home }}/etc/auth/mycerts/splunk.pem"
+      register: stat_result
+
+    - name: Use mycerts ssl override if exists
+      set_fact:
+        splunk:
+          http_enableSSL_privKey: "{{ splunk.home }}/etc/auth/mycerts/splunk.key"
+          http_enableSSL_privKey_password: "password"
+          http_enableSSL_cert: "{{ splunk.home }}/etc/auth/mycerts/splunk.pem"
+      when: stat_result.stat.exists
+
     #########################################
     # VARIABLES DEFINING DEPLOYED ENVIRONMENT
     ##########################################
-    
+
     # Include additional variables as required
     - name: Include Global HEC Variable
       include_vars: ../vars/splunk_hec.yml
 
     - name: Include Global DFS Variable
       include_vars: ../vars/splunk_dfs.yml
-      
+
     - name: Include Standalone Variables
       include_vars: ../vars/splunk_standalone.yml
 
