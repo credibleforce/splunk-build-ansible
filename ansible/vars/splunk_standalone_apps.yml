@@ -3,7 +3,7 @@ splunk:
     apps_location:
         - /tmp/indexes.tgz
         - /tmp/props_win_dns.tgz
-        - /tmp/Splunk_TA_windows.tgz
+        #- /tmp/Splunk_TA_windows.tgz
         - /tmp/transforms_forwarded_events.tgz
 
         #################################################
@@ -81,3 +81,6 @@ splunk:
 
         # custom radar chart viz
         - https://splunkbase.splunk.com/app/3772/release/1.1.1/download/
+
+        # windows ta
+        - https://splunkbase.splunk.com/app/742/release/7.0.0/download/
