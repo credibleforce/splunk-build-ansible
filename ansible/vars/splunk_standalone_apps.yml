@@ -83,4 +83,4 @@ splunk:
         - https://splunkbase.splunk.com/app/3772/release/1.1.1/download/
 
         # windows ta
-        - https://splunkbase.splunk.com/app/742/release/7.0.0/download/
+        - https://splunkbase.splunk.com/app/742/release/8.1.1/download/
