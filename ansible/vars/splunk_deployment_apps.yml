@@ -1,9 +1,9 @@
 ---
 splunk:
-    apps_location: 
+    apps_location:
         - /tmp/indexes.tgz
         - /tmp/inputs_forwarded_events.tgz
         - /tmp/inputs_win_dns.tgz
-        - /tmp/Splunk_TA_windows.tgz
+        #- /tmp/Splunk_TA_windows.tgz
         - /tmp/inputs_suricata.tgz
         - /tmp/outputs_forwarder.tgz

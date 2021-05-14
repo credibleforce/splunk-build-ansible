@@ -1,0 +1,47 @@
+[serverClass:org_all_forwarder_outputs:app:outputs_forwarder]
+restartSplunkWeb = 0
+restartSplunkd = 1
+stateOnClient = enabled
+
+[serverClass:org_all_win_wef:app:inputs_forwarded_events]
+restartSplunkWeb = 0
+restartSplunkd = 1
+stateOnClient = enabled
+
+[serverClass:org_all_win_dc:app:inputs_win_dns]
+restartSplunkWeb = 0
+restartSplunkd = 1
+stateOnClient = enabled
+
+[serverClass:org_all_indexers_base:app:indexes]
+restartSplunkWeb = 0
+restartSplunkd = 1
+stateOnClient = enabled
+
+[serverClass:org_all_suricata]
+
+[serverClass:org_all_suricata:app:inputs_suricata]
+restartSplunkWeb = 0
+restartSplunkd = 1
+stateOnClient = enabled
+
+[serverClass:org_all_win:app:Splunk_TA_windows]
+restartSplunkWeb = 0
+restartSplunkd = 1
+stateOnClient = enabled
+
+[serverClass:org_all_forwarder_outputs]
+whitelist.0 = *
+
+[serverClass:org_all_indexers_base]
+whitelist.0 = splk-idx*
+
+[serverClass:org_all_win]
+machineTypesFilter = windows-x64
+whitelist.0 = win*
+
+[serverClass:org_all_win_dc]
+whitelist.0 = win*-dc*
+
+[serverClass:org_all_win_wef]
+whitelist.0 = win*-wef*

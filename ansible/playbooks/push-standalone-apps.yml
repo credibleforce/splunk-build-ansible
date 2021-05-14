@@ -1,3 +1,4 @@
+---
 ###########################################################
 # PUSH APPS TO CLUSTER MASTER, DEPLOYMENT_SERVER, DEPLOYER
 ############################################################
@@ -6,10 +7,9 @@
   vars_files:
     - ../vars/default.yml
   tasks:
-    
     - name: Set indexers fact
       set_fact:
-        indexers: 
+        indexers:
           - "{{ groups['splunk_standalone'][0] }}:9997"
 
     - name: Update forwarder outputs app
@@ -32,28 +32,28 @@
   vars_files:
     - ../vars/default.yml
 
-  gather_facts: True
+  gather_facts: true
 
-  pre_tasks:  
-  
+  pre_tasks:
+
     #########################################
     # VARIABLES DEFINING DEPLOYED ENVIRONMENT
     ##########################################
-    
+
     # Include additional variables as required
     - name: Include Global HEC Variable
       include_vars: ../vars/splunk_hec.yml
 
     - name: Include Global DFS Variable
       include_vars: ../vars/splunk_dfs.yml
-      
+
     - name: Include Standalone Variables
       include_vars: ../vars/splunk_standalone.yml
-    
+
     #########################################
     # VARIABLES DEFINING APP INSTALLATION
     ##########################################
-    
+
     # SPLUNK COMMON Apps Variable
     - name: Include Default Apps Vars
       include_vars: ../splunk-ansible/roles/splunk_common/vars/main.yml
@@ -61,7 +61,7 @@
   #########################################
   # SETUP ADDITIONAL HANDLERS
   ##########################################
-    
+
   handlers:
     - include: ../splunk-ansible/roles/splunk_common/handlers/main.yml
 
@@ -76,12 +76,12 @@
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/get_facts.yml
       when: inventory_hostname in groups['splunk_standalone']
 
-    # DEPLOYMENT SERVER - check for splunk_deployment_server role  
+    # DEPLOYMENT SERVER - check for splunk_deployment_server role
     - name: Include Deployment Apps variables
       include_vars: ../vars/splunk_deployment_apps.yml
-      when: 
+      when:
         - inventory_hostname in groups['splunk_standalone']
-    
+
     - name: Push apps to deployment server
       vars:
         app_url: "{{ item }}"
@@ -89,29 +89,29 @@
         src: "{{app_url}}"
         dest: "{{app_url}}"
       loop: "{{ splunk.apps_location }}"
-      when: 
+      when:
         - inventory_hostname in groups['splunk_standalone']
         - not app_url is match("^(https?|file)://.*")
-    
+
     - name: Install deployment server apps
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/install_apps.yml
       vars:
         app_url: "{{ item }}"
       loop: "{{ splunk.apps_location }}"
-      when: 
+      when:
         - inventory_hostname in groups['splunk_standalone']
-  
+
     - name: Find deployment server installed apps
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/find_installed_apps.yml
-      when: 
+      when:
         - inventory_hostname in groups['splunk_standalone']
-  
+
     - name: Enable installed apps
       command: "{{ splunk.exec }} enable app {{ item }} -auth {{ splunk.admin_user }}:{{ splunk.password }}"
-      become: yes
+      become: true
       become_user: "{{ splunk.user }}"
       with_items: "{{ installed_apps }}"
-      when: 
+      when:
         - inventory_hostname in groups['splunk_standalone'] and installed_apps is defined and installed_apps | length > 0
 
     - name: Copy deployment server install
@@ -119,35 +119,35 @@
       vars:
         apps: "{{ installed_apps }}"
         dest: "{{ splunk.app_paths.deployment }}"
-      when: 
+      when:
         - inventory_hostname in groups['splunk_standalone']
 
     - name: Disable installed apps
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/disable_installed_apps.yml
-      when: 
+      when:
         - inventory_hostname in groups['splunk_standalone']
 
     - name: Reload deployment server
       command: "{{ splunk.exec }} reload deploy-server -auth {{ splunk.admin_user }}:{{ splunk.password }} -timeout {{ retry_delay * retry_num }}"
-      become: yes
+      become: true
       become_user: "{{ splunk.user }}"
       register: reload_depserver
       until: reload_depserver.rc == 0
       changed_when: reload_depserver.rc == 0
       retries: "{{ retry_num }}"
       delay: "{{ retry_delay }}"
-      ignore_errors: yes
+      ignore_errors: true
       no_log: "{{ hide_password }}"
-      when: 
+      when:
         - inventory_hostname in groups['splunk_standalone']
 
 
     # STANDALONE SERVER - check for splunk_standalone role
     - name: Include Standalone Apps variables
       include_vars: ../vars/splunk_standalone_apps.yml
-      when: 
+      when:
         - inventory_hostname in groups['splunk_standalone']
-    
+
     - name: Push apps to standalone server
       vars:
         app_url: "{{ item }}"
@@ -155,10 +155,10 @@
         src: "{{app_url}}"
         dest: "{{app_url}}"
       loop: "{{ splunk.apps_location }}"
-      when: 
+      when:
         - inventory_hostname in groups['splunk_standalone']
         - not app_url is match("^(https?|file)://.*")
-    
+
     - name: Install standalone server apps
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/install_apps.yml
       vars:
@@ -175,11 +175,30 @@
 
     - name: Enable installed apps
       command: "{{ splunk.exec }} enable app {{ item }} -auth {{ splunk.admin_user }}:{{ splunk.password }}"
-      become: yes
+      become: true
       become_user: "{{ splunk.user }}"
       with_items: "{{ installed_standalone_apps.stdout_lines }}"
-      when: 
+      when:
         - inventory_hostname in groups['splunk_standalone'] and installed_standalone_apps is defined and installed_standalone_apps | length > 0
+
+    - name: Deploy serverclass to splunk system
+      template:
+        src: ../templates/serverclass.conf.j2
+        dest: "{{ splunk.app_paths.default }}/../system/local/serverclass.conf"
+      when: inventory_hostname in groups['splunk_standalone']
+
+    - name: Reload deployment server
+      command: "{{ splunk.exec }} reload deploy-server -auth {{ splunk.admin_user }}:{{ splunk.password }} -timeout {{ retry_delay * retry_num }}"
+      become: true
+      become_user: "{{ splunk.user }}"
+      register: reload_depserver
+      until: reload_depserver.rc == 0
+      changed_when: reload_depserver.rc == 0
+      retries: "{{ retry_num }}"
+      delay: "{{ retry_delay }}"
+      ignore_errors: true
+      no_log: "{{ hide_password }}"
+      when: inventory_hostname in groups['splunk_standalone']
 
     - name: Check for required restarts
       include_tasks: ../splunk-ansible/roles/splunk_common/tasks/check_for_required_restarts.yml

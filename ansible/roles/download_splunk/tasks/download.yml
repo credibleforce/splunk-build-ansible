@@ -3,7 +3,8 @@
   get_url:
     #url: https://www.splunk.com/page/download_track?file=7.3.4/linux/splunk-7.3.4-13e97039fb65-linux-2.6-x86_64.rpm&ac=&wget=true&name=wget&platform=Linux&architecture=x86_64&version=7.3.4&product=splunk&typed=release
     #url: https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.0.2.1&product=splunk&filename=splunk-8.0.2.1-f002026bad55-linux-2.6-x86_64.rpm&wget=true
-    url: https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.1.0&product=splunk&filename=splunk-8.1.0-f57c09e87251-linux-2.6-x86_64.rpm&wget=true
+    #url: https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.1.0&product=splunk&filename=splunk-8.1.0-f57c09e87251-linux-2.6-x86_64.rpm&wget=true
+    url: https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.2.0&product=splunk&filename=splunk-8.2.0-e053ef3c985f-linux-2.6-x86_64.rpm&wget=true
     dest: /tmp/splunk.rpm
     mode: 0644
   retries: 10
@@ -13,7 +14,8 @@
 
 - name: Download splunk uf
   get_url:
-    url: https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.0.2.1&product=universalforwarder&filename=splunkforwarder-8.0.2.1-f002026bad55-linux-2.6-x86_64.rpm&wget=true
+    #url: https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.0.2.1&product=universalforwarder&filename=splunkforwarder-8.0.2.1-f002026bad55-linux-2.6-x86_64.rpm&wget=true
+    url: https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.2.0&product=universalforwarder&filename=splunkforwarder-8.2.0-e053ef3c985f-linux-2.6-x86_64.rpm&wget=true
     dest: /tmp/splunkuf.rpm
     mode: 0644
   retries: 10

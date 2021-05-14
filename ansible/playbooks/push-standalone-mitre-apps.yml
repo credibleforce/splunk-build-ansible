@@ -1,0 +1,131 @@
+---
+###########################################################
+# PUSH MITRE LAB APPS
+############################################################
+
+- hosts: splunk_standalone,splunk_deployment_server
+  vars_files:
+    - ../vars/default.yml
+  gather_facts: true
+  pre_tasks:
+    #########################################
+    # VARIABLES DEFINING DEPLOYED ENVIRONMENT
+    ##########################################
+
+    # Include additional variables as required
+    - name: Include Global HEC Variable
+      include_vars: ../vars/splunk_hec.yml
+
+    - name: Include Global DFS Variable
+      include_vars: ../vars/splunk_dfs.yml
+
+    - name: Include Standalone Variables
+      include_vars: ../vars/splunk_standalone.yml
+
+    #########################################
+    # VARIABLES DEFINING APP INSTALLATION
+    ##########################################
+
+    # SPLUNK COMMON Apps Variable
+    - name: Include Default Apps Vars
+      include_vars: ../splunk-ansible/roles/splunk_common/vars/main.yml
+
+  #########################################
+  # SETUP ADDITIONAL HANDLERS
+  ##########################################
+
+  handlers:
+    - include: ../splunk-ansible/roles/splunk_common/handlers/main.yml
+
+  tasks:
+    #########################################
+    # TASKS
+    ##########################################
+
+    # SPLUNK COMMON - set common splunk-ansible facts
+    - name: Splunk environment setup
+      include_tasks: ../splunk-ansible/roles/splunk_common/tasks/get_facts.yml
+      when: inventory_hostname in groups['splunk_standalone']
+
+    - name: Extract custom mitre_lab apps into splunk apps directory
+      unarchive:
+        src: "{{ item }}"
+        dest: "{{ splunk.app_paths.default }}"
+      with_items:
+        - ../files/mitre_apps/SA-attck_nav.tgz
+        - ../files/mitre_apps/SA-cim_vladiator.tgz
+        - ../files/mitre_apps/TA-ansible-invoke.tgz
+        - ../files/mitre_apps/ThreatHunting.tgz
+
+    - name: Update splunk apps permissions
+      file:
+        dest: "{{ splunk.app_paths.default }}"
+        owner: "{{ splunk.user }}"
+        group: "{{ splunk.group }}"
+        recurse: true
+
+    - name: Restart Splunkd
+      systemd:
+        state: restarted
+        daemon_reload: true
+        name: Splunkd
+
+    - name: Check Splunk instance is running
+      uri:
+        url: "https://127.0.0.1:{{ splunk.svc_port }}/services/server/info?output_mode=json"
+        method: GET
+        user: "{{ splunk.admin_user }}"
+        password: "{{ splunk.password }}"
+        validate_certs: false
+      register: task_response
+      until:
+        - task_response.status == 200
+        - lookup('pipe', 'date +"%s"')|int - task_response.json.entry[0].content.startup_time > 10
+      retries: 10
+      delay: 10
+      ignore_errors: true
+      no_log: "{{ hide_password }}"
+
+    - name: Update ansible credentials
+      uri:
+        url: "https://127.0.0.1:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account"
+        user: "{{ splunk.admin_user }}"
+        password: "{{ splunk.password }}"
+        method: POST
+        body:
+          output_mode: "json"
+          name: "admin"
+          username: "admin"
+          password: "{{ lab.settings.ansible.admin_password }}"
+        body_format: form-urlencoded
+        validate_certs: false
+        status_code: 200,201
+      no_log: "{{ hide_password }}"
+
+    - name: Update hec credentials
+      uri:
+        url: "https://127.0.0.1:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account"
+        user: "{{ splunk.admin_user }}"
+        password: "{{ splunk.password }}"
+        method: POST
+        body:
+          output_mode: "json"
+          name: "hec"
+          username: "hec"
+          password: "{{ splunk.hec.token }}"
+        body_format: form-urlencoded
+        validate_certs: false
+        status_code: 200,201
+      no_log: "{{ hide_password }}"
+
+    # - name: Update ansible credentials
+    #   command: |
+    #     curl -k -u '{{ splunk.user }}:{{ splunk.password }}' \
+    #       https://localhost:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account \
+    #       -d 'output_mode=json&name=admin&username=admin&password={{ lab.settings.ansible.admin_password |urlencode }}'
+
+    # - name: Update hec credentials
+    #   command: |
+    #     curl -k -u '{{ splunk.user }}:{{ splunk.password }}' \
+    #       https://localhost:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account \
+    #       -d 'output_mode=json&name=hec&username=hec&password={{ splunk.hec.token }}'
