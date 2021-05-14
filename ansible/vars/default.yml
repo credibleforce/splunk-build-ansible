@@ -50,7 +50,7 @@ splunk:
   http_enableSSL_privKey_password: null
   http_port: 8000
   ignore_license: false
-  license_download_dest: /tmp/splunk.licences
+  license_download_dest: /tmp/splunk.lic
   nfr_license: /tmp/splunk.lic
   opt: /opt
   password: "{{ lab.settings.splunk.admin_password | default(lookup('env', 'SPLUNK_PASSWORD')) }}"
