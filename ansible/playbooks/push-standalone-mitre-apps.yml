@@ -56,6 +56,7 @@
         - ../files/mitre_apps/SA-cim_vladiator.tgz
         - ../files/mitre_apps/TA-ansible-invoke.tgz
         - ../files/mitre_apps/ThreatHunting.tgz
+        - ../files/mitre_apps/TA-microsoft-sysmon.tgz
 
     - name: Update splunk apps permissions
       file:

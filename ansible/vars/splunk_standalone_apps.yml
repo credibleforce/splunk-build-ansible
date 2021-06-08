@@ -14,16 +14,16 @@ splunk:
         - https://splunkbase.splunk.com/app/635/release/1.0/download/
 
         # splunk common information model
-        - https://splunkbase.splunk.com/app/1621/release/4.15.0/download/
+        - https://splunkbase.splunk.com/app/1621/release/4.18.1/download/
 
         # decrypt
-        - https://splunkbase.splunk.com/app/2655/release/2.0/download/
+        - https://splunkbase.splunk.com/app/2655/release/2.3.1/download/
 
         # asn lookup
-        - https://splunkbase.splunk.com/app/3531/release/1.1.0/download/
+        - https://splunkbase.splunk.com/app/3531/release/1.2.1/download/
 
         # timeline
-        - https://splunkbase.splunk.com/app/3120/release/1.4.0/download/
+        - https://splunkbase.splunk.com/app/3120/release/1.5.0/download/
 
         # link analysis
         - https://api.github.com/repos/secops4thewin/link_analysis_app/tarball
@@ -32,34 +32,34 @@ splunk:
         - https://splunkbase.splunk.com/app/2734/release/1.8/download/
 
         # sysmon ta
-        - https://splunkbase.splunk.com/app/1914/release/10.6.2/download/
+        #- https://splunkbase.splunk.com/app/1914/release/10.6.2/download/
 
         # force directed viz
-        - https://splunkbase.splunk.com/app/3767/release/3.0.1/download/
+        - https://splunkbase.splunk.com/app/3767/release/3.0.3/download/
 
         # lookup file editor
-        - https://splunkbase.splunk.com/app/1724/release/3.3.3/download/
+        - https://splunkbase.splunk.com/app/1724/release/3.4.6/download/
 
         # punchcard viz
         - https://splunkbase.splunk.com/app/3129/release/1.4.0/download/
 
         # sankey viz
-        - https://splunkbase.splunk.com/app/3112/release/1.4.0/download/
+        - https://splunkbase.splunk.com/app/3112/release/1.5.0/download/
 
         # splunk machine learning toolkit
-        - https://splunkbase.splunk.com/app/2890/release/5.1.0/download/
+        - https://splunkbase.splunk.com/app/2890/release/5.2.1/download/
 
         # python for scientific computing (linux 64-bit)
-        - https://splunkbase.splunk.com/app/2882/release/2.0.0/download/
+        - https://splunkbase.splunk.com/app/2882/release/2.0.2/download/
 
         # security essentials
-        - https://splunkbase.splunk.com/app/3435/release/3.0.6/download/
+        - https://splunkbase.splunk.com/app/3435/release/3.3.3/download/
 
         # threathunting
         #- https://splunkbase.splunk.com/app/4305/release/1.4.1/download/
 
         # infosec app for splunk
-        - https://splunkbase.splunk.com/app/4240/release/1.5.2/download/
+        - https://splunkbase.splunk.com/app/4240/release/1.6.4/download/
 
         # sa-investigator
         - https://splunkbase.splunk.com/app/3749/release/2.3.0/download/
@@ -71,7 +71,7 @@ splunk:
         - https://splunkbase.splunk.com/app/3411/release/4.0.35/download/
 
         # splunk es content update
-        - https://splunkbase.splunk.com/app/3449/release/3.18.0/download/
+        - https://splunkbase.splunk.com/app/3449/release/3.22.0/download/
 
         # ansible monitoring app
         - https://splunkbase.splunk.com/app/4023/release/1.2.2/download/
