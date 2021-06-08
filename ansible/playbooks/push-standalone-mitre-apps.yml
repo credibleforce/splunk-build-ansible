@@ -122,7 +122,7 @@
     #   command: |
     #     curl -k -u '{{ splunk.user }}:{{ splunk.password }}' \
     #       https://localhost:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account \
-    #       -d 'output_mode=json&name=admin&username=admin&password={{ lab.settings.ansible.admin_password |urlencode }}'
+    #       -d 'output_mode=json&name=admin&username=admin&password={{ lab.settings.ansible.admin_password | default(lookup('env', 'SPLUNK_PASSWORD')) |urlencode }}'
 
     # - name: Update hec credentials
     #   command: |
