@@ -169,13 +169,12 @@
         - ThreatHunting
         - timeline_app
 
-    - name: Apply splunk ownership permissions
+    - name: Update splunk apps permissions
       file:
-        path: /opt/splunk/etc/apps/
-        state: directory
+        dest: "{{ splunk.app_paths.default }}"
+        owner: "{{ splunk.user }}"
+        group: "{{ splunk.group }}"
         recurse: true
-        owner: splunk
-        group: splunk
 
     - name: Restart Splunkd
       systemd:
