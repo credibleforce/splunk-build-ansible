@@ -58,6 +58,45 @@
         - ../files/mitre_apps/ThreatHunting.tgz
         - ../files/mitre_apps/TA-microsoft-sysmon.tgz
 
+    # hide some apps
+    - name: Create local directory directory
+      file:
+        path: "/opt/splunk/etc/apps/{{ item }}/local"
+        state: directory
+      with_items:
+        - Ansible_Splunk
+        - secops4thewin-link_analysis_app-0bce4b9
+        - phantom
+        - InfoSec_App_for_Splunk
+        - punchcard_app
+        - SA-cim_vladiator
+        - sankey_diagram_app
+        - splunk_app_addon-builder
+        - Splunk_ML_Toolkit
+        - splunk_secure_gateway
+        - TA-ansible-invoke
+        - ThreatHunting
+        - timeline_app
+
+    - name: Copy list of apps to hide
+      copy:
+        src: ../files/mitre_apps/hide_app.conf
+        dest: "/opt/splunk/etc/apps/{{ item }}/local/app.conf"
+      with_items:
+        - Ansible_Splunk
+        - secops4thewin-link_analysis_app-0bce4b9
+        - phantom
+        - InfoSec_App_for_Splunk
+        - punchcard_app
+        - SA-cim_vladiator
+        - sankey_diagram_app
+        - splunk_app_addon-builder
+        - Splunk_ML_Toolkit
+        - splunk_secure_gateway
+        - TA-ansible-invoke
+        - ThreatHunting
+        - timeline_app
+
     - name: Update splunk apps permissions
       file:
         dest: "{{ splunk.app_paths.default }}"
@@ -121,53 +160,3 @@
       ignore_errors: true
       no_log: "{{ hide_password }}"
 
-    - name: Create local directory directory
-      file:
-        path: "/opt/splunk/etc/apps/{{ item }}/local"
-        state: directory
-      with_items:
-        - Ansible_Splunk
-        - secops4thewin-link_analysis_app-0bce4b9
-        - phantom
-        - InfoSec_App_for_Splunk
-        - punchcard_app
-        - SA-cim_vladiator
-        - sankey_diagram_app
-        - splunk_app_addon-builder
-        - Splunk_ML_Toolkit
-        - splunk_secure_gateway
-        - TA-ansible-invoke
-        - ThreatHunting
-        - timeline_app
-
-    - name: Copy list of apps to hide
-      copy:
-        src: ../files/mitre_apps/hide_app.conf
-        dest: "/opt/splunk/etc/apps/{{ item }}/local/app.conf"
-      with_items:
-        - Ansible_Splunk
-        - secops4thewin-link_analysis_app-0bce4b9
-        - phantom
-        - InfoSec_App_for_Splunk
-        - punchcard_app
-        - SA-cim_vladiator
-        - sankey_diagram_app
-        - splunk_app_addon-builder
-        - Splunk_ML_Toolkit
-        - splunk_secure_gateway
-        - TA-ansible-invoke
-        - ThreatHunting
-        - timeline_app
-
-    - name: Update splunk apps permissions
-      file:
-        dest: "{{ splunk.app_paths.default }}"
-        owner: "{{ splunk.user }}"
-        group: "{{ splunk.group }}"
-        recurse: true
-
-    - name: Restart Splunkd
-      systemd:
-        state: restarted
-        daemon_reload: true
-        name: Splunkd
