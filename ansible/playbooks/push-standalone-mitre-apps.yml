@@ -101,6 +101,7 @@
         body_format: form-urlencoded
         validate_certs: false
         status_code: 200,201
+      ignore_errors: true
       no_log: "{{ hide_password }}"
 
     - name: Update hec credentials
@@ -117,19 +118,8 @@
         body_format: form-urlencoded
         validate_certs: false
         status_code: 200,201
+      ignore_errors: true
       no_log: "{{ hide_password }}"
-
-    # - name: Update ansible credentials
-    #   command: |
-    #     curl -k -u '{{ splunk.user }}:{{ splunk.password }}' \
-    #       https://localhost:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account \
-    #       -d 'output_mode=json&name=admin&username=admin&password={{ lab.settings.ansible.admin_password | default(lookup('env', 'SPLUNK_PASSWORD')) |urlencode }}'
-
-    # - name: Update hec credentials
-    #   command: |
-    #     curl -k -u '{{ splunk.user }}:{{ splunk.password }}' \
-    #       https://localhost:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account \
-    #       -d 'output_mode=json&name=hec&username=hec&password={{ splunk.hec.token }}'
 
     - name: Create local directory directory
       file:
