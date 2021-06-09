@@ -130,3 +130,31 @@
     #     curl -k -u '{{ splunk.user }}:{{ splunk.password }}' \
     #       https://localhost:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account \
     #       -d 'output_mode=json&name=hec&username=hec&password={{ splunk.hec.token }}'
+
+    - name: Hide unnecessary apps
+      command: |
+        cat <<'EOF' > /tmp/hideapps.txt
+        Ansible_Splunk
+        secops4thewin-link_analysis_app-0bce4b9
+        phantom
+        InfoSec_App_for_Splunk
+        punchcard_app
+        SA-cim_vladiator
+        sankey_diagram_app
+        splunk_app_addon-builder
+        Splunk_ML_Toolkit
+        splunk_secure_gateway
+        TA-ansible-invoke
+        ThreatHunting
+        timeline_app
+        EOF
+
+        for app in $(cat /tmp/hideapps.txt); do mkdir -p /opt/splunk/etc/apps/$app/local; echo -e "\n[ui]\nis_visible = 0" >  /opt/splunk/etc/apps/$app/local/app.conf; done
+        chown -R splunk:splunk /opt/splunk/etc/apps
+        rm -f /tmp/hideapps.txt
+
+    - name: Restart Splunkd
+      systemd:
+        state: restarted
+        daemon_reload: true
+        name: Splunkd
