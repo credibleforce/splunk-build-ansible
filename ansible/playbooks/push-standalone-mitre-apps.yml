@@ -56,6 +56,46 @@
         - ../files/mitre_apps/SA-cim_vladiator.tgz
         - ../files/mitre_apps/TA-ansible-invoke.tgz
         - ../files/mitre_apps/ThreatHunting.tgz
+        - ../files/mitre_apps/TA-microsoft-sysmon.tgz
+
+    # hide some apps
+    - name: Create local directory directory
+      file:
+        path: "/opt/splunk/etc/apps/{{ item }}/local"
+        state: directory
+      with_items:
+        - Ansible_Splunk
+        - secops4thewin-link_analysis_app-0bce4b9
+        - phantom
+        - InfoSec_App_for_Splunk
+        - punchcard_app
+        - SA-cim_vladiator
+        - sankey_diagram_app
+        - splunk_app_addon-builder
+        - Splunk_ML_Toolkit
+        - splunk_secure_gateway
+        - TA-ansible-invoke
+        - ThreatHunting
+        - timeline_app
+
+    - name: Copy list of apps to hide
+      copy:
+        src: ../files/mitre_apps/hide_app.conf
+        dest: "/opt/splunk/etc/apps/{{ item }}/local/app.conf"
+      with_items:
+        - Ansible_Splunk
+        - secops4thewin-link_analysis_app-0bce4b9
+        - phantom
+        - InfoSec_App_for_Splunk
+        - punchcard_app
+        - SA-cim_vladiator
+        - sankey_diagram_app
+        - splunk_app_addon-builder
+        - Splunk_ML_Toolkit
+        - splunk_secure_gateway
+        - TA-ansible-invoke
+        - ThreatHunting
+        - timeline_app
 
     - name: Update splunk apps permissions
       file:
@@ -100,6 +140,7 @@
         body_format: form-urlencoded
         validate_certs: false
         status_code: 200,201
+      ignore_errors: true
       no_log: "{{ hide_password }}"
 
     - name: Update hec credentials
@@ -116,16 +157,6 @@
         body_format: form-urlencoded
         validate_certs: false
         status_code: 200,201
+      ignore_errors: true
       no_log: "{{ hide_password }}"
 
-    # - name: Update ansible credentials
-    #   command: |
-    #     curl -k -u '{{ splunk.user }}:{{ splunk.password }}' \
-    #       https://localhost:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account \
-    #       -d 'output_mode=json&name=admin&username=admin&password={{ lab.settings.ansible.admin_password | default(lookup('env', 'SPLUNK_PASSWORD')) |urlencode }}'
-
-    # - name: Update hec credentials
-    #   command: |
-    #     curl -k -u '{{ splunk.user }}:{{ splunk.password }}' \
-    #       https://localhost:8089/servicesNS/nobody/TA-ansible-invoke/TA_ansible_invoke_account \
-    #       -d 'output_mode=json&name=hec&username=hec&password={{ splunk.hec.token }}'
