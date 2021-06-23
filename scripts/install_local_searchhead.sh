@@ -48,12 +48,13 @@ export SPLUNK_PASSWORD=$SPLUNK_PASSWORD
 # install pre-requisites
 yum install -y epel-release 
 yum install -y git python3-pip
-pip3 install --upgrade pip
+python -m pip install --upgrade pip
 
 # setup standalone ansible
 git clone --single-branch --branch 'stable-2.9' https://github.com/ansible/ansible.git
+python -m pip install -r ansible/requirements.txt
 source ansible/hacking/env-setup
-pip3 install -r ansible/requirements.txt
+
 
 # setup splunk-ansible
 git clone --recursive https://github.com/mobia-security-services/splunk-engagement-ansible.git
